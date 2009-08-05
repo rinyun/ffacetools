@@ -1,5 +1,0 @@
-C:\Users\Vinny\Documents\SharpDevelop Projects\FinalFisher C#\Classes\FFACETools\bin\Debug\FFACETools.dll
-C:\Users\Vinny\Documents\SharpDevelop Projects\FinalFisher C#\Classes\FFACETools\bin\Debug\FFACETools.pdb
-C:\Users\Vinny\Documents\SharpDevelop Projects\FinalFisher C#\Classes\FFACETools\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\Vinny\Documents\SharpDevelop Projects\FinalFisher C#\Classes\FFACETools\obj\Debug\FFACETools.dll
-C:\Users\Vinny\Documents\SharpDevelop Projects\FinalFisher C#\Classes\FFACETools\obj\Debug\FFACETools.pdb
