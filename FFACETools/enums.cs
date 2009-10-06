@@ -351,8 +351,8 @@
 		Maguss_Roll = 325,
 		Corsairs_Roll = 326,
 		Puppet_Roll = 327,
-		Dancers_Roll = 328
-		Scholars_Roll = 329
+		Dancers_Roll = 328,
+		Scholars_Roll = 329,
 		Warriors_Charge = 340,
 		Formless_Strikes = 341,
 		Assassins_Charge = 342,
@@ -1338,7 +1338,7 @@
 		Modus = 230,
 		Stratagems = 231,
 		Dark_Arts = 232,
-		Sublimation = 234
+		Sublimation = 234,
 		Weaponskill = 900
 
 	} // @ public enum AbilityList : byte
