@@ -86,7 +86,7 @@
 		Doom = 15,
 		Amnesia = 16,
 		Charm2 = 17,
-		Petrification = 18,
+		Gradual_Petrification = 18,
 		Sleep2 = 19,
 		Terror = 28,
 		Mute = 29,
@@ -447,7 +447,7 @@
 		//------------------------------------------------------------------------------------------'
 		//--------------------------------------Tekz eChatModes-------------------------------------'
 		//------------------------------------------------------------------------------------------'
-
+		Error = -1				// "Invented" chat mode, to help catch errors
 		Unknown = 0,			 // Catch all.
 
 		//--------------------------------------------------------------'
@@ -1338,8 +1338,7 @@
 		Modus = 230,
 		Stratagems = 231,
 		Dark_Arts = 232,
-		Sublimation = 234,
-		Weaponskill = 900
+		Sublimation = 234
 
 	} // @ public enum AbilityList : byte
 
