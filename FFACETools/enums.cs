@@ -1295,6 +1295,7 @@
 		Seigan = 139,
 		Sekkanoki = 140,
 		Sange = 145,
+		Yonin_Innin = 146,
 		Ancient_Circle = 157,
 		Jump = 158,
 		High_Jump = 159,
@@ -1314,9 +1315,9 @@
 		Burst_Affinity = 182,
 		Convergence = 183,
 		Diffusion  = 184,
-		Roll = 193,
+		Phantom_Roll = 193,
 		Double_Up = 194,
-		Shot = 195,
+		Quick_Draw = 195,
 		Random_Deal = 196,
 		Snake_Eye = 197,
 		Fold_Passen = 198,
@@ -1331,14 +1332,18 @@
 		Sambas = 216,
 		Waltzes = 217,
 		Jigs = 218,
+		Saber_Dance = 219,
 		Steps = 220,
 		Flourishes_I = 221,
 		Flourishes_II = 222,
+		No_Foot_Rise = 223
+		Fan_Dance = 224,
 		Light_Arts = 228,
 		Modus = 230,
 		Stratagems = 231,
 		Dark_Arts = 232,
-		Sublimation = 234
+		Sublimation = 234,
+		Enlightenment = 235
 
 	} // @ public enum AbilityList : byte
 
