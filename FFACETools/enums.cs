@@ -431,7 +431,17 @@
 		Afflatus_Misery = 418,
 		Composure = 419,
 		Yonin = 420,
-		Innin = 421
+		Innin = 421,
+		Carbuncle_Favor = 422,
+		Ifrits Favor = 423,
+		Shivas Favor = 424,
+		Garudas Favor = 425,
+		Titans Favor = 426,
+		Ramuhs Favor = 427,
+		Leviathans Favor = 428,
+		Fenrirs Favor = 429,
+		Diabolos Favor = 430,
+		Avatars Favor = 431
 
 	} // @ public enum StatusEffect : short
 
@@ -1344,6 +1354,8 @@
 		Dark_Arts = 232,
 		Sublimation = 234,
 		Enlightenment = 235
+		Avatars_Favor = 250,
+		Ready = 251
 
 	} // @ public enum AbilityList : byte
 
