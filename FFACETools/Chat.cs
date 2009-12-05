@@ -105,7 +105,7 @@ namespace FFACETools
 
 				public DateTime LineTime { get; set; }
 				public string LineTimeString { get; set; }
-				public Color LineColor { get; set; }
+				public string LineColor { get; set; }
 				public string LineText { get; set; }
 				public ChatMode LineType { get; set; }
 				public int Index { get; set; }
@@ -359,7 +359,7 @@ namespace FFACETools
 				byte[] buffer = new byte[255];
 				GetChatLineR(_InstanceID, index, buffer, ref size);
 				if (size == 0)
-					return new ChatLogEntry() { LineTime = DateTime.Now, LineTimeString = "[" + DateTime.Now.ToString("HH:mm:ss") + "] ", LineColor = Color.Empty, LineText = String.Empty, LineType = ChatMode.Unknown, Index = 0 };
+					return new ChatLogEntry() { LineTime = DateTime.Now, LineTimeString = "[" + DateTime.Now.ToString("HH:mm:ss") + "] ", LineColor = string.Empty, LineText = String.Empty, LineType = ChatMode.Unknown, Index = 0 };
 
 				string tempLine = System.Text.Encoding.GetEncoding(932).GetString(buffer, 0, size - 1);
 				string[] sArray = tempLine.Split(new char[1] {','}, 12);
@@ -383,7 +383,8 @@ namespace FFACETools
 					{
 						LineTime = DateTime.Now,
 						LineTimeString = "[" + DateTime.Now.ToString("HH:mm:ss") + "] ",
-						LineColor = ColorTranslator.FromHtml("#" + sArray[3]),
+						// Original Line:  LineColor = ColorTranslator.FromHtml("#" + sArray[3]),
+                        LineColor = sArray[3],
 						LineText = sArray[11].Remove(0, 4),
 						LineType = (ChatMode)short.Parse(sArray[0], System.Globalization.NumberStyles.AllowHexSpecifier),
 						Index = int.Parse(sArray[5], System.Globalization.NumberStyles.AllowHexSpecifier)
@@ -393,7 +394,7 @@ namespace FFACETools
 					{
 						LineTime = DateTime.Now,
 						LineTimeString = "[" + DateTime.Now.ToString("HH:mm:ss") + "] ",
-						LineColor = ColorTranslator.FromHtml("#FF0000"),
+						LineColor = "#FF0000",
 						LineText = "Error: " + e.Message,
 						LineType = ChatMode.Unknown,
 						Index = 0
@@ -499,8 +500,9 @@ namespace FFACETools
 			/// Will get the next chat line
 			/// </summary>
 			/// <param name="cleanLine">Whether to return a clean text line</param>
+            /// <param name="addcolor">Whether to return a color coded line</param>
 			/// <returns>Empty string if no new line available, otherwise the new line</returns>
-			public ChatLine GetNextLine(bool cleanLine)
+			public ChatLine GetNextLine(bool cleanLine, bool addcolor)
 			{
 				ChatLine line = new ChatLine();
 
@@ -513,7 +515,15 @@ namespace FFACETools
 					// get the next chat line
 					line.Now = _ChatLog.Peek().LineTimeString;
 					line.NowDate = _ChatLog.Peek().LineTime;
-					line.Color = _ChatLog.Peek().LineColor;
+					if (addcolor == true)
+                    {
+                        line.Color = ColorTranslator.FromHtml("#" + _ChatLog.Peek().LineColor);
+                    }
+                    else
+                    {
+                        line.Color = Color.Empty;
+                    }
+                    
 					line.Type = _ChatLog.Peek().LineType;
 					line.Text = _ChatLog.Peek().LineText;
 
