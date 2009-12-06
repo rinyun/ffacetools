@@ -433,15 +433,15 @@
 		Yonin = 420,
 		Innin = 421,
 		Carbuncle_Favor = 422,
-		Ifrits Favor = 423,
-		Shivas Favor = 424,
-		Garudas Favor = 425,
-		Titans Favor = 426,
-		Ramuhs Favor = 427,
-		Leviathans Favor = 428,
-		Fenrirs Favor = 429,
-		Diabolos Favor = 430,
-		Avatars Favor = 431
+		Ifrits_Favor = 423,
+		Shivas_Favor = 424,
+		Garudas_Favor = 425,
+		Titans_Favor = 426,
+		Ramuhs_Favor = 427,
+		Leviathans_Favor = 428,
+		Fenrirs_Favor = 429,
+		Diabolos_Favor = 430,
+		Avatars_Favor = 431
 
 	} // @ public enum StatusEffect : short
 
@@ -926,6 +926,7 @@
 		Reraise_II	  = 282,
 		Reraise_III	 = 284,
 		Erase		   = 286,
+		
 		Fire			= 288,
 		Fire_II		 = 290,
 		Fire_III		= 292,
@@ -1023,7 +1024,7 @@
 		Rasp			= 476,
 		Shock		   = 478,
 		Drown		   = 480,
-		
+
 		Drain		   = 490,
 		Drain_II		= 492,
 		Aspir		   = 494,
@@ -1054,7 +1055,7 @@
 		Absorb_CHR	  = 544,
 		Sleepga_DRK	 = 546,
 		Sleepga_II_DRK  = 548,
-		
+
 		Fire_Spirit	 = 576,
 		Ice_Spirit	  = 578,
 		Air_Spirit	  = 580,
@@ -1072,7 +1073,7 @@
 		Shiva		  = 604,
 		Ramuh		  = 606,
 		Diabolos	   = 608,
-		
+
 		Katon_Ichi	 = 640,
 		Katon_Ni	   = 642,
 		Katon_San	  = 644,
@@ -1109,6 +1110,7 @@
 		Tonko_Ichi	  = 706,
 		Tonko_Ni		= 708,
 		Tonko_San	   = 710,
+		
 		Paralyga		= 712,
 		Slowga		  = 714,
 		Hastega		 = 716,
@@ -1221,6 +1223,7 @@
 		Goddesss_Hymnus	  = 928,
 		Chocobo_Mazurka	  = 930,
 		Maidens_Virelai	  = 932,
+		
 		Awful_Eye			= 934,
 		Battle_Dance		 = 936,
 		Blastbomb			= 938,
