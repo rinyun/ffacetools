@@ -749,8 +749,8 @@
         Airship_from_Bastok_to_Jeuno = 0xE0,
         Airship_from_Windurst_to_Jeuno = 0xE1,
         Airship_from_Kazham_to_Jeuno = 0xE2,
-        Ferry_between_Mhaura__Selbina = 0xE3,
-        Ferry_between_Selbina__Mhaura = 0xE4,
+        Ferry_between_Mhaura__Selbina_Pirates = 0xE3,
+        Ferry_between_Selbina__Mhaura_Pirates = 0xE4,
         Southern_San_DOria = 0xE6,
         Northern_San_DOria = 0xE7,
         Port_San_DOria = 0xE8,
@@ -774,9 +774,9 @@
         Kazham = 0xFA,
         Hall_of_the_Gods = 0xFB,
         Norg = 0xFC,
-        San_DOria_Residential_Area = 0xFD,
-        Bastok_Residential_Area = 0xFE,
-        Windurst_Residential_Area = 0xFF
+        San_DOria_Residential_Area_S = 0xFD,
+        Bastok_Residential_Area_S = 0xFE,
+        Windurst_Residential_Area_S = 0xFF
 
     } // @ public enum Zone : short 
 
