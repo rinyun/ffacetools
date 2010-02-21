@@ -66,7 +66,7 @@
     /// <summary>
     /// Status effects
     /// </summary>
-    public enum StatusEffect : ushort
+    public enum StatusEffect : short
     {
         KO = 0,
         Weakness = 1,
