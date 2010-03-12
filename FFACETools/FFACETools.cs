@@ -134,17 +134,17 @@ namespace FFACETools
 				throw new Exception(NEED_v4009_OR_HIGHER);
 
 			// instantiate our classes
-			Player	  = new PlayerTools(_InstanceID);
-			Target	  = new TargetTools(_InstanceID);
-			Party	   = new PartyTools(_InstanceID);
+			Player	    = new PlayerTools(_InstanceID);
+			Target	    = new TargetTools(_InstanceID);
+			Party	    = new PartyTools(_InstanceID);
 			Fish		= new FishTools(_InstanceID);
 			Windower	= new WindowerTools(_InstanceID);
-			Timer	   = new TimerTools(_InstanceID);
+			Timer	    = new TimerTools(_InstanceID);
 			Chat		= new ChatTools(_InstanceID);
 			Item		= new ItemTools(_InstanceID);
-			NPC		 = new NPCTools(_InstanceID);
+			NPC		    = new NPCTools(_InstanceID);
 			Menu		= new MenuTools(_InstanceID);
-			Search	  = new SearchTools(_InstanceID);
+			Search	    = new SearchTools(_InstanceID);
 			Navigator   = new NavigatorTools(this);
 
 			#region Party Members
