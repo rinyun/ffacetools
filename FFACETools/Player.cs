@@ -478,6 +478,14 @@ namespace FFACETools
 				get { return GetPlayerInformation().HomePoint; }
 
 			} // @ public int HomePoint_ID
+			
+			/// <summary>
+            /// Get Login Status
+            /// </summary>
+            public LoginStatus GetLoginStatus
+            {
+                get { return (LoginStatus)GetLoginStatus(_InstanceID); }
+            }
 
 			#endregion
 

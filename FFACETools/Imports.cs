@@ -9,6 +9,9 @@ namespace FFACETools
 		private static extern int CreateInstance(UInt32 PID);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern void DeleteInstance(int instanceID);
+        [DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+        private static extern byte GetLoginStatus (int instanceID);
+
 
 		#region Player Imports
 

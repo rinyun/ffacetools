@@ -26,6 +26,17 @@
 
     } // @ public enum Status : byte
 
+    /// <summary>
+    /// Login Status
+    /// </summary>
+    public enum LoginStatus : byte
+    {
+        CharacterLoginScreen = 0,
+        Loading = 1,
+        LoggedIn = 2
+
+    }
+
     #endregion
 
     #region Job
