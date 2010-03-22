@@ -479,6 +479,7 @@
         SentTell = 4,			// = my Tell to someone else
         SentParty = 5,		   // = my msg to Party
         SentLinkShell = 6,	   // = my msg to my linkshell
+        SentEmote = 7,			  // = sent email
 
         //--------------------------------------------------------------'
         //----Text That's Been Recieved In ChatLog By Other Players-----'
@@ -488,52 +489,73 @@
         RcvdTell = 12,		   // = received a Tell
         RcvdParty = 13,		  // = received party text -- Thanks to AcidFang for this value (v1.5.4)
         RcvdLinkShell = 14,	  // = incoming linkshell text
+        RcvdEmote = 15,			 // = received Emote
 
         //--------------------------------------------------------------'
         //-----------You aKa (The Player's) Fight Log Stuff-------------'
         //--------------------------------------------------------------'
-        PlayerzFightLog = 20,	// eg. Teknical hits the Thread Leech for 63 points of damage.
+        PlayerHits = 20,	// eg. Teknical hits the Thread Leech for 63 points of damage.
+        PlayerMisses = 21,
+        TargetUsesJobAbility = 22, // eg. The Thread Leech uses TP Drainkiss.
+        TargetHits = 28,	 // eg. The Thread Leech hits Teknical for 4 points of damage.
+        TargetMisses = 29,	   // eg. The Thread Leech misses Teknical.
+        PlayerAdditionalEffect = 30,
         PlayerDefeats = 36,	  // eg. Teknical Defeats the River Crab. or whatever
+        SomeoneSpellEffect = 43,
+        SomeoneDefeats = 44,	 // = somebody "defeats the" river crab or whatever
+        PartySpellEffect = 51,
         PlayerStartCasting = 52, // eg. Teknical starts casting Dia on the Thread Leech.
+        PlayerSpellResult = 56,
+        PlayerSpellEffect = 64,
+        TargetEffectOff = 65,
+        Itemused = 90,
+        SomeoneItemEffect = 91,
+        TargetActionStart = 100,
         PlayerUsesJobAbility = 101, // eg. Teknical uses Divine Seal.
+        PlayerStatusResult = 102,
         PlayerReadiesMove = 110, // eg. The Thread Leech readies Brain Drain.
+        SomeoneAbility = 111,
+        SynthResult = 121,	   // = you throw away a rusty subligar or whatever
         PlayersBadCast = 122,	// eg. Inturrupted or Unable to Cast. eg: Unable To Cast That Spell
-
+        TellNotRcvd = 123,	   // = your tell was not received
+        Obtained = 127,
+        SkillBoost = 129,		// = you fishing skill rises 0.1 points
+        Experience = 131,
+        ActionStart = 135,
+        LogoutMessage = 136,
+        ItemSold = 138,		  // = item sold
+        MoogleYellow = 141,
+        MoogleWhite = 144,
+        FishObtained = 146,	  // "player caught ....!"
+        FishResult = 148,		// = fishing result including: 
+        CaughtOnHook = 152,	  //// = something caught on hook
+        CommandError = 157,	  //// = A command error occurred
+        DropRipCap = 159,		//// = you release the ripped cap regretfully
+        RegConquest = 161,	   //// = regional conquest update message
+        ChangeJob = 190,
+        EffectWearOff = 191,	 // eg. Teknical's Protect effect wears off
+        ServerNotice = 200,	   //// = notice of upcoming server maintenance
+        SearchComment = 204,
+        LSMES = 205,
+        Echo = 206,			  // = echo
+        Examined = 208
         //--------------------------------------------------------------'
         //-----The Other Player aKa (The Target's) Fight Log Stuff------'
         //--------------------------------------------------------------'
-        TargetUsesJobAbility = 22, // eg. The Thread Leech uses TP Drainkiss.
-        TargetFightLog = 28,	 // eg. The Thread Leech hits Teknical for 4 points of damage.
-        TargetReadiesMove = 100, // eg. Teknical readies Rock Crusher.
-        TargetMisses = 29,	   // eg. The Thread Leech misses Teknical.
+        
+        
 
-        Emote1 = 7,			  // = Emote1
-        Emote2 = 15,			 // = Emote2
+        
 
-        Echo = 206,			  // = echo
-
-        EffectWearOff = 191,	 // eg. Teknical's Protect effect wears off
-
-        SomeoneDefeats = 44,	 // = somebody "defeats the" river crab or whatever
-        SynthResult = 121,	   // = you throw away a rusty subligar or whatever
-        TellNotRcvd = 123,	   // = your tell was not received
-        SkillBoost = 129,		// = you fishing skill rises 0.1 points
-        ItemSold = 138,		  // = item sold
-
-        FishObtained = 146,	  // "player caught ....!"
-        FishResult = 148,		// = fishing result including: 
+        
+        
+        
         //-You didn't catch anything=,
         //-You lost your catch, 
         //-Whatever caught the hook was too small to catch, 
         //-Your line broke
 
-        CaughtOnHook = 152,	  //// = something caught on hook
-        DropRipCap = 159,		//// = you release the ripped cap regretfully
-
-        CommandError = 157,	  //// = A command error occurred
-
-        RegConquest = 161,	   //// = regional conquest update message
-        ServerNotice = 200	   //// = notice of upcoming server maintenance
+        
 
     } // @ public enum ChatMode : short
 
