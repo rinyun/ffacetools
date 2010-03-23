@@ -501,20 +501,32 @@
         TargetMisses = 29,	   // eg. The Thread Leech misses Teknical.
         PlayerAdditionalEffect = 30,
         PlayerDefeats = 36,	  // eg. Teknical Defeats the River Crab. or whatever
+        PlayedDefeated = 38,
+        NPCHit = 40,
+        NPCMiss = 41,
+        NPCSpellEffect = 42,
         SomeoneSpellEffect = 43,
         SomeoneDefeats = 44,	 // = somebody "defeats the" river crab or whatever
+        PlayerCastComplete = 50,
         PartySpellEffect = 51,
         PlayerStartCasting = 52, // eg. Teknical starts casting Dia on the Thread Leech.
         PlayerSpellResult = 56,
+        PlayerSpellResist = 59,
         PlayerSpellEffect = 64,
         TargetEffectOff = 65,
+        SomeoneNoEffect = 69,
+        PlayerLearnedSpell = 81,
         Itemused = 90,
-        SomeoneItemEffect = 91,
+        SomeoneItemBadEffect = 91,
+        SomeoneItemGoodEfect = 92,
         TargetActionStart = 100,
         PlayerUsesJobAbility = 101, // eg. Teknical uses Divine Seal.
         PlayerStatusResult = 102,
+        TargetActionMiss = 104,
         PlayerReadiesMove = 110, // eg. The Thread Leech readies Brain Drain.
         SomeoneAbility = 111,
+        SomeoneBadEffect = 112,
+        PlayerWSMiss = 114,
         SynthResult = 121,	   // = you throw away a rusty subligar or whatever
         PlayersBadCast = 122,	// eg. Inturrupted or Unable to Cast. eg: Unable To Cast That Spell
         TellNotRcvd = 123,	   // = your tell was not received
@@ -525,16 +537,17 @@
         LogoutMessage = 136,
         ItemSold = 138,		  // = item sold
         MoogleYellow = 141,
+        NPCChat = 142,
         MoogleWhite = 144,
         FishObtained = 146,	  // "player caught ....!"
         FishResult = 148,		// = fishing result including: 
-        CaughtOnHook = 152,	  //// = something caught on hook
-        CommandError = 157,	  //// = A command error occurred
-        DropRipCap = 159,		//// = you release the ripped cap regretfully
-        RegConquest = 161,	   //// = regional conquest update message
+        CaughtOnHook = 152,	  // = something caught on hook
+        CommandError = 157,	  // = A command error occurred
+        DropRipCap = 159,		// = you release the ripped cap regretfully
+        RegConquest = 161,	   // = regional conquest update message
         ChangeJob = 190,
         EffectWearOff = 191,	 // eg. Teknical's Protect effect wears off
-        ServerNotice = 200,	   //// = notice of upcoming server maintenance
+        ServerNotice = 200,	   // = notice of upcoming server maintenance
         SearchComment = 204,
         LSMES = 205,
         Echo = 206,			  // = echo
