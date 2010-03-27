@@ -487,6 +487,19 @@ namespace FFACETools
                 get { return (LoginStatus)GetLoginStatus(_InstanceID); }
             }
 
+            /// <summary>
+            /// Will get information about the trade window
+            /// </summary>
+            public TRADEINFO GetTradeWindowInformation
+            {
+                get
+                {
+                    TRADEINFO information = new TRADEINFO();
+                    GetNPCTradeInfo(_InstanceID, ref information);
+                    return information;
+                }
+            } // @ public TRADEINFO GetTradeWindowInformation
+
 			#endregion
 
 			#region Methods

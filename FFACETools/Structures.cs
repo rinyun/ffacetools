@@ -280,6 +280,32 @@ namespace FFACETools
 
 		} // @ private struct TREASUREITEM
 
+        /// <summary>
+        /// Structure to hold information about a specific item in the trade window
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public struct TRADEITEM
+        { 
+            public ushort ItemID;
+            public byte Index;
+            public byte Count;
+
+        } // @ private struct TRADEITEM
+
+        /// <summary>
+        /// Structure containing information about the trade window
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public struct TRADEINFO
+        { 
+            public uint Gil;
+            public int TargetID;
+            public byte SelectedBox;		
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)] 
+            public TRADEITEM[] items;
+
+        } // @ private struct TRADEINFO
+
 		#endregion
 
 		#region Chat
@@ -295,5 +321,5 @@ namespace FFACETools
 
 		#endregion
 
-	} // @ public partial class FFACE
+    } // @ public partial class FFACE
 }

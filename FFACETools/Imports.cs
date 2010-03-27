@@ -163,6 +163,8 @@ namespace FFACETools
 		private static extern float GetNPCDistance(int instanceID, int npcID);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern double GetNPCHeadingToNPC(int instanceID, int npcIDStart, int npcIDEnd);
+        [DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+        private static extern void GetNPCTradeInfo(int instanceID, ref TRADEINFO info);
 
 		#endregion
 
