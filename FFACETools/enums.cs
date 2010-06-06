@@ -710,6 +710,7 @@
         Ghoyus_Reverie              = 129,
         RuAun_Gardens               = 130,
         Mordion_Gaol                = 131,
+		Character_Login_Selection_Zone	= 133,
         Dynamis_Beaucedine          = 134,
         Dynamis_Xarcabard           = 135,
         Beaucedine_Glacier_S        = 136,
