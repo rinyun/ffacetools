@@ -137,7 +137,8 @@
         Souleater = 63,
         Last_Resort = 64,
         Sneak_Attack = 65,
-        Copy_Image = 66,
+        //Copy_Image = 66,
+		Utsusemi_1_Shadow_Left = 66,
         Third_Eye = 67,
         Warcry = 68,
         Invisible = 69,
@@ -452,7 +453,11 @@
         Leviathans_Favor = 428,
         Fenrirs_Favor = 429,
         Diabolos_Favor = 430,
-        Avatars_Favor = 431
+        Avatars_Favor = 431,
+		Utsusemi_2_Shadows_Left = 444,
+		Utsusemi_3_Shadows_Left = 445,
+		Utsusemi_4_Shadows_Left = 446
+		
 
     } // @ public enum StatusEffect : short
 
