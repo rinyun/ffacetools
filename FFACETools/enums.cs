@@ -897,7 +897,7 @@
     /// </summary>
     public enum SpellList : short
     {
-        		Cure = 2,
+        Cure = 2,
         Cure_II = 4,
         Cure_III = 6,
         Cure_IV = 8,
