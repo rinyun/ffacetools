@@ -796,9 +796,9 @@
         Cloister_of_Tides           = 211,
         Gustav_Tunnel               = 212,
         Labyrinth_of_Onzozo         = 213,
-        Jeuno_Residential_Area      = 215,
-        San_DOria_Residential_Area  = 216,
-        Bastok_Residential_Area     = 217,
+        Abyssea__Attohwa            = 215,
+        Abyssea__Misareaux          = 216,
+        Abyssea__Vunkerl            = 217,
         Windurst_Residential_Area   = 218,
         Ferry_between_Mhaura__Selbina = 220,
         Ferry_between_Selbina__Mhaura = 221,
@@ -831,9 +831,9 @@
         Kazham                      = 250,
         Hall_of_the_Gods            = 251,
         Norg                        = 252,
-        San_DOria_Residential_Area_S = 253,
-        Bastok_Residential_Area_S   = 254,
-        Windurst_Residential_Area_S = 255
+        San_DOria_Residential_Area  = 253,
+        Bastok_Residential_Area     = 254,
+        Windurst_Residential_Area_2 = 255
 
     } // @ public enum Zone : short 
 
