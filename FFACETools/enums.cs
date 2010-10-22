@@ -799,7 +799,7 @@
         Abyssea__Attohwa            = 215,
         Abyssea__Misareaux          = 216,
         Abyssea__Vunkerl            = 217,
-        Windurst_Residential_Area   = 218,
+        Windurst_Residential_Area_2 = 218,
         Ferry_between_Mhaura__Selbina = 220,
         Ferry_between_Selbina__Mhaura = 221,
         Airship_from_San_DOria_to_Jeuno = 223,
@@ -833,7 +833,7 @@
         Norg                        = 252,
         San_DOria_Residential_Area  = 253,
         Bastok_Residential_Area     = 254,
-        Windurst_Residential_Area_2 = 255
+        Windurst_Residential_Area = 255
 
     } // @ public enum Zone : short 
 
