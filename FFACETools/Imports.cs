@@ -11,7 +11,7 @@ namespace FFACETools
 		private static extern void DeleteInstance(int instanceID);
         [DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
         private static extern byte GetLoginStatus (int instanceID);
-		DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
         private static extern bool Access (int instanceID);
 
 
@@ -167,6 +167,20 @@ namespace FFACETools
 		private static extern double GetNPCHeadingToNPC(int instanceID, int npcIDStart, int npcIDEnd);
         [DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
         private static extern void GetNPCTradeInfo(int instanceID, ref TRADEINFO info);
+		
+		/*		
+		 *		FFACE paid functions
+		 *
+		 *		BOOL SetNPCTradeInfo(void* inst, int Code, unsigned short ItemID, char Index, char Count, char Box, unsigned int Gil)
+		 *		void GetNPCTradeInfo(void* inst, TRADEINFO* TI)
+		 *		BOOL IsSynthesis(void* inst)
+		 *		bool SetFishHP(void* inst, int value)
+		 *		bool FightFish(void* inst)
+		 *		bool SetTimeOut(void* inst, short value)
+		 */
+		[DllImport("FFACE.dll", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = false, EntryPoint="SetCraftItem")]
+		private static extern bool SetCraftItem(int instanceID, int Zero, short ItemID, byte Index, byte Count, byte Box);
+
 
 		#endregion
 
