@@ -2048,6 +2048,7 @@
         Blood_Pact_Rage = 173,
         Blood_Pact_Ward = 174,
         Elemental_Siphon = 175,
+		Avatars_Favor = 176,
         Chain_Affinity = 181,
         Burst_Affinity = 182,
         Convergence = 183,
@@ -2085,7 +2086,6 @@
         Sublimation = 234,
         Enlightenment = 235,
         Presto = 236,
-        Avatars_Favor = 250,
         Ready = 251
 
     } // @ public enum AbilityList : byte
