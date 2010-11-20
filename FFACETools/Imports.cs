@@ -36,6 +36,8 @@ namespace FFACETools
 		private static extern float GetCastPercent(int instanceID);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern short GetCastPercentEx(int instanceID);
+        [DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+        private static extern byte GetWeatherType (int instanceID);
 
 		#endregion
 

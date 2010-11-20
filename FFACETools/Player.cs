@@ -500,6 +500,17 @@ namespace FFACETools
                 }
             } // @ public TRADEINFO GetTradeWindowInformation
 
+            /// <summary>
+            /// Weather of the Zone player is in
+            /// </summary>
+            public Weather Weather
+            {
+                get { return (Weather)GetWeatherType(_InstanceID); }
+
+            } // @ public Weather Weather
+
+            /// <summary>
+
 			#endregion
 
 			#region Methods

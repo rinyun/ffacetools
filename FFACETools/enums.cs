@@ -2092,6 +2092,38 @@
 
     #endregion
 
+    #region Weather
+
+    /// <summary>
+    /// Weather Types
+    /// </summary>
+    public enum Weather : byte
+    {
+        Clear = 0,
+        Sunny = 1,
+        Cloudy = 2,
+        Fog = 3,
+        Fire = 4,
+        Fire_Double = 5,
+        Water = 6,
+        Water_Double = 7,
+        Earth = 8,
+        Earth_Double = 9,
+        Wind = 10,
+        Wind_Double = 11,
+        Ice = 12,
+        Ice_Double = 13,
+        Lightning = 14,
+        Lightning_Double = 15,
+        Light = 16,
+        Light_Double = 17,
+        Dark = 18,
+        Dark_Double = 19
+
+    } // @ public enum Weather : byte
+
+    #endregion
+
     #region Treasure
 
     /// <summary>
