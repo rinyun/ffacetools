@@ -106,6 +106,14 @@ namespace FFACETools
 			private int _InstanceID { get; set; }
 
 			/// <summary>
+			/// Player's Current Gil
+			/// </summary>
+			public uint CurrentGil 
+			{
+			  get { return GetInventoryItem(0).Count; }
+			}
+
+			/// <summary>
 			/// Maximum amount of inventory slots player has
 			/// </summary>
 			public short InventoryMax
@@ -166,14 +174,15 @@ namespace FFACETools
 			{
 				get
 				{
-					// calculate amount of slots are not empty
-					short count = 0;
+				    // calculate amount of slots are not empty
+				    // -1 for error (loading/zoning), count Gil too because of this.
+				    short count = -1;
 
-					for (byte i = 1; i <= 80; i++)
-					   if (!GetInventoryItem(i).ID.Equals(0))
-							count++;
-
-					return count;
+				    for (byte i = 0; i <= 80; i++)
+				      if (!GetInventoryItem(i).ID.Equals(0)) {
+					count++;
+				      }
+				    return count;
 				}
 
 			} // @ public short InventoryCount

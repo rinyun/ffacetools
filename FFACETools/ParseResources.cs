@@ -22,6 +22,14 @@ namespace FFACETools
 			/// </summary>
 			private const string RESOURCES_FILE_NAME = "resources.xml";
 
+			private const string RESOURCES_ITEMS_GENERAL_FILE_NAME = "items_general.xml";
+			private const string RESOURCES_ITEM_ARMOR_FILE_NAME = "items_armor.xml";
+			private const string RESOURCES_ITEM_WEAPONS_FILE_NAME = "items_weapons.xml";
+			private const string RESOURCES_AREAS_FILE_NAME = "areas.xml";
+			private const string RESOURCES_STATUS_FILE_NAME = "status.xml";
+			private const string RESOURCES_SPELLS_FILE_NAME = "spells.xml";
+			private const string RESOURCES_ABILS_FILE_NAME = "abils.xml";
+
 			#endregion
 
 			/// <summary>
@@ -32,9 +40,12 @@ namespace FFACETools
 			{
 				string sResult = String.Empty;
 
-				XPathDocument document = new XPathDocument(/*FFACE.WindowerPath + */RESOURCES_FILE_NAME);
+				XPathDocument document = new XPathDocument(FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + RESOURCES_AREAS_FILE_NAME);
 
-				XPathNavigator node = document.CreateNavigator().SelectSingleNode("//resources/areas/entry[@id='" + id + "']");
+				XPathNavigator node = document.CreateNavigator().SelectSingleNode("//areas/a[@id='" + id + "']");
+				//XPathDocument document = new XPathDocument(/*FFACE.WindowerPath + */RESOURCES_FILE_NAME);
+
+				//XPathNavigator node = document.CreateNavigator().SelectSingleNode("//resources/areas/entry[@id='" + id + "']");
 
 				if (null != node && !String.IsNullOrEmpty(node.Value))
 					sResult = node.Value;
@@ -51,13 +62,28 @@ namespace FFACETools
 			{
 				string sResult = String.Empty;
 
-				XPathDocument document = new XPathDocument(/*FFACE.WindowerPath + */RESOURCES_FILE_NAME);
+				//XPathDocument document = new XPathDocument(/*FFACE.WindowerPath + */RESOURCES_FILE_NAME);
 
-				XPathNavigator node = document.CreateNavigator().SelectSingleNode("//resources/items/entry[@id='" + id + "']");
+				//XPathNavigator node = document.CreateNavigator().SelectSingleNode("//resources/items/entry[@id='" + id + "']");
 
+				//if (null != node && !String.IsNullOrEmpty(node.Value))
+				//        sResult = node.Value;
+
+				XPathDocument document = new XPathDocument(FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + RESOURCES_ITEMS_GENERAL_FILE_NAME);
+				XPathNavigator node = document.CreateNavigator().SelectSingleNode("//items/i[@id='" + id + "']");  // Items Armor items_armor.xml
 				if (null != node && !String.IsNullOrEmpty(node.Value))
-					sResult = node.Value;
+				  return (node.Value);
 
+				XPathDocument doc2 = new XPathDocument(FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + RESOURCES_ITEM_ARMOR_FILE_NAME);
+				XPathNavigator node2 = doc2.CreateNavigator().SelectSingleNode("//items/i[@id='" + id + "']");  // Items Weapons item_weapons.xml
+				if (null != node2 && !String.IsNullOrEmpty(node2.Value))
+				  return (node2.Value);
+
+				XPathDocument doc1 = new XPathDocument(FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + RESOURCES_ITEM_WEAPONS_FILE_NAME);
+				XPathNavigator node1 = doc1.CreateNavigator().SelectSingleNode("//items/i[@id='" + id + "']");  // Items General items_general.xml
+
+				if (null != node1 && !String.IsNullOrEmpty(node1.Value))
+				  sResult = node1.Value;
 				return sResult;
 
 			} // @ public static string GetItemName(int id)
@@ -69,16 +95,31 @@ namespace FFACETools
 			/// <returns>-1 if no ID was found for passed name</returns>
 			public static int GetItemID(string name)
 			{
-				int iResult = -1;
+			  int iResult = -1;
 
-				XPathDocument document = new XPathDocument(/*FFACE.WindowerPath + */RESOURCES_FILE_NAME);
+			  //XPathDocument document = new XPathDocument(/*FFACE.WindowerPath + */RESOURCES_FILE_NAME);
+			  //XPathNavigator node = document.CreateNavigator().SelectSingleNode("//resources/items/entry[translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=\"" + name.ToLower() + "\"]");
 
-				XPathNavigator node = document.CreateNavigator().SelectSingleNode("//resources/items/entry[translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=\"" + name.ToLower() + "\"]");
+			  XPathDocument document = new XPathDocument(FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + RESOURCES_ITEMS_GENERAL_FILE_NAME);
+			  XPathNavigator node = document.CreateNavigator().SelectSingleNode("//items/i[translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=\"" + name.ToLower() + "\"]");
 
-				if (null != node && !String.IsNullOrEmpty(node.Value))
-					iResult = Convert.ToInt32(node.GetAttribute("id", String.Empty));
+			  if (null != node && !String.IsNullOrEmpty(node.Value))
+			    return (Convert.ToInt32(node.GetAttribute("id", String.Empty)));
 
-				return iResult;
+			  XPathDocument doc2 = new XPathDocument(FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + RESOURCES_ITEM_ARMOR_FILE_NAME);
+			  XPathNavigator node2 = doc2.CreateNavigator().SelectSingleNode("//items/i[translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=\"" + name.ToLower() + "\"]");
+			  //XPathNavigator node = document.CreateNavigator().SelectSingleNode("//resources/items/entry[translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=\"" + name.ToLower() + "\"]");
+
+			  if (null != node2 && !String.IsNullOrEmpty(node2.Value))
+			    return (Convert.ToInt32(node2.GetAttribute("id", String.Empty)));
+
+			  XPathDocument doc1 = new XPathDocument(FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + RESOURCES_ITEM_WEAPONS_FILE_NAME);
+			  XPathNavigator node1 = doc1.CreateNavigator().SelectSingleNode("//items/i[translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=\"" + name.ToLower() + "\"]");
+
+			  if (null != node1 && !String.IsNullOrEmpty(node1.Value))
+			    iResult = Convert.ToInt32(node1.GetAttribute("id", String.Empty));
+
+			  return iResult;
 
 			} // @ public static string GetItemID(string name)
 
@@ -90,9 +131,11 @@ namespace FFACETools
 			{
 				string sResult = String.Empty;
 
-				XPathDocument document = new XPathDocument(/*FFACE.WindowerPath + */RESOURCES_FILE_NAME);
+				//XPathDocument document = new XPathDocument(/*FFACE.WindowerPath + */RESOURCES_FILE_NAME);
+				//XPathNavigator node = document.CreateNavigator().SelectSingleNode("//resources/status/entry[@id='" + statusEffect + "']");
 
-				XPathNavigator node = document.CreateNavigator().SelectSingleNode("//resources/status/entry[@id='" + statusEffect + "']");
+				XPathDocument document = new XPathDocument(FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + RESOURCES_STATUS_FILE_NAME);
+				XPathNavigator node = document.CreateNavigator().SelectSingleNode("//status/b[@id='" + statusEffect + "']");
 
 				if (null != node && !String.IsNullOrEmpty(node.Value))
 					sResult = node.Value;

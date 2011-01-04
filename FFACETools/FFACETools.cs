@@ -179,9 +179,13 @@ namespace FFACETools
 		/// </summary>
 		~FFACE()
 		{
-			if (!_InstanceID.Equals(0))
-				DeleteInstance(_InstanceID);
-
+		  if (!_InstanceID.Equals(0)) {
+		    try {
+		      DeleteInstance(_InstanceID);
+		    }
+		    catch {
+		    }
+		  }
 		} // @ ~FFACEWrapper()
 
 		#endregion

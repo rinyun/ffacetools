@@ -565,9 +565,10 @@
         SomeoneDefeats = 44,	 // = somebody "defeats the" river crab or whatever
         PlayerCastComplete = 50,
         PartySpellEffect = 51,
-        PlayerStartCasting = 52, // eg. Teknical starts casting Dia on the Thread Leech.
+	PlayerStartCasting = 52, // eg. Teknical starts casting Dia on the Thread Leech., The Antican Princeps starts casting Flash.
         PlayerSpellResult = 56,
-        PlayerSpellResist = 59,
+	PlayerRcvdEffect = 57, // The Antican Princeps casts Flash. <name> is blinded.
+	PlayerSpellResist = 59,
         PlayerSpellEffect = 64,
         TargetEffectOff = 65,
         SomeoneNoEffect = 69,
@@ -592,12 +593,13 @@
         ActionStart = 135,
         LogoutMessage = 136,
         ItemSold = 138,		  // = item sold
-        MoogleYellow = 141,
+	ClockInfo = 140,
+	MoogleYellow = 141,
         NPCChat = 142,
         MoogleWhite = 144,
         FishObtained = 146,	  // "player caught ....!"
         FishResult = 148,		// = fishing result including: 
-        CaughtOnHook = 152,	  // = something caught on hook
+	CaughtOnHook = 152,	  // = something caught on hook... incorrect, actually info given by NPC
         CommandError = 157,	  // = A command error occurred
         DropRipCap = 159,		// = you release the ripped cap regretfully
         RegConquest = 161,	   // = regional conquest update message
@@ -607,7 +609,8 @@
         SearchComment = 204,
         LSMES = 205,
         Echo = 206,			  // = echo
-        Examined = 208
+        Examined = 208,
+        AbilTimeLeft = 209    // Time left on "job ability"
         //--------------------------------------------------------------'
         //-----The Other Player aKa (The Target's) Fight Log Stuff------'
         //--------------------------------------------------------------'
@@ -2086,7 +2089,7 @@
         Sublimation = 234,
         Enlightenment = 235,
         Presto = 236,
-        Ready = 251
+	Ready = 251
 
     } // @ public enum AbilityList : byte
 
@@ -2462,7 +2465,7 @@
         Player,
         NPC,
         Mob,
-        InadamentObject
+	InanimateObject
 
     } // @ public enum NPCType
 
