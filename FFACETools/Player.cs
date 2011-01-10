@@ -511,6 +511,15 @@ namespace FFACETools
 
             /// <summary>
 
+            /// <summary>
+            /// Returns true if you are in the middle of a synth
+            /// </summary>
+            public bool IsSynthing ()
+            {
+                return IsSynthesis(_InstanceID);
+
+            } // @ public bool Synthing()
+
 			#endregion
 
 			#region Methods
@@ -736,7 +745,7 @@ namespace FFACETools
 			} // @ public SkillDetails GetCombatSkillDetail(CombatSkill skill)
 
 			#endregion
-
+			
 		} // @ public class PlayerTools
 	}
 }

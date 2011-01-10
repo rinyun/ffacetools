@@ -91,7 +91,7 @@ namespace FFACETools
 			{
 				get { return FFACE.ShopQuantityMax(_InstanceID); }
 
-			} // @ public string ShopQuantityMax
+			} // @ public byte ShopQuantityMax
 
 			/// <summary>
 			/// Current quantity of the selection
@@ -101,6 +101,40 @@ namespace FFACETools
 				get { return FFACE.ShopQuantity(_InstanceID); }
 
 			} // @ public byte ShopQuantity
+			
+			///Set Items in npc trade window
+            ///<param name="sTinfo">NPCTRADEINFO structure</param>
+            ///</summary>
+            public bool SetNPCTradeInformation(NPCTRADEINFO sTinfo)
+            {
+                bool result = false;
+
+                for (int i = 0; i < sTinfo.items.Length; i++)
+                {
+                    result = FFACE.SetNPCTradeInfo(_InstanceID, 0, sTinfo.items[i].ItemID, sTinfo.items[i].Index, sTinfo.items[i].Count, (byte)i, sTinfo.Gil);
+                    if (!result)
+                        break;
+                }
+                return result;
+            } // @ public bool SetNPCTradeInformation
+			
+			/// <summary>
+			/// Set items in craft window
+			/// </summary>
+			/// <param name="sTinfo">NPCTRADEINFO structure</param>
+			public bool SetCraftItems(NPCTRADEINFO sTinfo)
+			{
+				bool result = false;
+
+				for (byte i = 0; i < sTinfo.items.Length; i++)
+				{
+					result = FFACE.SetCraftItem(_InstanceID, 0, sTinfo.items[i].ItemID, sTinfo.items[i].Index, sTinfo.items[i].Count, i);
+					if (!result)
+						break;
+				}
+				return result;
+			} // @ public bool SetCraftItems
+
 
 			#endregion
 

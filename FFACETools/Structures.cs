@@ -305,6 +305,16 @@ namespace FFACETools
             public TRADEITEM[] items;
 
         } // @ private struct TRADEINFO
+		
+		///<summary>
+        ///FFACETools Structure for setTradeItems
+        ///</summary>
+        public struct NPCTRADEINFO
+        {
+            public UInt32 Gil;
+            public TRADEITEM[] items;
+        }
+
 
 		#endregion
 

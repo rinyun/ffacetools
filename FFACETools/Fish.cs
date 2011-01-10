@@ -155,6 +155,38 @@ namespace FFACETools
 
 			} // @ public FishID ID
 
+            /// <summary>
+            /// Set the current HP of the fish on the line.
+            /// </summary>
+            /// <param name="value"></param>
+            /// <returns></returns>
+            public bool SetHP(int value)
+            {
+                bool result = false;
+
+                if (SetFishHP(_InstanceID, value))
+                {
+                    result = true;
+                }
+                return result;
+            } // @ public bool SetHP
+
+            /// <summary>
+            /// Set the timeout value in seconds for the fish on the line (second before you lose your catch).
+            /// </summary>
+            /// <param name="value"></param>
+            /// <returns></returns>
+            public bool SetFishTimeOut(short value)
+            {
+                bool result = false;
+
+                if (SetTimeOut(_InstanceID, value))
+                {
+                    result = true;
+                }
+                return result;
+            } // @ public bool SetFishTimeOut
+
 			#endregion
 
 		} // @ public class FishTools
