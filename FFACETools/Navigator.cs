@@ -89,7 +89,20 @@ namespace FFACETools
 			/// <param name="KeepRunning">Whether to keep moving after reaching the destination</param>
 			public void GotoXZ(dPoint x, dPoint z, bool KeepRunning)
 			{
+				GotoXYZ(x, () => _FFACE.Player.PosY, z, KeepRunning);
+			} // @ public void GotoXZ(dPoint x, dPoint z, bool KeepRunning)
+
+			/// <summary>
+			/// Will move the player to the passed destination
+			/// </summary>
+			/// <param name="x">X coordinate of the destination</param>
+			/// <param name="y">Y coordinate of the destination</param>
+			/// <param name="z">Z coordinate of the destination</param>
+			/// <param name="KeepRunning">Whether to keep moving after reaching the destination</param>
+			public void GotoXYZ(dPoint x, dPoint y, dPoint z, bool KeepRunning)
+			{
 				float X = x();
+				float Y = y();
 				float Z = z();
 				double RH = Math.Abs(HeadingToPosXZ(X, Z) - GetPlayerPosHInDegrees());
 
@@ -117,10 +130,11 @@ namespace FFACETools
 				StartRunning();
 
 				// while we're not within our distance tolerance
-				while (DistanceToPosXZ(X, Z) > DistanceTolerance)
+				while (DistanceToPosXYZ(X, Y, Z) > DistanceTolerance)
 				{
-					double dist = DistanceToPosXZ(X, Z);
+					double dist = DistanceToPosXYZ(X, Y, Z);
 					X = x();
+					Y = y();
 					Z = z();
 					RH = Math.Abs(HeadingToPosXZ(X, Z) - GetPlayerPosHInDegrees());
 
@@ -151,26 +165,43 @@ namespace FFACETools
 				if (!KeepRunning)
 					StopRunning();
 
-			} // @ public void GotoXZ(dPoint x, dPoint z, bool KeepRunning)
+			} // @ public void GotoXZ(dPoint x, dPoint y, dPoint z, bool KeepRunning)
 
 			/// <summary>
 			/// Will go to the passed NPC's location
 			/// </summary>
 			/// <param name="ID">ID of the NPC</param>
-			public void GotoNPCXZ(short ID)
-			{
-				GotoXZ(() => _FFACE.NPC.PosX(ID), () => _FFACE.NPC.PosZ(ID), false);
+			public void GotoNPCXZ(short ID) {
+			  GotoXYZ(() => _FFACE.NPC.PosX(ID), () => _FFACE.NPC.PosY(ID), () => _FFACE.NPC.PosZ(ID), false);
 
 			} // @ public void GotoNPCXZ(short ID)
 
 			/// <summary>
+			/// Will go to the passed NPC's location
+			/// </summary>
+			/// <param name="ID">ID of the NPC</param>
+			public void GotoNPCXYZ(short ID)
+			{
+				GotoXYZ(() => _FFACE.NPC.PosX(ID), () => _FFACE.NPC.PosY(ID), () => _FFACE.NPC.PosZ(ID), false);
+
+			} // @ public void GotoNPCXYZ(short ID)
+
+			/// <summary>
 			/// Will go to the current target's location
 			/// </summary>
-			public void GotoTargetXZ()
-			{
-				GotoXZ(() => _FFACE.Target.PosX, () => _FFACE.Target.PosZ, false);
+			public void GotoTargetXZ() {
+			  GotoXYZ(() => _FFACE.Target.PosX, () => _FFACE.Target.PosY, () => _FFACE.Target.PosZ, false);
 
 			} // @ public void GotoTargetXZ()
+
+			/// <summary>
+			/// Will go to the current target's location
+			/// </summary>
+			public void GotoTargetXYZ()
+			{
+				GotoXYZ(() => _FFACE.Target.PosX, () => _FFACE.Target.PosY, () => _FFACE.Target.PosZ, false);
+
+			} // @ public void GotoTargetXYZ()
 
 			/// <summary>
 			/// Whether we're currently moving or not
@@ -188,9 +219,21 @@ namespace FFACETools
 			/// <param name="Z">Z coordinate of destination</param>
 			public double DistanceToPosXZ(double X, double Z)
 			{
-				return Math.Sqrt(Math.Pow((_FFACE.Player.PosX - X), 2) + Math.Pow((Z - _FFACE.Player.PosZ), 2));
+			  //return DistanceToPosXYZ(X, _FFACE.Player.PosY, Z);  Fail since DTPXYZ's Y would == Player.PosY in all cases
+			  return Math.Sqrt(Math.Pow((_FFACE.Player.PosX - X), 2) + Math.Pow((Z - _FFACE.Player.PosZ), 2));
 
 			} // @ public double DistanceToPosXZ(double X, double Z)
+
+			/// <summary>
+			/// Calculates the distance to the passed destination taking height into account.
+			/// </summary>
+			/// <param name="X">X coordinate of destination</param>
+			/// <param name="Y">Y coordinate of destination</param>
+			/// <param name="Z">Z coordinate of destination</param>
+			public double DistanceToPosXYZ(double X, double Y, double Z) {
+			  return Math.Sqrt(Math.Pow((_FFACE.Player.PosX - X), 2) + Math.Pow((_FFACE.Player.PosY - Y), 2) + Math.Pow((Z - _FFACE.Player.PosZ), 2));
+
+			} // @ public double DistanceToPosXYZ(double X, double Y, double Z)
 
 			/// <summary>
 			/// Caulcates the heading to the passed destination
@@ -199,25 +242,44 @@ namespace FFACETools
 			/// <param name="Z">Z coordinate of destination</param>
 			public double HeadingToPosXZ(double X, double Z)
 			{
-				X = X - _FFACE.Player.PosX;
-				Z = Z - _FFACE.Player.PosZ;
-				double p = 180 * Math.Atan2(X, Z) / Math.PI;
-
-				if (Z < 0)
-					return p + 360;
-				else
-					return p;
-
+			  return HeadingToPosXYZ(X, 0, Z);
 			} // @ public double HeadingToPosXZ(double X, double Z)
+
+			/// <summary>
+			/// Calculates the heading to the passed destination
+			/// </summary>
+			/// <param name="X">X coordinate of destination</param>
+			/// <param name="Y">Y coordinate of destination (not used, here for consistency)</param>
+			/// <param name="Z">Z coordinate of destination</param>
+			public double HeadingToPosXYZ(double X, double Y, double Z) {
+			  X = X - _FFACE.Player.PosX;
+			  Z = Z - _FFACE.Player.PosZ;
+			  double p = 180 * Math.Atan2(X, Z) / Math.PI;
+
+			  if (Z < 0)
+			    return p + 360;
+			  else
+			    return p;
+			} // @ public double HeadingToPosXYZ(double X, double Y, double Z)
 
 			/// <summary>
 			/// Changes facing to passed destination
 			/// </summary>
 			/// <param name="X">X coordinate of destination</param>
 			/// <param name="Z">Z coordinate of destination</param>
-			public void FacePosXZ(double X, double Z)
+			public void FacePosXZ(double X, double Z) {
+			  FaceHeadingXZ(HeadingToPosXYZ(X, 0, Z));
+			} // @ public void FacePosXZ(double X, double Z)
+
+			/// <summary>
+			/// Changes facing to passed destination
+			/// </summary>
+			/// <param name="X">X coordinate of destination</param>
+			/// <param name="Y">Y coordinate of destination (not used, here for consistency)</param>
+			/// <param name="Z">Z coordinate of destination</param>
+			public void FacePosXYZ(double X, double Y, double Z)
 			{
-				FaceHeadingXZ(HeadingToPosXZ(X, Z));
+				FaceHeadingXZ(HeadingToPosXYZ(X, Y, Z));
 
 			} // @ public void FacePosXZ(double X, double Z)
 
@@ -278,6 +340,14 @@ namespace FFACETools
 			/// <param name="H">The heading to the destination</param>
 			private void FaceHeadingXZ(double H)
 			{
+				FaceHeadingXYZ(H);
+			}
+			/// <summary>
+			/// Changes facing to passed destination (XYZ for consistency)
+			/// </summary>
+			/// <param name="H">The heading to the destination</param>
+			private void FaceHeadingXYZ(double H)
+			{
 				double RH = 180;
 				
 				// if we're moving, stop
@@ -308,7 +378,7 @@ namespace FFACETools
 					System.Threading.Thread.Sleep(SpeedDelay);
 
 				} // @ while (Math.Abs(RH) > HeadingTolerance)
-			} // @ private void FaceHeadingXZ(double H)
+			} // @ private void FaceHeadingXYZ(double H)
 
 			#endregion
 

@@ -173,12 +173,6 @@ namespace FFACETools
         private static extern void GetNPCTradeInfo(int instanceID, ref TRADEINFO info);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern bool IsSynthesis(int InstanceID);
-		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        private static extern bool SetFishHP (int InstanceID, int value);
-        [DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        private static extern bool SetTimeOut (int InstanceID, short value);
-        //[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        //private static extern bool FightFish (int InstanceID);
 		
 		/*		
 		 *		FFACE paid functions
@@ -186,9 +180,6 @@ namespace FFACETools
 		 *		BOOL SetNPCTradeInfo(void* inst, int Code, unsigned short ItemID, char Index, char Count, char Box, unsigned int Gil)
 		 *		void GetNPCTradeInfo(void* inst, TRADEINFO* TI)
 		 *		BOOL IsSynthesis(void* inst)
-		 *		bool SetFishHP(void* inst, int value)
-		 *		bool FightFish(void* inst)
-		 *		bool SetTimeOut(void* inst, short value)
 		 */
 		[DllImport("FFACE.dll", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = false, EntryPoint="SetCraftItem")]
 		private static extern bool SetCraftItem(int instanceID, int Zero, ushort ItemID, byte Index, byte Count, byte Box);
@@ -279,6 +270,19 @@ namespace FFACETools
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern int GetFishID4(int instanceID);
 
+		/*		
+		 *		FFACE paid functions
+		 *
+		 *		bool SetFishHP(void* inst, int value)
+		 *		bool FightFish(void* inst)
+		 *		bool SetTimeOut(void* inst, short value)
+		 */
+		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+		private static extern bool SetFishHP(int InstanceID, int value);
+		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+		private static extern bool SetTimeOut(int InstanceID, short value);
+		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+		private static extern bool FightFish (int InstanceID);
 		#endregion
 
 		#region Alliance Imports

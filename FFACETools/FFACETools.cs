@@ -109,6 +109,7 @@ namespace FFACETools
 			// create our FFACE instance
 			_InstanceID = CreateInstance((UInt32)processID);
 
+			WindowerPath = "Set this to the Plugins Directory";
 			//#region Find Windower Plugin Path
 
 			//System.Diagnostics.Process[] Processes = System.Diagnostics.Process.GetProcessesByName("pol");
