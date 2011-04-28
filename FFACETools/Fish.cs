@@ -137,14 +137,6 @@ namespace FFACETools
 			} // @ public int Timeout
 
 			/// <summary>
-			/// Return value of FightFish success.
-			/// </summary>
-			public bool Fight
-			{
-				get { return FightFish(_InstanceID); }
-			} // @ public bool Fight
-
-			/// <summary>
 			/// ID of the fish on the hook
 			/// </summary>
 			public FishID ID
@@ -197,6 +189,13 @@ namespace FFACETools
 
 		#endregion
 
-		} // @ public class FishTools
-	} // @ public partial class FFACE
+	    /// <summary>
+	    /// Return value of FightFish success.
+	    /// </summary>
+	    public bool FightFish() {
+	      return FFACE.FightFish(_InstanceID);
+	    } // @ public bool Fight
+
+	} // @ public class FishTools
+    } // @ public partial class FFACE
 }
