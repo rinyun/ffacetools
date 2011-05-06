@@ -29,7 +29,8 @@ namespace FFACETools
 			private const string RESOURCES_STATUS_FILE_NAME = "status.xml";
 			private const string RESOURCES_SPELLS_FILE_NAME = "spells.xml";
 			private const string RESOURCES_ABILS_FILE_NAME = "abils.xml";
-			private const string WINDOWERPATH_MSG = "Ensure WindowerPath is set to an absolute path to Windower plugins folder and that the file stated is present.";
+			private const string FILENOTFOUND_MSG = "Ensure WindowerPath is set to an absolute path to Windower plugins folder and that the file stated is present.";
+			private const string WINDOWERPATH_MSG = "WindowerPath has not been set!";
 			#endregion
 
 			/// <summary>
@@ -40,12 +41,16 @@ namespace FFACETools
 			/// <exception cref="System.IO.FileNotFoundException">Thrown if the resources file in question is not found (Check WindowerPath).</exception>
 			public static string GetAreaName(int id)
 			{
+				if (String.IsNullOrEmpty(FFACE.WindowerPath))
+				{
+				  throw new FileNotFoundException(WINDOWERPATH_MSG);
+				}
 				string sResult = String.Empty;
 				string fileName = FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_AREAS_FILE_NAME;
 
 				if (!File.Exists(fileName))
 				{
-				  throw new FileNotFoundException(WINDOWERPATH_MSG, fileName);
+				  throw new FileNotFoundException(FILENOTFOUND_MSG, fileName);
 				}
 
 				XPathDocument document = new XPathDocument(fileName);
@@ -65,11 +70,14 @@ namespace FFACETools
 			/// <returns>An empty string if no matching item was found.</returns>
 			/// <exception cref="System.IO.FileNotFoundException">Thrown if the resources file in question is not found (Check WindowerPath).</exception>
 			public static string GetItemNameGeneral(int id) {
+			  if (String.IsNullOrEmpty(FFACE.WindowerPath)) {
+			    throw new FileNotFoundException(WINDOWERPATH_MSG);
+			  }
 			  string sResult = String.Empty;
 			  string fileName = FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_ITEMS_GENERAL_FILE_NAME;
 
 			  if (!File.Exists(fileName)) {
-			    throw new FileNotFoundException(WINDOWERPATH_MSG, fileName);
+			    throw new FileNotFoundException(FILENOTFOUND_MSG, fileName);
 			  }
 
 			  XPathDocument document = new XPathDocument(fileName);
@@ -86,11 +94,14 @@ namespace FFACETools
 			/// <returns>An empty string if no matching item was found.</returns>
 			/// <exception cref="System.IO.FileNotFoundException">Thrown if the resources file in question is not found (Check WindowerPath).</exception>
 			public static string GetItemNameArmor(int id) {
+			  if (String.IsNullOrEmpty(FFACE.WindowerPath)) {
+			    throw new FileNotFoundException(WINDOWERPATH_MSG);
+			  }
 			  string sResult = String.Empty;
 			  string fileName = FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_ITEM_ARMOR_FILE_NAME;
 
 			  if (!File.Exists(fileName)) {
-			    throw new FileNotFoundException(WINDOWERPATH_MSG, fileName);
+			    throw new FileNotFoundException(FILENOTFOUND_MSG, fileName);
 			  }
 
 			  XPathDocument document = new XPathDocument(fileName);
@@ -107,11 +118,14 @@ namespace FFACETools
 			/// <returns>An empty string if no matching item was found.</returns>
 			/// <exception cref="System.IO.FileNotFoundException">Thrown if the resources file in question is not found (Check WindowerPath).</exception>
 			public static string GetItemNameWeapons(int id) {
+			  if (String.IsNullOrEmpty(FFACE.WindowerPath)) {
+			    throw new FileNotFoundException(WINDOWERPATH_MSG);
+			  }
 			  string sResult = String.Empty;
 			  string fileName = FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_ITEM_WEAPONS_FILE_NAME;
 
 			  if (!File.Exists(fileName)) {
-			    throw new FileNotFoundException(WINDOWERPATH_MSG, fileName);
+			    throw new FileNotFoundException(FILENOTFOUND_MSG, fileName);
 			  }
 
 			  XPathDocument document = new XPathDocument(fileName);
@@ -130,6 +144,9 @@ namespace FFACETools
 			/// <exception cref="System.IO.FileNotFoundException">Thrown if the resources file in question is not found (Check WindowerPath).</exception>
 			public static string GetItemName(int id)
 			{
+				if (String.IsNullOrEmpty(FFACE.WindowerPath)) {
+				  throw new FileNotFoundException(WINDOWERPATH_MSG);
+				}
 				string sResult = String.Empty;
 
 				sResult = GetItemNameGeneral(id);
@@ -148,12 +165,15 @@ namespace FFACETools
 			/// <exception cref="System.IO.FileNotFoundException">Thrown if the resources file in question is not found (Check WindowerPath).</exception>
 			public static int GetItemIDGeneral(string name)
 			{
+			  if (String.IsNullOrEmpty(FFACE.WindowerPath)) {
+			    throw new FileNotFoundException(WINDOWERPATH_MSG);
+			  }
 			  int iResult = -1;
 
 			  string fileName = FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_ITEMS_GENERAL_FILE_NAME;
 
 			  if (!File.Exists(fileName)) {
-			    throw new FileNotFoundException(WINDOWERPATH_MSG, fileName);
+			    throw new FileNotFoundException(FILENOTFOUND_MSG, fileName);
 			  }
 
 			  XPathDocument document = new XPathDocument(fileName);
@@ -178,12 +198,15 @@ namespace FFACETools
 			/// <exception cref="System.IO.FileNotFoundException">Thrown if the resources file in question is not found (Check WindowerPath).</exception>
 			public static int GetItemIDWeapons(string name) 
 			{
+			  if (String.IsNullOrEmpty(FFACE.WindowerPath)) {
+			    throw new FileNotFoundException(WINDOWERPATH_MSG);
+			  }
 			  int iResult = -1;
 
 			  string fileName = FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_ITEM_WEAPONS_FILE_NAME;
 
 			  if (!File.Exists(fileName)) {
-			    throw new FileNotFoundException(WINDOWERPATH_MSG, fileName);
+			    throw new FileNotFoundException(FILENOTFOUND_MSG, fileName);
 			  }
 
 			  XPathDocument document = new XPathDocument(fileName);
@@ -208,12 +231,15 @@ namespace FFACETools
 			/// <exception cref="System.IO.FileNotFoundException">Thrown if the resources file in question is not found (Check WindowerPath).</exception>
 			public static int GetItemIDArmor(string name)
 			{
+			  if (String.IsNullOrEmpty(FFACE.WindowerPath)) {
+			    throw new FileNotFoundException(WINDOWERPATH_MSG);
+			  }
 			  int iResult = -1;
 
 			  string fileName = FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_ITEM_ARMOR_FILE_NAME;
 
 			  if (!File.Exists(fileName)) {
-			    throw new FileNotFoundException(WINDOWERPATH_MSG, fileName);
+			    throw new FileNotFoundException(FILENOTFOUND_MSG, fileName);
 			  }
 
 			  XPathDocument document = new XPathDocument(fileName);
@@ -238,6 +264,9 @@ namespace FFACETools
 			/// <exception cref="System.IO.FileNotFoundException">Thrown if the resources file in question is not found (Check WindowerPath).</exception>
 			public static int GetItemID(string name)
 			{
+			  if (String.IsNullOrEmpty(FFACE.WindowerPath)) {
+			    throw new FileNotFoundException(WINDOWERPATH_MSG);
+			  }
 			  int iResult = GetItemIDGeneral(name);
 
 			  if (iResult < 0)
@@ -255,11 +284,14 @@ namespace FFACETools
 			/// <exception cref="System.IO.FileNotFoundException">Thrown if the resources file in question is not found (Check WindowerPath).</exception>
 			public static string GetStatusEffectName(StatusEffect statusEffect)
 			{
+				if (String.IsNullOrEmpty(FFACE.WindowerPath)) {
+				  throw new FileNotFoundException(WINDOWERPATH_MSG);
+				}
 				string sResult = String.Empty;
 				string fileName = FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_STATUS_FILE_NAME;
 
 				if (!File.Exists(fileName)) {
-				  throw new FileNotFoundException(WINDOWERPATH_MSG, fileName);
+				  throw new FileNotFoundException(FILENOTFOUND_MSG, fileName);
 				}
 
 				XPathDocument document = new XPathDocument(fileName);
