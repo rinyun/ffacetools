@@ -29,23 +29,27 @@ namespace FFACETools
 			private const string RESOURCES_STATUS_FILE_NAME = "status.xml";
 			private const string RESOURCES_SPELLS_FILE_NAME = "spells.xml";
 			private const string RESOURCES_ABILS_FILE_NAME = "abils.xml";
-
+			private const string WINDOWERPATH_MSG = "Ensure WindowerPath is set to an absolute path to Windower plugins folder and that the file stated is present.";
 			#endregion
 
 			/// <summary>
 			/// Will get the name of the passed area ID
 			/// </summary>
 			/// <param name="id">ID of the area to get the name for</param>
+			/// <returns>An empty string if no matching area was found.</returns>
+			/// <exception cref="System.IO.FileNotFoundException">Thrown if the resources file in question is not found (Check WindowerPath).</exception>
 			public static string GetAreaName(int id)
 			{
 				string sResult = String.Empty;
-				
-				XPathDocument document = new XPathDocument(FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_AREAS_FILE_NAME);
+				string fileName = FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_AREAS_FILE_NAME;
 
+				if (!File.Exists(fileName))
+				{
+				  throw new FileNotFoundException(WINDOWERPATH_MSG, fileName);
+				}
+
+				XPathDocument document = new XPathDocument(fileName);
 				XPathNavigator node = document.CreateNavigator().SelectSingleNode("//areas/a[@id='" + id + "']");
-				//XPathDocument document = new XPathDocument(/*FFACE.WindowerPath + */RESOURCES_FILE_NAME);
-
-				//XPathNavigator node = document.CreateNavigator().SelectSingleNode("//resources/areas/entry[@id='" + id + "']");
 
 				if (null != node && !String.IsNullOrEmpty(node.Value))
 					sResult = node.Value;
@@ -58,83 +62,207 @@ namespace FFACETools
 			/// Will get the name of the passed item ID
 			/// </summary>
 			/// <param name="id">ID of the item to get the name for</param>
+			/// <returns>An empty string if no matching item was found.</returns>
+			/// <exception cref="System.IO.FileNotFoundException">Thrown if the resources file in question is not found (Check WindowerPath).</exception>
+			public static string GetItemNameGeneral(int id) {
+			  string sResult = String.Empty;
+			  string fileName = FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_ITEMS_GENERAL_FILE_NAME;
+
+			  if (!File.Exists(fileName)) {
+			    throw new FileNotFoundException(WINDOWERPATH_MSG, fileName);
+			  }
+
+			  XPathDocument document = new XPathDocument(fileName);
+			  XPathNavigator node = document.CreateNavigator().SelectSingleNode("//items/i[@id='" + id + "']");  // Items Armor items_armor.xml
+			  if (null != node && !String.IsNullOrEmpty(node.Value))
+			    sResult = node.Value;
+			  return sResult;
+			}
+
+			/// <summary>
+			/// Will get the name of the passed item ID
+			/// </summary>
+			/// <param name="id">ID of the item to get the name for</param>
+			/// <returns>An empty string if no matching item was found.</returns>
+			/// <exception cref="System.IO.FileNotFoundException">Thrown if the resources file in question is not found (Check WindowerPath).</exception>
+			public static string GetItemNameArmor(int id) {
+			  string sResult = String.Empty;
+			  string fileName = FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_ITEM_ARMOR_FILE_NAME;
+
+			  if (!File.Exists(fileName)) {
+			    throw new FileNotFoundException(WINDOWERPATH_MSG, fileName);
+			  }
+
+			  XPathDocument document = new XPathDocument(fileName);
+			  XPathNavigator node = document.CreateNavigator().SelectSingleNode("//items/i[@id='" + id + "']");  // Items Weapons item_weapons.xml
+			  if (null != node && !String.IsNullOrEmpty(node.Value))
+			    sResult = node.Value;
+			  return sResult;
+			}
+
+			/// <summary>
+			/// Will get the name of the passed item ID
+			/// </summary>
+			/// <param name="id">ID of the item to get the name for</param>
+			/// <returns>An empty string if no matching item was found.</returns>
+			/// <exception cref="System.IO.FileNotFoundException">Thrown if the resources file in question is not found (Check WindowerPath).</exception>
+			public static string GetItemNameWeapons(int id) {
+			  string sResult = String.Empty;
+			  string fileName = FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_ITEM_WEAPONS_FILE_NAME;
+
+			  if (!File.Exists(fileName)) {
+			    throw new FileNotFoundException(WINDOWERPATH_MSG, fileName);
+			  }
+
+			  XPathDocument document = new XPathDocument(fileName);
+			  XPathNavigator node = document.CreateNavigator().SelectSingleNode("//items/i[@id='" + id + "']");  // Items General items_general.xml
+
+			  if (null != node && !String.IsNullOrEmpty(node.Value))
+			    sResult = node.Value;
+			  return sResult;
+			}
+
+			/// <summary>
+			/// Will get the name of the passed item ID
+			/// </summary>
+			/// <param name="id">ID of the item to get the name for</param>
+			/// <returns>An empty string if no matching item was found.</returns>
+			/// <exception cref="System.IO.FileNotFoundException">Thrown if the resources file in question is not found (Check WindowerPath).</exception>
 			public static string GetItemName(int id)
 			{
 				string sResult = String.Empty;
 
-				//XPathDocument document = new XPathDocument(/*FFACE.WindowerPath + */RESOURCES_FILE_NAME);
-
-				//XPathNavigator node = document.CreateNavigator().SelectSingleNode("//resources/items/entry[@id='" + id + "']");
-
-				//if (null != node && !String.IsNullOrEmpty(node.Value))
-				//        sResult = node.Value;
-
-				XPathDocument document = new XPathDocument(FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_ITEMS_GENERAL_FILE_NAME);
-				XPathNavigator node = document.CreateNavigator().SelectSingleNode("//items/i[@id='" + id + "']");  // Items Armor items_armor.xml
-				if (null != node && !String.IsNullOrEmpty(node.Value))
-				  return (node.Value);
-
-				XPathDocument doc2 = new XPathDocument(FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_ITEM_ARMOR_FILE_NAME);
-				XPathNavigator node2 = doc2.CreateNavigator().SelectSingleNode("//items/i[@id='" + id + "']");  // Items Weapons item_weapons.xml
-				if (null != node2 && !String.IsNullOrEmpty(node2.Value))
-				  return (node2.Value);
-
-				XPathDocument doc1 = new XPathDocument(FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_ITEM_WEAPONS_FILE_NAME);
-				XPathNavigator node1 = doc1.CreateNavigator().SelectSingleNode("//items/i[@id='" + id + "']");  // Items General items_general.xml
-
-				if (null != node1 && !String.IsNullOrEmpty(node1.Value))
-				  sResult = node1.Value;
+				sResult = GetItemNameGeneral(id);
+				if (String.IsNullOrEmpty(sResult))
+				  sResult = GetItemNameArmor(id);
+				if (String.IsNullOrEmpty(sResult))
+				  sResult = GetItemNameWeapons(id);
 				return sResult;
-
 			} // @ public static string GetItemName(int id)
 
 			/// <summary>
-			/// Will get the ID of of the passed item name (case senstitive)
+			/// Will get the ID of of the passed item name (case insenstitive)
 			/// </summary>
 			/// <param name="name">Name of the item</param>
 			/// <returns>-1 if no ID was found for passed name</returns>
-			public static int GetItemID(string name)
+			/// <exception cref="System.IO.FileNotFoundException">Thrown if the resources file in question is not found (Check WindowerPath).</exception>
+			public static int GetItemIDGeneral(string name)
 			{
 			  int iResult = -1;
 
-			  //XPathDocument document = new XPathDocument(/*FFACE.WindowerPath + */RESOURCES_FILE_NAME);
-			  //XPathNavigator node = document.CreateNavigator().SelectSingleNode("//resources/items/entry[translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=\"" + name.ToLower() + "\"]");
+			  string fileName = FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_ITEMS_GENERAL_FILE_NAME;
 
-			  XPathDocument document = new XPathDocument(FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_ITEMS_GENERAL_FILE_NAME);
+			  if (!File.Exists(fileName)) {
+			    throw new FileNotFoundException(WINDOWERPATH_MSG, fileName);
+			  }
+
+			  XPathDocument document = new XPathDocument(fileName);
 			  XPathNavigator node = document.CreateNavigator().SelectSingleNode("//items/i[translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=\"" + name.ToLower() + "\"]");
 
-			  if (null != node && !String.IsNullOrEmpty(node.Value))
-			    return (Convert.ToInt32(node.GetAttribute("id", String.Empty)));
-
-			  XPathDocument doc2 = new XPathDocument(FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_ITEM_ARMOR_FILE_NAME);
-			  XPathNavigator node2 = doc2.CreateNavigator().SelectSingleNode("//items/i[translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=\"" + name.ToLower() + "\"]");
-			  //XPathNavigator node = document.CreateNavigator().SelectSingleNode("//resources/items/entry[translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=\"" + name.ToLower() + "\"]");
-
-			  if (null != node2 && !String.IsNullOrEmpty(node2.Value))
-			    return (Convert.ToInt32(node2.GetAttribute("id", String.Empty)));
-
-			  XPathDocument doc1 = new XPathDocument(FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_ITEM_WEAPONS_FILE_NAME);
-			  XPathNavigator node1 = doc1.CreateNavigator().SelectSingleNode("//items/i[translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=\"" + name.ToLower() + "\"]");
-
-			  if (null != node1 && !String.IsNullOrEmpty(node1.Value))
-			    iResult = Convert.ToInt32(node1.GetAttribute("id", String.Empty));
-
+			  if (null != node && !String.IsNullOrEmpty(node.Value)) {
+			    try {
+			      iResult = Convert.ToInt32(node.GetAttribute("id", String.Empty));
+			    }
+			    catch (Exception) {
+			      iResult = -1;
+			    }
+	  		  }
 			  return iResult;
+			}
 
+			/// <summary>
+			/// Will get the ID of of the passed item name (case insenstitive)
+			/// </summary>
+			/// <param name="name">Name of the item</param>
+			/// <returns>-1 if no ID was found for passed name</returns>
+			/// <exception cref="System.IO.FileNotFoundException">Thrown if the resources file in question is not found (Check WindowerPath).</exception>
+			public static int GetItemIDWeapons(string name) 
+			{
+			  int iResult = -1;
+
+			  string fileName = FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_ITEM_WEAPONS_FILE_NAME;
+
+			  if (!File.Exists(fileName)) {
+			    throw new FileNotFoundException(WINDOWERPATH_MSG, fileName);
+			  }
+
+			  XPathDocument document = new XPathDocument(fileName);
+			  XPathNavigator node = document.CreateNavigator().SelectSingleNode("//items/i[translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=\"" + name.ToLower() + "\"]");
+
+			  if (null != node && !String.IsNullOrEmpty(node.Value)) {
+			    try {
+			      iResult = Convert.ToInt32(node.GetAttribute("id", String.Empty));
+			    }
+			    catch (Exception) {
+			      iResult = -1;
+			    }
+			  }
+			  return iResult;
+			}
+
+			/// <summary>
+			/// Will get the ID of of the passed item name (case insenstitive)
+			/// </summary>
+			/// <param name="name">Name of the item</param>
+			/// <returns>-1 if no ID was found for passed name</returns>
+			/// <exception cref="System.IO.FileNotFoundException">Thrown if the resources file in question is not found (Check WindowerPath).</exception>
+			public static int GetItemIDArmor(string name)
+			{
+			  int iResult = -1;
+
+			  string fileName = FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_ITEM_ARMOR_FILE_NAME;
+
+			  if (!File.Exists(fileName)) {
+			    throw new FileNotFoundException(WINDOWERPATH_MSG, fileName);
+			  }
+
+			  XPathDocument document = new XPathDocument(fileName);
+			  XPathNavigator node = document.CreateNavigator().SelectSingleNode("//items/i[translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=\"" + name.ToLower() + "\"]");
+
+			  if (null != node && !String.IsNullOrEmpty(node.Value)) {
+			    try {
+			      iResult = Convert.ToInt32(node.GetAttribute("id", String.Empty));
+			    }
+			    catch (Exception) {
+			      iResult = -1;
+			    }
+			  }
+			  return iResult;
+			}
+
+			/// <summary>
+			/// Will get the ID of of the passed item name (case insenstitive)
+			/// </summary>
+			/// <param name="name">Name of the item</param>
+			/// <returns>-1 if no ID was found for passed name</returns>
+			/// <exception cref="System.IO.FileNotFoundException">Thrown if the resources file in question is not found (Check WindowerPath).</exception>
+			public static int GetItemID(string name)
+			{
+			  int iResult = GetItemIDGeneral(name);
+
+			  if (iResult < 0)
+			    iResult = GetItemIDArmor(name);
+			  if (iResult < 0)
+			    iResult = GetItemIDWeapons(name);
+			  return iResult;
 			} // @ public static string GetItemID(string name)
 
 			/// <summary>
 			/// Will get the name of the passed status effect
 			/// </summary>
 			/// <param name="id">ID of the area to get the name for</param>
+			/// <returns>An empty string if status not found.</returns>
+			/// <exception cref="System.IO.FileNotFoundException">Thrown if the resources file in question is not found (Check WindowerPath).</exception>
 			public static string GetStatusEffectName(StatusEffect statusEffect)
 			{
 				string sResult = String.Empty;
+				string fileName = FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_STATUS_FILE_NAME;
 
-				//XPathDocument document = new XPathDocument(/*FFACE.WindowerPath + */RESOURCES_FILE_NAME);
-				//XPathNavigator node = document.CreateNavigator().SelectSingleNode("//resources/status/entry[@id='" + statusEffect + "']");
+				if (!File.Exists(fileName)) {
+				  throw new FileNotFoundException(WINDOWERPATH_MSG, fileName);
+				}
 
-				XPathDocument document = new XPathDocument(FFACE.WindowerPath.Trim(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + "resources" + Path.DirectorySeparatorChar + RESOURCES_STATUS_FILE_NAME);
+				XPathDocument document = new XPathDocument(fileName);
 				XPathNavigator node = document.CreateNavigator().SelectSingleNode("//status/b[@id='" + statusEffect + "']");
 
 				if (null != node && !String.IsNullOrEmpty(node.Value))

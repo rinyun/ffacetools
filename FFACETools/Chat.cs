@@ -243,57 +243,172 @@ namespace FFACETools
 			/// <summary>
 			/// Will strip abnormal characters (colors, etc) from the string
 			/// </summary>
-			/// <param name="line">line to clean</param>
+			/// <param name="line">line to clean (left intact)</param>
+			/// <returns>string containing the cleaned line</returns>
 			internal string CleanLine(string line)
 			{
-				// change the dot to a [ for start of string
-				string startingChars = System.Text.Encoding.GetEncoding(932).GetString(new byte[2] { 0x1e, 0xfc });
-				if (line.StartsWith(startingChars))
-					line = "[" + line.Substring(2);
+			  string cleanedString = line;
+			  byte[] bytearray1252 = System.Text.Encoding.GetEncoding(1252).GetBytes(cleanedString);
+			  int i = 0, len = bytearray1252.Length;
+			  string sEF = "\xFF\x1F\x20\x21\x22\x23\x24\x25\x26\x27\x28\xFF";
+				// 1f 20 21 22 23 24 25 26 27 28
+			  string rep = "<FIAETWLD{}>";
+			  string s1E = "\x01\x02\x03\xFC\xFD";
+			  string s1F = "\x0E\x0F\x2F\x7F\x79\x7B\x7C\x8D\x88\x8A\xA1\xD0\r\n\x07";
+			  string sExtra = "\r\n\x07\x7F\x81\x87";
+			  List<Byte> cleaned = new List<byte>();
+			  int ndx = -1;
 
-				line = line.Replace("y", String.Empty);
+			  for (int c = 0; c < len; ++c) {
 
-				if (line.Contains(" "))
+			    if ((bytearray1252[c] == '\xEF') && (((c + 1) < len) && ((ndx = sEF.IndexOf((char) bytearray1252[c + 1])) >= 0))) {
+			      // 3C <  3E >
+			      // 7B {  7D }
+			      if (sEF[ndx] != '\x28') // Not closing brace? Needs starter char
+				cleaned.Add((byte) rep[0]);
+			      cleaned.Add((byte) rep[ndx]); // add rep.char based on Index
+			      if (sEF[ndx] != '\x27') // Not opening brace? Needs closer char
+				cleaned.Add((byte) rep[rep.Length - 1]); // >  Final: <{ and }> for Auto-translate braces
+			      ++c;
+			    }
+			    else if ((bytearray1252[c] == '\x1F') && (((c + 1) < len) && s1F.IndexOf((char) bytearray1252[c + 1]) >= 0)) {
+			      ++c;
+			    }
+			    else if ((bytearray1252[c] == '\x1E') && (((c + 1) < len) && s1E.IndexOf((char) bytearray1252[c + 1]) >= 0)) {
+			      ++c;
+			    }
+			    else {
+			      i = sExtra.IndexOf((char) bytearray1252[c]);
+			      if (i >= 3) // \r\n\07 are singles, others are doubles
 				{
-					line = line.Replace(" ", "**&*&!!@#$@$#$");
-					line = line.Replace("**&*&!!@#$@$#$", " ");
+				if (((bytearray1252[c] == '\x7F') && (((c + 1) < len) && bytearray1252[c + 1] == '\x31')) ||
+				    ((bytearray1252[c] == '\x81') && (((c + 1) < len) && bytearray1252[c + 1] == '\xA1')) ||
+				    ((bytearray1252[c] == '\x87') && (((c + 1) < len) && bytearray1252[c + 1] == '\xB2')) ||
+				    ((bytearray1252[c] == '\x87') && (((c + 1) < len) && bytearray1252[c + 1] == '\xB3'))) {
+				  ++c;
+				}
+				else {
+				  i = -1; // not a target, so "wasn't found"
+				}
+			      }
+			      /*else if (i >= 0) {
+				++c; // using an auto-incrementing for loop this becomes { }
+			      }*/
+			      if (i < 0) {
+				cleaned.Add(bytearray1252[c]);
+			      }
+			    }
+			  }
+			  cleaned.Add(0);
+			  #region The above code done with all line.Replace() instead.
+			  /*
+				if (cleanedString.IndexOf('\xEF') >= 0)
+				{
+				  cleanedString = cleanedString.Replace("\xEF\x1F", "");  // Fire
+				  cleanedString = cleanedString.Replace("\xEF\x20", "");  // Ice
+				  cleanedString = cleanedString.Replace("\xEF\x21", "");  // Wind (Air)
+				  cleanedString = cleanedString.Replace("\xEF\x22", "");  // Earth
+				  cleanedString = cleanedString.Replace("\xEF\x23", "");  // Lightning (Thunder)
+				  cleanedString = cleanedString.Replace("\xEF\x24", "");  // Water
+				  cleanedString = cleanedString.Replace("\xEF\x25", "");  // Light
+				  cleanedString = cleanedString.Replace("\xEF\x26", "");  // Darkness
+				  cleanedString = cleanedString.Replace("\xEF\x27", "");  // Opening Brace
+				  cleanedString = cleanedString.Replace("\xEF\x28", "");  // Closing Brace
+				}
+				if (cleanedString.IndexOf('\x1E') >= 0)
+				{
+				  cleanedString = cleanedString.Replace("\x1E\x01", "");
+				  cleanedString = cleanedString.Replace("\x1E\x02", "");
+				  cleanedString = cleanedString.Replace("\x1E\x03", "");
+				  cleanedString = cleanedString.Replace("\x1E\xFC", "");
+				  cleanedString = cleanedString.Replace("\x1E\xFD", "");
+				}
+				if (cleanedString.IndexOf('\x1F') >= 0)
+				{
+				  cleanedString = cleanedString.Replace("\x1F\x0E", "");
+				  cleanedString = cleanedString.Replace("\x1F\x0F", "");
+				  cleanedString = cleanedString.Replace("\x1F\x2F", "");
+				  cleanedString = cleanedString.Replace("\x1F\x7F", "");
+				  cleanedString = cleanedString.Replace("\x1F\x79", "");
+				  cleanedString = cleanedString.Replace("\x1F\x7B", "");
+				  cleanedString = cleanedString.Replace("\x1F\x7C", "");
+				  cleanedString = cleanedString.Replace("\x1F\x8D", "");
+				  cleanedString = cleanedString.Replace("\x1F\x88", "");
+				  cleanedString = cleanedString.Replace("\x1F\x8A", "");
+				  cleanedString = cleanedString.Replace("\x1F\xA1", "");
+				  cleanedString = cleanedString.Replace("\x1F\xD0", "");
+				  cleanedString = cleanedString.Replace("\x1F\r", "");
+				  cleanedString = cleanedString.Replace("\x1F\n", "");
+				  cleanedString = cleanedString.Replace("\x1F\x07", "");
+				}
+				if (cleanedString.IndexOfAny(new char[] { '\r', '\n', '\x7F', '\x81', '\x87', '\x07' }) >= 0) {
+				  cleanedString = cleanedString.Replace("\r", "");
+				  cleanedString = cleanedString.Replace("\n", "");
+				  cleanedString = cleanedString.Replace("\x7F\x31", "");
+				  cleanedString = cleanedString.Replace("\x81\xA1", "");
+				  cleanedString = cleanedString.Replace("\x87\xB2", "");
+				  cleanedString = cleanedString.Replace("\x87\xB3", "");
+				  cleanedString = cleanedString.Replace("\x07", "");
+				}
+			  */
+			  #endregion
+			  #region Original code (fail)
+			  /*
+				// change the dot to a [ for start of string
+				string startingChars = System.Text.Encoding.GetEncoding(1252).GetString(new byte[2] { 0x1e, 0xfc });
+				if (cleanedString.StartsWith(startingChars))
+					cleanedString = "[" + cleanedString.Substring(2);
+
+				cleanedString = cleanedString.Replace("y", String.Empty);
+
+				if (cleanedString.Contains(" "))
+				{
+					cleanedString = cleanedString.Replace(" ", "**&*&!!@#$@$#$");
+					cleanedString = cleanedString.Replace("**&*&!!@#$@$#$", " ");
 				}
 
-				line = line.Replace("1", "");
-				line = line.Replace(" ", " "); // green start
-				line = line.Replace("", "");   // green end
-				line = line.Replace("Ð", "");
-				line = line.Replace("{", "");
-				line = line.Replace("ﾐ", "");
-				line = line.Replace("", "");
-				line = line.Replace("・", "E");
-				line = line.Replace("・", "[");
-				line = line.Replace("・", "");
-				line = line.Replace("巧", "I"); // Yellow colored lines, JP
-				line = line.Replace("｡", ""); // Super Kupowers, JP
-				line = line.Replace("垢", "C"); // Change job text.
+				cleanedString = cleanedString.Replace("1", "");
+				cleanedString = cleanedString.Replace(" ", " "); // green start
+				cleanedString = cleanedString.Replace("", "");   // green end
+				cleanedString = cleanedString.Replace("Ð", "");
+				cleanedString = cleanedString.Replace("{", "");
+				cleanedString = cleanedString.Replace("ﾐ", "");
+				cleanedString = cleanedString.Replace("", "");
+				cleanedString = cleanedString.Replace("・", "E");
+				cleanedString = cleanedString.Replace("・", "[");
+				cleanedString = cleanedString.Replace("・", "");
+				cleanedString = cleanedString.Replace("巧", "I"); // Yellow colored lines, JP
+				cleanedString = cleanedString.Replace("｡", ""); // Super Kupowers, JP
+				cleanedString = cleanedString.Replace("垢", "C"); // Change job text.
 
 				// trim the 1 that occasionally shows up at the end
-				if (line.EndsWith("1"))
-					line = line.TrimEnd('1');
+				if (cleanedString.EndsWith("1"))
+					cleanedString = cleanedString.TrimEnd('1');
 				
-				line = line.TrimStart('');
-				
-				if (line.StartsWith("["))  // Detect and remove Windower Timestamp plugin text.
-				{
-					string text = line.Substring(1,8);
-					string re1 = ".*?";	// Non-greedy match on filler
-					string re2 = "((?:(?:[0-1][0-9])|(?:[2][0-3])|(?:[0-9])):(?:[0-5][0-9])(?::[0-5][0-9])?(?:\\s?(?:am|AM|pm|PM))?)";
+				cleanedString = cleanedString.TrimStart('');
+				*/
+			  #endregion
 
-					Regex r = new Regex(re1+re2,RegexOptions.IgnoreCase|RegexOptions.Singleline);
-					Match m = r.Match(text);
-					if (m.Success)
-					{
-						line = line.Remove(0,11);
-					}
-				} // Detect and remove Windower Timestamp plugin text.
-				
-				return line;
+			  if (cleaned[0] != 0)
+			    cleanedString = System.Text.Encoding.GetEncoding(932).GetString(cleaned.ToArray());
+			  else
+			    cleanedString = String.Empty;
+			  if (cleanedString.StartsWith("["))  // Detect and remove Windower Timestamp plugin text.
+			  {
+				  string text = cleanedString.Substring(1, 8);
+				  string re1 = ".*?";	// Non-greedy match on filler
+				  string re2 = "((?:(?:[0-1][0-9])|(?:[2][0-3])|(?:[0-9])):(?:[0-5][0-9])(?::[0-5][0-9])?(?:\\s?(?:am|AM|pm|PM))?)";
+
+				  Regex r = new Regex(re1+re2,RegexOptions.IgnoreCase|RegexOptions.Singleline);
+				  Match m = r.Match(text);
+				  if (m.Success)
+				  {
+				    cleanedString = cleanedString.Remove(0, 11); // this assumes timestamp found is only 10+1 space in length
+				    // Better way? : line = line.Remove(0,m.Length+1);
+				  }
+			  } // Detect and remove Windower Timestamp plugin text.
+
+			  return cleanedString;
 
 			} // private CleanLine(string line)
 
@@ -311,7 +426,7 @@ namespace FFACETools
 				if (size == 0)
 					return new ChatLogEntry() { LineText = String.Empty, LineType = ChatMode.Unknown, Index = 0 };
 
-				string tempLine = System.Text.Encoding.GetEncoding(932).GetString(buffer, 0, size - 1);
+				string tempLine = System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
 
 				return new ChatLogEntry()
 				{
@@ -336,7 +451,7 @@ namespace FFACETools
 				if (size == 0)
 					return new ChatLogEntry() { LineText = String.Empty, LineType = ChatMode.Unknown, Index = 0 };
 
-				string tempLine = System.Text.Encoding.GetEncoding(932).GetString(buffer, 0, size - 1);
+				string tempLine = System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
 
 				return new ChatLogEntry()
 				{
@@ -361,7 +476,9 @@ namespace FFACETools
 				if (size == 0)
 					return new ChatLogEntry() { LineTime = DateTime.Now, LineTimeString = "[" + DateTime.Now.ToString("HH:mm:ss") + "] ", LineColor = string.Empty, LineText = String.Empty, LineType = ChatMode.Unknown, Index = 0 };
 
-				string tempLine = System.Text.Encoding.GetEncoding(932).GetString(buffer, 0, size - 1);
+				// System.Text.Encoding.GetEncoding(932)
+				string tempLine = System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
+				
 				string[] sArray = tempLine.Split(new char[1] {','}, 12);
 
 				/*
@@ -500,7 +617,7 @@ namespace FFACETools
 			/// Will get the next chat line
 			/// </summary>
 			/// <param name="cleanLine">Whether to return a clean text line</param>
-            /// <param name="addcolor">Whether to return a color coded line</param>
+			/// <param name="addcolor">Whether to return a color coded line</param>
 			/// <returns>Empty string if no new line available, otherwise the new line</returns>
 			public ChatLine GetNextLine(bool cleanLine, bool addcolor)
 			{

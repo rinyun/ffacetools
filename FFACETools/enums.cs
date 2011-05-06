@@ -599,7 +599,7 @@
         MoogleWhite = 144,
         FishObtained = 146,	  // "player caught ....!"
         FishResult = 148,		// = fishing result including: 
-	CaughtOnHook = 152,	  // = something caught on hook... incorrect, actually info given by NPC
+	NPCSpeaking = 152,	  // = something caught on hook... incorrect, NPC speaking to you
         CommandError = 157,	  // = A command error occurred
         DropRipCap = 159,		// = you release the ripped cap regretfully
         RegConquest = 161,	   // = regional conquest update message
