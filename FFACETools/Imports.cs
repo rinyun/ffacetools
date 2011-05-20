@@ -104,6 +104,8 @@ namespace FFACETools {
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern byte GetSatchelMax(int instanceID);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+		private static extern byte GetSackMax(int instanceID);
+		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern INVENTORYITEM GetInventoryItem(int instanceID, int index);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern INVENTORYITEM GetSafeItem(int instanceID, byte index);
@@ -115,6 +117,8 @@ namespace FFACETools {
 		private static extern INVENTORYITEM GetLockerItem(int instanceID, byte index);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern INVENTORYITEM GetSatchelItem(int instanceID, byte index);
+		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+		private static extern INVENTORYITEM GetSackItem(int instanceID, byte index);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern void GetSelectedItemName(int instanceID, byte[] buffer, ref int size);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]

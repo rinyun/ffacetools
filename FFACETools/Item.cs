@@ -168,6 +168,15 @@ namespace FFACETools
 			} // @ public short SatchelMax
 
 			/// <summary>
+			/// Maximum amount of sack slots player has
+			/// </summary>
+			public short SackMax
+			{
+				get { return GetSackMax(_InstanceID); }
+
+			} // @ public short SatchelMax
+
+			/// <summary>
 			/// Inventory slots in use
 			/// </summary>
 			public short InventoryCount
@@ -235,6 +244,25 @@ namespace FFACETools
 			#region Methods
 
 			#region Methods relating to inventory
+			/// <summary>
+			/// The count of an item by index
+			/// </summary>
+			/// <param name="index">Index of the item</param>
+			public uint GetInventoryItemCountByIndex(byte index)
+			{
+				return GetInventoryItem(index).Count;
+			}
+
+			/// <summary>
+			/// The count of an item by index
+			/// </summary>
+			/// <param name="index">Index of the item</param>
+			[Obsolete("Use GetInventoryItemCountByIndex")]
+			public uint GetItemCountByIndex(byte index)
+			{
+				return GetInventoryItemCountByIndex(index);
+
+			} // @ public byte GetItemCountByIndex(byte index)
 
 			/// <summary>
 			/// Will get an inventory item ID by index
@@ -284,6 +312,51 @@ namespace FFACETools
 
 			#endregion
 
+			#region Methods relating to Safe
+			/// <summary>
+			/// The count of an item by index
+			/// </summary>
+			/// <param name="index">Index of the item</param>
+			public uint GetSafeItemCountByIndex(byte index)
+			{
+				return GetSafeItem(index).Count;
+
+			} // @ public byte GetItemCountByIndex(byte index)
+
+			/// <summary>
+			/// Will get a Safe item ID by index
+			/// </summary>
+			/// <param name="index">Index of the item in your Safe</param>
+			public int GetSafeItemIDByIndex(byte index)
+			{
+				if (1 > index || 80 < index)
+					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+
+				return GetSafeItem(index).ID;
+
+			} // @ public int GetItemIDByIndex(short index)
+
+			/// <summary>
+			/// The amount of passed items you have in your safe
+			/// </summary>
+			/// <param name="iD">ID of the item to count</param>
+			public uint GetSafeItemCount(ushort iD)
+			{
+				uint count = 0;
+
+				for (byte i = 1; i <= 80; i++)
+				{
+					InventoryItem item = GetSafeItem(i);
+
+					if (item.ID.Equals(iD))
+						count += item.Count;
+
+				} // @ for (short i = 0; i < 80; i++)
+
+				return count;
+
+			} // @ public int ItemCount(short ID)
+
 			/// <summary>
 			/// Gets information about an item from your safe
 			/// </summary>
@@ -298,6 +371,52 @@ namespace FFACETools
 				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra);
 
 			} // @ public INVENTORYITEM GetSafeItem(byte index)
+			#endregion
+
+			#region Methods relating to storage
+			/// <summary>
+			/// The count of an item by index
+			/// </summary>
+			/// <param name="index">Index of the item</param>
+			public uint GetStorageItemCountByIndex(byte index)
+			{
+				return GetStorageItem(index).Count;
+
+			} // @ public byte GetItemCountByIndex(byte index)
+
+			/// <summary>
+			/// Will get a Storage item ID by index
+			/// </summary>
+			/// <param name="index">Index of the item in your Storage</param>
+			public int GetStorageItemIDByIndex(byte index)
+			{
+				if (1 > index || 80 < index)
+					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+
+				return GetStorageItem(index).ID;
+
+			} // @ public int GetItemIDByIndex(short index)
+
+			/// <summary>
+			/// The amount of passed items you have in your Storage
+			/// </summary>
+			/// <param name="iD">ID of the item to count</param>
+			public uint GetStorageItemCount(ushort iD)
+			{
+				uint count = 0;
+
+				for (byte i = 1; i <= 80; i++)
+				{
+					InventoryItem item = GetStorageItem(i);
+
+					if (item.ID.Equals(iD))
+						count += item.Count;
+
+				} // @ for (short i = 0; i < 80; i++)
+
+				return count;
+
+			} // @ public int ItemCount(short ID)
 
 			/// <summary>
 			/// Gets information about an item from your storage
@@ -310,6 +429,52 @@ namespace FFACETools
 				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra);
 
 			} // @ public INVENTORYITEM GetStorageItem(int index)
+			#endregion
+
+			#region Methods relating to Locker
+			/// <summary>
+			/// The count of an item by index
+			/// </summary>
+			/// <param name="index">Index of the item</param>
+			public uint GetLockerItemCountByIndex(byte index)
+			{
+				return GetLockerItem(index).Count;
+
+			} // @ public byte GetItemCountByIndex(byte index)
+
+			/// <summary>
+			/// Will get a Locker item ID by index
+			/// </summary>
+			/// <param name="index">Index of the item in your Locker</param>
+			public int GetLockerItemIDByIndex(byte index)
+			{
+				if (1 > index || 80 < index)
+					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+
+				return GetLockerItem(index).ID;
+
+			} // @ public int GetItemIDByIndex(short index)
+
+			/// <summary>
+			/// The amount of passed items you have in your Locker
+			/// </summary>
+			/// <param name="iD">ID of the item to count</param>
+			public uint GetLockerItemCount(ushort iD)
+			{
+				uint count = 0;
+
+				for (byte i = 1; i <= 80; i++)
+				{
+					InventoryItem item = GetLockerItem(i);
+
+					if (item.ID.Equals(iD))
+						count += item.Count;
+
+				} // @ for (short i = 0; i < 80; i++)
+
+				return count;
+
+			} // @ public int ItemCount(short ID)
 
 			/// <summary>
 			/// Gets information about an item from your locker
@@ -325,6 +490,52 @@ namespace FFACETools
 				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra);
 
 			} // @ public InventoryItem GetLockerItem(ushort index)
+			#endregion
+
+			#region Methods relating to Temporary Storage
+			/// <summary>
+			/// The count of an item by index
+			/// </summary>
+			/// <param name="index">Index of the item</param>
+			public uint GetTempItemCountByIndex(byte index)
+			{
+				return GetTempItem(index).Count;
+
+			} // @ public byte GetItemCountByIndex(byte index)
+
+			/// <summary>
+			/// Will get a Temp item ID by index
+			/// </summary>
+			/// <param name="index">Index of the item in your Temp</param>
+			public int GetTempItemIDByIndex(byte index)
+			{
+				if (1 > index || 80 < index)
+					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+
+				return GetTempItem(index).ID;
+
+			} // @ public int GetItemIDByIndex(short index)
+
+			/// <summary>
+			/// The amount of passed items you have in your Temp Storage
+			/// </summary>
+			/// <param name="iD">ID of the item to count</param>
+			public uint GetTempItemCount(ushort iD)
+			{
+				uint count = 0;
+
+				for (byte i = 1; i <= 80; i++)
+				{
+					InventoryItem item = GetTempItem(i);
+
+					if (item.ID.Equals(iD))
+						count += item.Count;
+
+				} // @ for (short i = 0; i < 80; i++)
+
+				return count;
+
+			} // @ public int ItemCount(short ID)
 
 			/// <summary>
 			/// Gets information about a temporary item
@@ -340,6 +551,52 @@ namespace FFACETools
 				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra);
 
 			} // @ public InventoryItem GetLockerItem(ushort index)
+			#endregion
+
+			#region Methods relating to Satchel
+			/// <summary>
+			/// The count of an item by index
+			/// </summary>
+			/// <param name="index">Index of the item</param>
+			public uint GetSatchelItemCountByIndex(byte index)
+			{
+				return GetSatchelItem(index).Count;
+
+			} // @ public byte GetItemCountByIndex(byte index)
+
+			/// <summary>
+			/// Will get a Satchel item ID by index
+			/// </summary>
+			/// <param name="index">Index of the item in your Satchel</param>
+			public int GetSatchelItemIDByIndex(byte index)
+			{
+				if (1 > index || 80 < index)
+					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+
+				return GetSatchelItem(index).ID;
+
+			} // @ public int GetItemIDByIndex(short index)
+
+			/// <summary>
+			/// The amount of passed items you have in your Satchel
+			/// </summary>
+			/// <param name="iD">ID of the item to count</param>
+			public uint GetSatchelItemCount(ushort iD)
+			{
+				uint count = 0;
+
+				for (byte i = 1; i <= 80; i++)
+				{
+					InventoryItem item = GetSatchelItem(i);
+
+					if (item.ID.Equals(iD))
+						count += item.Count;
+
+				} // @ for (short i = 0; i < 80; i++)
+
+				return count;
+
+			} // @ public int ItemCount(short ID)
 
 			/// <summary>
 			/// Gets information about an item from your Satchel
@@ -355,18 +612,71 @@ namespace FFACETools
 				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra);
 
 			} // @ public InventoryItem GetSatchelItem(ushort index)
+			#endregion
 
+			#region Methods relating to Sack
 			/// <summary>
 			/// The count of an item by index
 			/// </summary>
 			/// <param name="index">Index of the item</param>
-			public uint GetItemCountByIndex(byte index)
+			public uint GetSackItemCountByIndex(byte index)
 			{
-				return GetInventoryItem(index).Count;
+				return GetSackItem(index).Count;
 
 			} // @ public byte GetItemCountByIndex(byte index)
 
-            /// <summary>
+			/// <summary>
+			/// Will get a Sack item ID by index
+			/// </summary>
+			/// <param name="index">Index of the item in your Sack</param>
+			public int GetSackItemIDByIndex(byte index)
+			{
+				if (1 > index || 80 < index)
+					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+
+				return GetSackItem(index).ID;
+
+			} // @ public int GetItemIDByIndex(short index)
+
+			/// <summary>
+			/// The amount of passed items you have in your Satchel
+			/// </summary>
+			/// <param name="iD">ID of the item to count</param>
+			public uint GetSackItemCount(ushort iD)
+			{
+				uint count = 0;
+
+				for (byte i = 1; i <= 80; i++)
+				{
+					InventoryItem item = GetSackItem(i);
+
+					if (item.ID.Equals(iD))
+						count += item.Count;
+
+				} // @ for (short i = 0; i < 80; i++)
+
+				return count;
+
+			} // @ public int ItemCount(short ID)
+
+			/// <summary>
+			/// Gets information about an item from your Sack
+			/// </summary>
+			/// <param name="index">Index of the item</param>
+			public InventoryItem GetSackItem(ushort index)
+			{
+				if (1 > index || 80 < index)
+					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+
+				// done this way because INVENTORYITEM is a private structure
+				INVENTORYITEM item = FFACE.GetSackItem(_InstanceID, (byte)index);
+				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra);
+
+			} // @ public InventoryItem GetSatchelItem(ushort index)
+			#endregion 
+
+			#region Methods relating to Equipment
+			/// <summary>
             /// The count of an item in a specific equipment slot
             /// </summary>
             /// <param name="slot">Slot to count</param>
@@ -378,16 +688,6 @@ namespace FFACETools
 				else
 					return 0;
 			} // @ public byte GetEquippedItemCount(EquipSlot slot)
-
-			/// <summary>
-			/// Gets information about an item currently in the treasure pool
-			/// </summary>
-			/// <param name="index">Index of the treasure item</param>
-			public TREASUREITEM GetTreasureItem(byte index)
-			{
-				return FFACE.GetTreasureItem(_InstanceID, index);
-
-			} // @ public TREASUREITEM GetTrasureItem(byte index)
 
             /// <summary>
             /// Gets the item id for passed equipment slot
@@ -411,6 +711,17 @@ namespace FFACETools
 				return FFACE.GetEquippedItemIndex(_InstanceID, slot);
 
 			} // @ public byte GetEquippedItemIndex(EquipSlot slot)
+			#endregion
+
+			/// <summary>
+			/// Gets information about an item currently in the treasure pool
+			/// </summary>
+			/// <param name="index">Index of the treasure item</param>
+			public TREASUREITEM GetTreasureItem(byte index)
+			{
+				return FFACE.GetTreasureItem(_InstanceID, index);
+
+			} // @ public TREASUREITEM GetTrasureItem(byte index)
 
 			#endregion
 

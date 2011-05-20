@@ -55,3 +55,12 @@ Version 1.1.1.2
 Version 1.3.0.4
 	- Add new Menu Dialog imports and corresponding functions into MenuTools section.
 	- New class added as well.
+
+Version 1.3.0.5
+	- Updated to work with 4.1.0.14 FFACE.dll
+	
+Version 1.3.0.6
+	- Add import GetSackMax and GetSackItem
+	- Add Get*ItemCountByIndex and renamed GetItemCountByIndex to GetInventoryItemCountByIndex to follow naming conventions
+	- Add Get*ItemIDByIndex, Get*ItemCount for Safe/Storage/Locker/Temp/Satchel/Sack
+	- Update dll to 1.3.0.6 to indicate an additional change.
