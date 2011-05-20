@@ -10,7 +10,7 @@ namespace FFACETools
 		/// <summary>
 		/// Message for not implimented exceptions
 		/// </summary>
-		private const string NEED_v4009_OR_HIGHER = "FFACETools requires FFACE v4.0.0.9 or higher";
+		private const string NEED_v410_14_OR_HIGHER = "FFACETools requires FFACE v4.1.0.14 or higher";
 
 		/// <summary>
 		/// Name of the FFACE library
@@ -131,8 +131,22 @@ namespace FFACETools
 			// Find out if we should be using structs or not
 			System.Diagnostics.FileVersionInfo fileInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(FFACE_LIBRARY);
 
-			if (fileInfo.FileMinorPart.Equals(0) && 8 > fileInfo.FilePrivatePart)
-				throw new Exception(NEED_v4009_OR_HIGHER);
+			// Need 4, 1, 0, 14 or later.  Adjust these settings as needed.
+			UInt64 version = ((UInt64)fileInfo.FileMajorPart << 48) + ((UInt64)fileInfo.FileMinorPart << 32) + ((UInt64)fileInfo.FileBuildPart << 16) + (UInt64)fileInfo.FilePrivatePart;
+			if (fileInfo.FileMajorPart != 4)
+				throw new Exception(NEED_v410_14_OR_HIGHER);
+			else if (version < 0x000400010000000E)			// 0004 0001 0000 000E (4, 1, 0, 14)
+				throw new Exception(NEED_v410_14_OR_HIGHER);
+
+			/*if (fileInfo.FileMajorPart != 4)
+				throw new Exception(NEED_v410_14_OR_HIGHER);
+			else if (fileInfo.FileMinorPart < 1)
+				throw new Exception(NEED_v410_14_OR_HIGHER);
+			else if (fileInfo.FileBuildPart < 0)
+				throw new Exception(NEED_v410_14_OR_HIGHER);
+			else if (fileInfo.FilePrivatePart < 14)
+				throw new Exception(NEED_v410_14_OR_HIGHER);*/
+
 
 			// instantiate our classes
 			Player	    = new PlayerTools(_InstanceID);

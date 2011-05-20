@@ -200,7 +200,7 @@ namespace FFACETools
 					GetSelectedItemName(_InstanceID, buffer, ref size);
 
 					// convert to a string
-					return System.Text.Encoding.ASCII.GetString(buffer, 0, size - 1);
+					return System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
 				}
 			} // @ public string SelectedItemName
 

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
-namespace FFACETools
-{
-	public partial class FFACE
-	{
+namespace FFACETools {
+	public partial class FFACE {
 		/*
 		 * Structures passed to/from FFACE
 		 */
@@ -16,8 +15,7 @@ namespace FFACETools
 		/// Stats of the player
 		/// </summary>
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-		public struct PlayerStats
-		{
+		public struct PlayerStats {
 			public short Str;
 			public short Dex;
 			public short Vit;
@@ -32,8 +30,7 @@ namespace FFACETools
 		/// Element reistances of the player
 		/// </summary>
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-		public struct PlayerElements
-		{
+		public struct PlayerElements {
 			public ushort Fire;
 			public ushort Ice;
 			public ushort Wind;
@@ -49,8 +46,7 @@ namespace FFACETools
 		/// Players Combat Skills
 		/// </summary>
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-		private struct PlayerCombatSkills
-		{
+		private struct PlayerCombatSkills {
 			public ushort HandToHand;
 			public ushort Dagger;
 			public ushort Sword;
@@ -89,8 +85,7 @@ namespace FFACETools
 		/// Players magic skills
 		/// </summary>
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-		private struct PlayerMagicSkills
-		{
+		private struct PlayerMagicSkills {
 			public ushort Divine;
 			public ushort Healing;
 			public ushort Enhancing;
@@ -114,8 +109,7 @@ namespace FFACETools
 		/// Players craft skills
 		/// </summary>
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-		private struct PlayerCraftLevels
-		{
+		private struct PlayerCraftLevels {
 			public ushort Fishing;
 			public ushort Woodworking;
 			public ushort Smithing;
@@ -132,8 +126,7 @@ namespace FFACETools
 		/// Structure passed back from FFACE.GetPlayerInfo()
 		/// </summary>
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-		private struct PLAYERINFO
-		{
+		private struct PLAYERINFO {
 			public int HPMax;
 			public int MPMax;
 			public Job MainJob;
@@ -174,8 +167,7 @@ namespace FFACETools
 		/// FFACE structure for a party member
 		/// </summary>
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-		private struct PARTYMEMBER
-		{
+		private struct PARTYMEMBER {
 			public int pad0;
 			public byte Index;
 			public byte MemberNumber;
@@ -206,8 +198,7 @@ namespace FFACETools
 		/// FFACE Structure for target information
 		/// </summary>
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-		private struct TARGETINFO
-		{
+		private struct TARGETINFO {
 			public int CurrentID;
 			public int SubID;
 			public int CurrentSvrID;
@@ -226,8 +217,7 @@ namespace FFACETools
 		/// FFACE structure for alliance information
 		/// </summary>
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-		private struct ALLIANCEINFO
-		{
+		private struct ALLIANCEINFO {
 			public int AllianceLeaderID;
 			public int Party0LeaderID;
 			public int Party1LeaderID;
@@ -251,8 +241,7 @@ namespace FFACETools
 		/// FFACE structure for an inventory item
 		/// </summary>
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-		private struct INVENTORYITEM
-		{
+		private struct INVENTORYITEM {
 			public ushort ID;
 			public byte Index;
 			public uint Count;
@@ -266,8 +255,7 @@ namespace FFACETools
 		/// Structure to hold information about an item in the treasure pool
 		/// </summary>
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-		public struct TREASUREITEM
-		{
+		public struct TREASUREITEM {
 			public byte Flag; //3=no item, 2=item	
 			public short ItemID;
 			public byte Count;
@@ -280,40 +268,37 @@ namespace FFACETools
 
 		} // @ private struct TREASUREITEM
 
-        /// <summary>
-        /// Structure to hold information about a specific item in the trade window
-        /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public struct TRADEITEM
-        { 
-            public ushort ItemID;
-            public byte Index;
-            public byte Count;
+		/// <summary>
+		/// Structure to hold information about a specific item in the trade window
+		/// </summary>
+		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+		public struct TRADEITEM {
+			public ushort ItemID;
+			public byte Index;
+			public byte Count;
 
-        } // @ private struct TRADEITEM
+		} // @ private struct TRADEITEM
 
-        /// <summary>
-        /// Structure containing information about the trade window
-        /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public struct TRADEINFO
-        { 
-            public uint Gil;
-            public int TargetID;
-            public byte SelectedBox;		
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)] 
-            public TRADEITEM[] items;
+		/// <summary>
+		/// Structure containing information about the trade window
+		/// </summary>
+		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+		public struct TRADEINFO {
+			public uint Gil;
+			public int TargetID;
+			public byte SelectedBox;
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
+			public TRADEITEM[] items;
 
-        } // @ private struct TRADEINFO
-		
+		} // @ private struct TRADEINFO
+
 		///<summary>
-        ///FFACETools Structure for setTradeItems
-        ///</summary>
-        public struct NPCTRADEINFO
-        {
-            public UInt32 Gil;
-            public TRADEITEM[] items;
-        }
+		///FFACETools Structure for setTradeItems
+		///</summary>
+		public struct NPCTRADEINFO {
+			public UInt32 Gil;
+			public TRADEITEM[] items;
+		}
 
 
 		#endregion
@@ -331,5 +316,144 @@ namespace FFACETools
 
 		#endregion
 
-    } // @ public partial class FFACE
+		#region Menu
+		public class DialogText {
+
+			private string _Question;
+			private string[] _Options;
+			private string _RawText;
+
+			private string[] CleanLine(string[] lines)
+			{
+				System.Collections.ArrayList ret = new System.Collections.ArrayList();
+
+				for (int i = 0; i < lines.Length; i++)
+				{
+					string x = CleanLine(lines[i]);
+					if (x == ".")
+						continue;
+					ret.Add(x);
+				}
+				string[] returnList = (string[])ret.ToArray(typeof(string));
+				return returnList;
+			}
+
+			/// <summary>
+			/// Will strip abnormal characters (colors, etc) from the string
+			/// </summary>
+			/// <param name="line">line to clean (left intact)</param>
+			/// <returns>string containing the cleaned line</returns>
+			private string CleanLine(string line)
+			{
+				string cleanedString = line;
+				byte[] bytearray1252 = System.Text.Encoding.GetEncoding(1252).GetBytes(cleanedString);
+				int i = 0, len = bytearray1252.Length;
+				string sEF = "\xFF\x1F\x20\x21\x22\x23\x24\x25\x26\x27\x28\xFF";
+				// 1f 20 21 22 23 24 25 26 27 28
+				string rep = "<FIAETWLD{}>";
+				string s1E = "\x01\x02\x03\xFC\xFD";
+				string s1F = "\x0E\x0F\x2F\x7F\x79\x7B\x7C\x8D\x88\x8A\xA1\xD0\r\n\x07";
+				string sExtra = "\r\n\x07\x7F\x81\x87";
+				System.Collections.Generic.List<Byte> cleaned = new System.Collections.Generic.List<byte>();
+				int ndx = -1;
+
+				for (int c = 0; c < len; ++c)
+				{
+
+					if ((bytearray1252[c] == '\xEF') && (((c + 1) < len) && ((ndx = sEF.IndexOf((char)bytearray1252[c + 1])) >= 0)))
+					{
+						// 3C <  3E >
+						// 7B {  7D }
+						if (sEF[ndx] != '\x28') // Not closing brace? Needs starter char
+							cleaned.Add((byte)rep[0]);
+						cleaned.Add((byte)rep[ndx]); // add rep.char based on Index
+						if (sEF[ndx] != '\x27') // Not opening brace? Needs closer char
+							cleaned.Add((byte)rep[rep.Length - 1]); // >  Final: <{ and }> for Auto-translate braces
+						++c;
+					}
+					else if ((bytearray1252[c] == '\x1F') && (((c + 1) < len) && s1F.IndexOf((char)bytearray1252[c + 1]) >= 0))
+					{
+						++c;
+					}
+					else if ((bytearray1252[c] == '\x1E') && (((c + 1) < len) && s1E.IndexOf((char)bytearray1252[c + 1]) >= 0))
+					{
+						++c;
+					}
+					else
+					{
+						i = sExtra.IndexOf((char)bytearray1252[c]);
+						if (i >= 3) // \r\n\07 are singles, others are doubles
+						{
+							if (((bytearray1252[c] == '\x7F') && (((c + 1) < len) && bytearray1252[c + 1] == '\x31')) ||
+								((bytearray1252[c] == '\x81') && (((c + 1) < len) && bytearray1252[c + 1] == '\xA1')) ||
+								((bytearray1252[c] == '\x87') && (((c + 1) < len) && bytearray1252[c + 1] == '\xB2')) ||
+								((bytearray1252[c] == '\x87') && (((c + 1) < len) && bytearray1252[c + 1] == '\xB3')))
+							{
+								++c;
+							}
+							else
+							{
+								i = -1; // not a target, so "wasn't found"
+							}
+						}
+						/*else if (i >= 0) {
+					  ++c; // using an auto-incrementing for loop this becomes { }
+						}*/
+						if (i < 0)
+						{
+							cleaned.Add(bytearray1252[c]);
+						}
+					}
+				}
+				cleaned.Add(0);
+				if (cleaned[0] != 0)
+					cleanedString = System.Text.Encoding.GetEncoding(932).GetString(cleaned.ToArray());
+				else
+					cleanedString = String.Empty;
+				if (cleanedString.StartsWith("["))  // Detect and remove Windower Timestamp plugin text.
+				{
+					string text = cleanedString.Substring(1, 8);
+					string re1 = ".*?";	// Non-greedy match on filler
+					string re2 = "((?:(?:[0-1][0-9])|(?:[2][0-3])|(?:[0-9])):(?:[0-5][0-9])(?::[0-5][0-9])?(?:\\s?(?:am|AM|pm|PM))?)";
+
+					Regex r = new Regex(re1 + re2, RegexOptions.IgnoreCase | RegexOptions.Singleline);
+					Match m = r.Match(text);
+					if (m.Success)
+					{
+						cleanedString = cleanedString.Remove(0, 11); // this assumes timestamp found is only 10+1 space in length
+						// Better way? : line = line.Remove(0,m.Length+1);
+					}
+				} // Detect and remove Windower Timestamp plugin text.
+
+				return cleanedString;
+
+			} // private CleanLine(string line)
+
+			public DialogText(string RawText)
+			{
+				_RawText = RawText;
+				if (RawText == String.Empty)
+				{
+					_Question = String.Empty;
+					_Options = new string[0];
+				}
+				else
+				{
+					_Question = CleanLine(RawText.Substring(0, RawText.IndexOf("\v") - 1));
+					string buffer = RawText.Substring(RawText.IndexOf("\v") + 1);
+					_Options = CleanLine(buffer.Split(new string[] { "\a" }, StringSplitOptions.RemoveEmptyEntries));
+				}
+			}
+			public string Question
+			{
+				get { return _Question; }
+			}
+			public string[] Options
+			{
+				get { return _Options; }
+			}
+		}
+		#endregion
+
+	} // @ public partial class FFACE
 }

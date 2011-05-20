@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace FFACETools
-{
-	public partial class FFACE
-	{
+namespace FFACETools {
+	public partial class FFACE {
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern int CreateInstance(UInt32 PID);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern void DeleteInstance(int instanceID);
-        [DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        private static extern byte GetLoginStatus (int instanceID);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        private static extern bool Access (int instanceID);
+		private static extern byte GetLoginStatus(int instanceID);
+		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+		private static extern bool Access(int instanceID);
 
 
 		#region Player Imports
@@ -36,8 +34,8 @@ namespace FFACETools
 		private static extern float GetCastPercent(int instanceID);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern short GetCastPercentEx(int instanceID);
-        [DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        private static extern byte GetWeatherType (int instanceID);
+		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+		private static extern byte GetWeatherType(int instanceID);
 
 		#endregion
 
@@ -169,11 +167,11 @@ namespace FFACETools
 		private static extern double GetNPCHeadingToNPC(int instanceID, int npcIDStart, int npcIDEnd);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern bool SetNPCTradeInfo(int InstanceID, int Zero, ushort ItemID, byte Index, byte Count, byte Box, UInt32 Gil);
-        [DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        private static extern void GetNPCTradeInfo(int instanceID, ref TRADEINFO info);
+		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+		private static extern void GetNPCTradeInfo(int instanceID, ref TRADEINFO info);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern bool IsSynthesis(int InstanceID);
-		
+
 		/*		
 		 *		FFACE paid functions
 		 *
@@ -181,7 +179,7 @@ namespace FFACETools
 		 *		void GetNPCTradeInfo(void* inst, TRADEINFO* TI)
 		 *		BOOL IsSynthesis(void* inst)
 		 */
-		[DllImport("FFACE.dll", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = false, EntryPoint="SetCraftItem")]
+		[DllImport("FFACE.dll", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = false, EntryPoint = "SetCraftItem")]
 		private static extern bool SetCraftItem(int instanceID, int Zero, ushort ItemID, byte Index, byte Count, byte Box);
 
 
@@ -282,7 +280,7 @@ namespace FFACETools
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern bool SetTimeOut(int InstanceID, short value);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-		private static extern bool FightFish (int InstanceID);
+		private static extern bool FightFish(int InstanceID);
 		#endregion
 
 		#region Alliance Imports
@@ -315,6 +313,15 @@ namespace FFACETools
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern byte ShopQuantity(int instanceID);
 
+		/*  FFACE 4.1.0.14 Exports */
+		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+		private static extern void GetDialogStrings(int instanceID, byte[] buffer, ref int size);
+		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+		private static extern short GetDialogIndex(int instanceID);
+		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+		private static extern int GetDialogIndexCount(int instanceID);
+		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+		private static extern short GetDialogID(int instanceID);
 		#endregion
 
 		#region Search Imports

@@ -1,14 +1,11 @@
 ﻿using System;
 
-namespace FFACETools
-{
-	public partial class FFACE
-	{
+namespace FFACETools {
+	public partial class FFACE {
 		/// <summary>
 		/// Wrapper class for menu information from FFACE
 		/// </summary>
-		public class MenuTools
-		{
+		public class MenuTools {
 			#region Constructor
 
 			/// <summary>
@@ -31,6 +28,48 @@ namespace FFACETools
 			private int _InstanceID { get; set; }
 
 			/// <summary>
+			/// Returns the ID for the current Dialogue or 0 if not dialogue is open
+			/// </summary>
+			public short DialogID
+			{
+				get { return GetDialogID(_InstanceID); }
+			}
+
+			/// <summary>
+			/// Returns the number of dialog options
+			/// </summary>
+			public int DialogOptionCount
+			{
+				get { return GetDialogIndexCount(_InstanceID); }
+			}
+
+			///<summary>
+			/// Returns the selected option index
+			///</summary>
+			public short DialogOptionIndex
+			{
+				get { return GetDialogIndex(_InstanceID); }
+			}
+
+			///<summary>
+			/// Returns a class containing the dialog text
+			///</summary>
+			public DialogText DialogText
+			{
+				get
+				{
+					if (DialogID == 0)
+						return new DialogText(String.Empty);
+					int size = 4096;
+					byte[] buffer = new byte[size];
+					GetDialogStrings(_InstanceID, buffer, ref size);
+					if (size <= 3)
+						return new DialogText(String.Empty);
+					return new DialogText(System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 3).Trim());
+				}
+			}
+
+			/// <summary>
 			/// Whether a menu is open or not
 			/// </summary>
 			public bool IsOpen
@@ -50,7 +89,7 @@ namespace FFACETools
 					byte[] buffer = new byte[size];
 					MenuName(_InstanceID, buffer, ref size);
 
-					return System.Text.Encoding.ASCII.GetString(buffer, 0, size - 1).Trim();
+					return System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1).Trim();
 				}
 			} // @ public bool Name
 
@@ -65,7 +104,7 @@ namespace FFACETools
 					byte[] buffer = new byte[size];
 					MenuSelection(_InstanceID, buffer, ref size);
 
-					return System.Text.Encoding.ASCII.GetString(buffer, 0, size - 1);
+					return System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
 				}
 			} // @ public string Selection
 
@@ -80,7 +119,7 @@ namespace FFACETools
 					byte[] buffer = new byte[size];
 					MenuHelp(_InstanceID, buffer, ref size);
 
-					return System.Text.Encoding.ASCII.GetString(buffer, 0, size - 1);
+					return System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
 				}
 			} // @ public string Help
 
@@ -101,23 +140,23 @@ namespace FFACETools
 				get { return FFACE.ShopQuantity(_InstanceID); }
 
 			} // @ public byte ShopQuantity
-			
-			///Set Items in npc trade window
-            ///<param name="sTinfo">NPCTRADEINFO structure</param>
-            ///</summary>
-            public bool SetNPCTradeInformation(NPCTRADEINFO sTinfo)
-            {
-                bool result = false;
 
-                for (int i = 0; i < sTinfo.items.Length; i++)
-                {
-                    result = FFACE.SetNPCTradeInfo(_InstanceID, 0, sTinfo.items[i].ItemID, sTinfo.items[i].Index, sTinfo.items[i].Count, (byte)i, sTinfo.Gil);
-                    if (!result)
-                        break;
-                }
-                return result;
-            } // @ public bool SetNPCTradeInformation
-			
+			///Set Items in npc trade window
+			///<param name="sTinfo">NPCTRADEINFO structure</param>
+			///</summary>
+			public bool SetNPCTradeInformation(NPCTRADEINFO sTinfo)
+			{
+				bool result = false;
+
+				for (int i = 0; i < sTinfo.items.Length; i++)
+				{
+					result = FFACE.SetNPCTradeInfo(_InstanceID, 0, sTinfo.items[i].ItemID, sTinfo.items[i].Index, sTinfo.items[i].Count, (byte)i, sTinfo.Gil);
+					if (!result)
+						break;
+				}
+				return result;
+			} // @ public bool SetNPCTradeInformation
+
 			/// <summary>
 			/// Set items in craft window
 			/// </summary>

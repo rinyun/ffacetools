@@ -102,7 +102,7 @@ namespace FFACETools
 				byte[] buffer = new byte[size];
 				GetSearchName(_InstanceID, index, buffer, ref size);
 
-				return System.Text.Encoding.ASCII.GetString(buffer, 0, size - 1);
+				return System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
 		 
 			} // @ public bool Name
 
