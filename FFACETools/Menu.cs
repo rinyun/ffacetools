@@ -40,7 +40,14 @@ namespace FFACETools {
 			/// </summary>
 			public int DialogOptionCount
 			{
-				get { return GetDialogIndexCount(_InstanceID); }
+				get
+				{
+					if (DialogID == 0)
+						return -1;
+					else
+						return GetDialogIndexCount(_InstanceID);
+				}
+				
 			}
 
 			///<summary>
@@ -48,7 +55,13 @@ namespace FFACETools {
 			///</summary>
 			public short DialogOptionIndex
 			{
-				get { return GetDialogIndex(_InstanceID); }
+				get
+				{
+					if (DialogID == 0)
+						return -1;
+					else
+						return GetDialogIndex(_InstanceID);
+				}
 			}
 
 			///<summary>
