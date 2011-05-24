@@ -390,9 +390,12 @@ namespace FFACETools
 			  #endregion
 
 			  if (cleaned[0] != 0)
-			    cleanedString = System.Text.Encoding.GetEncoding(932).GetString(cleaned.ToArray());
+			  {
+				  byte[] arr = cleaned.ToArray();
+				  cleanedString = System.Text.Encoding.GetEncoding(932).GetString(arr, 0, arr.Length);
+			  }
 			  else
-			    cleanedString = String.Empty;
+				  cleanedString = String.Empty;
 			  if (cleanedString.StartsWith("["))  // Detect and remove Windower Timestamp plugin text.
 			  {
 				  string text = cleanedString.Substring(1, 8);
