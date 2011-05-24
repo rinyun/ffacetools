@@ -411,7 +411,7 @@ namespace FFACETools
 				  }
 			  } // Detect and remove Windower Timestamp plugin text.
 
-			  return cleanedString;
+			  return cleanedString.TrimEnd('\0');
 
 			} // private CleanLine(string line)
 
