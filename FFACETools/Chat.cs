@@ -426,7 +426,7 @@ namespace FFACETools
 				int size = 255;
 				byte[] buffer = new byte[255];
 				GetChatLine(_InstanceID, index, buffer, ref size);
-				if (size == 0)
+				if (size <= 0)
 					return new ChatLogEntry() { LineText = String.Empty, LineType = ChatMode.Unknown, Index = 0 };
 
 				string tempLine = System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
@@ -451,7 +451,7 @@ namespace FFACETools
 				byte[] buffer = new byte[255];
 				ChatMode mode = new ChatMode();
 				GetChatLineEx(_InstanceID, index, buffer, ref size, ref mode);
-				if (size == 0)
+				if (size <= 0)
 					return new ChatLogEntry() { LineText = String.Empty, LineType = ChatMode.Unknown, Index = 0 };
 
 				string tempLine = System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
@@ -476,7 +476,7 @@ namespace FFACETools
 				int size = 255;
 				byte[] buffer = new byte[255];
 				GetChatLineR(_InstanceID, index, buffer, ref size);
-				if (size == 0)
+				if (size <= 0)
 					return new ChatLogEntry() { LineTime = DateTime.Now, LineTimeString = "[" + DateTime.Now.ToString("HH:mm:ss") + "] ", LineColor = string.Empty, LineText = String.Empty, LineType = ChatMode.Unknown, Index = 0 };
 
 				// System.Text.Encoding.GetEncoding(932)
@@ -488,7 +488,7 @@ namespace FFACETools
 				 * [0] Chat Type
 				 * [1] UNKNOWN 
 				 * [2] UNKNOWN
-				 * [3] UNKNOWN
+				 * [3] Line Color
 				 * [4] Index merging wrapping
 				 * [5] Index not merging wrapping (a line wrap gets its own index)
 				 * [6] UNKNOWN
@@ -637,7 +637,7 @@ namespace FFACETools
 					line.NowDate = _ChatLog.Peek().LineTime;
 					if (addcolor == true)
                     {
-                        line.Color = ColorTranslator.FromHtml("#" + _ChatLog.Peek().LineColor);
+                        line.Color = ColorTranslator.FromHtml("#" + _ChatLog.Peek().LineColor.Trim('#'));
                     }
                     else
                     {
