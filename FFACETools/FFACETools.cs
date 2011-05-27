@@ -135,7 +135,7 @@ namespace FFACETools
 			UInt64 version = ((UInt64)fileInfo.FileMajorPart << 48) + ((UInt64)fileInfo.FileMinorPart << 32) + ((UInt64)fileInfo.FileBuildPart << 16) + (UInt64)fileInfo.FilePrivatePart;
 			if (fileInfo.FileMajorPart != 4)
 				throw new Exception(NEED_v410_14_OR_HIGHER);
-			else if (version < 0x000400010000000E)			// 0004 0001 0000 000E (4, 1, 0, 14)
+			else if (version < 0x000400010000000EUL)			// 0004 0001 0000 000E (4, 1, 0, 14)
 				throw new Exception(NEED_v410_14_OR_HIGHER);
 
 			/*if (fileInfo.FileMajorPart != 4)

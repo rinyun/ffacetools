@@ -665,7 +665,18 @@ namespace FFACETools {
 				byte[] buffer = new byte[size];
 				GetChatLineR(_InstanceID, index, buffer, ref size);
 				if (size <= 0)
-					return null; //	new ChatLogEntry() { LineTime = DateTime.Now, LineTimeString = "[" + DateTime.Now.ToString("HH:mm:ss") + "] ", LineColor = String.Empty, ActualLineColor = Color.Empty, LineText = String.Empty, LineType = ChatMode.Error, Index = 0 };
+					return null;
+				/*
+				new ChatLogEntry() {
+					LineTime = DateTime.Now,
+					LineTimeString = "[" + DateTime.Now.ToString("HH:mm:ss") + "] ",
+					LineColor = String.Empty,
+					ActualLineColor = Color.Empty,
+					LineText = String.Empty,
+					LineType = ChatMode.Error,
+					Index = 0,
+					RawString = new String[0]
+				}; */
 
 				// System.Text.Encoding.GetEncoding(932)
 				string tempLine = System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
@@ -771,6 +782,10 @@ namespace FFACETools {
 					{
 						ChatLogEntry currentEntry = GetLineRaw(index);
 
+						// GetLineRaw() returns null if size <= 0 on the length of string.
+						if (currentEntry == null)
+							continue;
+
 						// only add the first 3 most recent lines
 						if (index.Equals(0))
 							_LastSeenEntry = (ChatLogEntry)currentEntry.Clone();
@@ -792,6 +807,10 @@ namespace FFACETools {
 					for (short index = 0; index <= 49; index++)
 					{
 						ChatLogEntry currentEntry = GetLineRaw(index);
+
+						// GetLineRaw() returns null if size <= 0 on the length of string.
+						if (currentEntry == null)
+							continue;
 
 						// add the indexed line to the current line stack
 						currentLines.Push(currentEntry);
