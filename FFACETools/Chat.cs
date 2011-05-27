@@ -3,28 +3,25 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text.RegularExpressions;
 
-namespace FFACETools
-{
-	public partial class FFACE
-	{
+namespace FFACETools {
+	public partial class FFACE {
 		/// <summary>
 		/// Class container to impliment Pyrolol's chat system
 		/// </summary>
-		public class ChatTools
-		{
+		public class ChatTools {
 			#region Classes
 
 			/// <summary>
 			/// Class container for a chat line returned from GetNextLine()
 			/// </summary>
-			public struct ChatLine
-			{
+			public class ChatLine {
+				public String[] RawString { get; set; }
 				/// <summary>
 				/// The time the message was parsed in
 				/// "January 01, 2009 HH:mm:ss AM/PM" format.
 				/// </summary>
 				public DateTime NowDate { get; set; }
-				
+
 				/// <summary>
 				/// The time the message was parsed in "[HH:mm:ss]" format.
 				/// </summary>
@@ -44,6 +41,11 @@ namespace FFACETools
 				/// The type of message
 				/// </summary>
 				public ChatMode Type { get; set; }
+
+				/// <summary>
+				/// The index of the message in FFXI memory.
+				/// </summary>
+				public Int32 Index { get; set; }
 
 				public static bool operator ==(ChatLine item1, ChatLine item2)
 				{
@@ -99,16 +101,17 @@ namespace FFACETools
 			/// Structure to hold a Chat log message and it's type
 			/// </summary>
 			[Serializable]
-			public class ChatLogEntry : ICloneable
-			{
+			public class ChatLogEntry : ICloneable {
 				#region Members
 
 				public DateTime LineTime { get; set; }
 				public string LineTimeString { get; set; }
 				public string LineColor { get; set; }
+				public Color ActualLineColor { get; set; }
 				public string LineText { get; set; }
 				public ChatMode LineType { get; set; }
 				public int Index { get; set; }
+				public String[] RawString { get; set; }
 
 				#endregion
 
@@ -145,7 +148,7 @@ namespace FFACETools
 
 					if (o is ChatLogEntry)
 					{
-						if(this.LineText.Equals(((ChatLogEntry)o).LineText)
+						if (this.LineText.Equals(((ChatLogEntry)o).LineText)
 						  && this.LineType.Equals(((ChatLogEntry)o).LineType)
 						  && this.Index.Equals(((ChatLogEntry)o).Index))
 							bEquals = true;
@@ -240,68 +243,197 @@ namespace FFACETools
 
 			#region Methods
 
+			internal static bool IsSet(UInt32 value, UInt32 bit)
+			{
+				if (value == bit)
+					return true;
+				return ((value & bit) != 0); // generic, means i don't have to be exact on settings.
+			}
+
+			internal static bool IsSet(LineSettings value, LineSettings bit)
+			{
+				if (value == bit)
+					return true;
+				return (((UInt32)value & (UInt32)bit) != 0);
+			}
+
 			/// <summary>
-			/// Will strip abnormal characters (colors, etc) from the string
+			/// Will convert AT Brackets, Element Icons, and strip everything else.
 			/// </summary>
 			/// <param name="line">line to clean (left intact)</param>
-			/// <returns>string containing the cleaned line</returns>
-			internal string CleanLine(string line)
+			/// <returns>string containing the cleaned line, original is left unharmed</returns>
+			public static String CleanLine(String line)
 			{
-			  string cleanedString = line;
-			  byte[] bytearray1252 = System.Text.Encoding.GetEncoding(1252).GetBytes(cleanedString);
-			  int i = 0, len = bytearray1252.Length;
-			  string sEF = "\xFF\x1F\x20\x21\x22\x23\x24\x25\x26\x27\x28\xFF";
-				// 1f 20 21 22 23 24 25 26 27 28
-			  string rep = "<FIAETWLD{}>";
-			  string s1E = "\x01\x02\x03\xFC\xFD";
-			  string s1F = "\x0E\x0F\x2F\x7F\x79\x7B\x7C\x8D\x88\x8A\xA1\xD0\r\n\x07";
-			  string sExtra = "\r\n\x07\x7F\x81\x87";
-			  List<Byte> cleaned = new List<byte>();
-			  int ndx = -1;
+				return FFACE.ChatTools.CleanLine(line, LineSettings.OldSchool);
+			}
 
-			  for (int c = 0; c < len; ++c) {
+			/// <summary>
+			/// Will strip/convert requested items based on LineSettings passed.
+			/// </summary>
+			/// <param name="line">line to clean (left intact)</param>
+			/// <returns>string containing the modified line, original is left unharmed</returns>
+			public static String CleanLine(String line, LineSettings ls)
+			{
+				String cleanedString = line;
 
-			    if ((bytearray1252[c] == '\xEF') && (((c + 1) < len) && ((ndx = sEF.IndexOf((char) bytearray1252[c + 1])) >= 0))) {
-			      // 3C <  3E >
-			      // 7B {  7D }
-			      if (sEF[ndx] != '\x28') // Not closing brace? Needs starter char
-				cleaned.Add((byte) rep[0]);
-			      cleaned.Add((byte) rep[ndx]); // add rep.char based on Index
-			      if (sEF[ndx] != '\x27') // Not opening brace? Needs closer char
-				cleaned.Add((byte) rep[rep.Length - 1]); // >  Final: <{ and }> for Auto-translate braces
-			      ++c;
-			    }
-			    else if ((bytearray1252[c] == '\x1F') && (((c + 1) < len) && s1F.IndexOf((char) bytearray1252[c + 1]) >= 0)) {
-			      ++c;
-			    }
-			    else if ((bytearray1252[c] == '\x1E') && (((c + 1) < len) && s1E.IndexOf((char) bytearray1252[c + 1]) >= 0)) {
-			      ++c;
-			    }
-			    else {
-			      i = sExtra.IndexOf((char) bytearray1252[c]);
-			      if (i >= 3) // \r\n\07 are singles, others are doubles
+				// Duh. If we managed to get here, I'm not bothering.
+				if (IsSet(ls, LineSettings.RawText))
 				{
-				if (((bytearray1252[c] == '\x7F') && (((c + 1) < len) && bytearray1252[c + 1] == '\x31')) ||
-				    ((bytearray1252[c] == '\x81') && (((c + 1) < len) && bytearray1252[c + 1] == '\xA1')) ||
-				    ((bytearray1252[c] == '\x87') && (((c + 1) < len) && bytearray1252[c + 1] == '\xB2')) ||
-				    ((bytearray1252[c] == '\x87') && (((c + 1) < len) && bytearray1252[c + 1] == '\xB3'))) {
-				  ++c;
+					return cleanedString;
 				}
-				else {
-				  i = -1; // not a target, so "wasn't found"
+
+				if (IsSet(ls, LineSettings.CleanTimeStamp))
+				{
+					cleanedString = CleanTimeStamp(cleanedString);
+					// if all we're doing is pulling the TimeStamp, just return.
+					if (ls == LineSettings.CleanTimeStamp)
+						return cleanedString;
 				}
-			      }
-			      /*else if (i >= 0) {
-				++c; // using an auto-incrementing for loop this becomes { }
-			      }*/
-			      if (i < 0) {
-				cleaned.Add(bytearray1252[c]);
-			      }
-			    }
-			  }
-			  cleaned.Add(0);
-			  #region The above code done with all line.Replace() instead.
-			  /*
+
+				Byte[] bytearray1252 = System.Text.Encoding.GetEncoding(1252).GetBytes(cleanedString);
+				Int32 i = 0, len = bytearray1252.Length;
+				const String sEF = "\xFF\x1F\x20\x21\x22\x23\x24\x25\x26\x27\x28\xFF";
+				// 1f 20 21 22 23 24 25 26 27 28
+				const String rep = "<FIAETWLD{}>";
+				const String s1E = "\x01\x02\x03\xFC\xFD";
+				const String s1F = "\x0E\x0F\x2F\x7F\x79\x7B\x7C\x8D\x88\x8A\xA1\xD0";  //\r\n\x07
+				const String sExtra = "\r\n\x07\x7F\x81\x87";
+
+				List<Byte> cleaned = new List<Byte>();
+				Int32 ndx = -1;
+				bool inItemCode = false;
+				bool inKeyItemCode = false;
+
+				// Sanity checks
+				for (Int32 c = 0; c < len; ++c)
+				{
+					if ((bytearray1252[c] == '\xEF') && (((c + 1) < len) && ((ndx = sEF.IndexOf((Char)bytearray1252[c + 1])) >= 0)))
+					{
+						// 3C <  3E >
+						// 7B {  7D }
+						bool isOpenBrace = (sEF[ndx] == '\x27');
+						bool isCloseBrace = (sEF[ndx] == '\x28');
+						bool isElementIcon = (!isOpenBrace && !isCloseBrace);
+
+						if (!isCloseBrace) // Not closing brace? Needs starter char
+						{
+							if ((isOpenBrace && IsSet(ls, LineSettings.ConvertATBrackets)) ||
+								(isElementIcon && IsSet(ls, LineSettings.ConvertElementIcons)))
+								cleaned.Add((Byte)rep[0]);
+						}
+						if ((!isElementIcon && IsSet(ls, LineSettings.ConvertATBrackets)) ||
+							(isElementIcon && IsSet(ls, LineSettings.ConvertElementIcons)))
+							cleaned.Add((Byte)rep[ndx]); // add rep.char based on Index
+
+						if (!isOpenBrace) // Not opening brace? Needs closer char
+						{
+							if ((isCloseBrace && IsSet(ls, LineSettings.ConvertATBrackets)) ||
+								(isElementIcon && IsSet(ls, LineSettings.ConvertElementIcons)))
+								cleaned.Add((Byte)rep[rep.Length - 1]); // >  Final: <{ and }> for Auto-translate braces
+						}
+						if (IsSet(ls, LineSettings.ConvertATBrackets | LineSettings.ConvertElementIcons | LineSettings.CleanElementIcons | LineSettings.CleanATBrackets))
+							++c;
+						else cleaned.Add(bytearray1252[c]);
+					}
+					else if ((bytearray1252[c] == '\x1F') && (((c + 1) < len) && ((ndx = s1F.IndexOf((char)bytearray1252[c + 1])) >= 0)))
+					{
+						if (IsSet(ls, LineSettings.CleanOthers))
+							++c;
+						else cleaned.Add(bytearray1252[c]);
+					}
+					else if ((bytearray1252[c] == '\x1E') && (((c + 1) < len) && ((ndx = s1E.IndexOf((char)bytearray1252[c + 1])) >= 0)))
+					{
+						if ((s1E[ndx] == '\x03') && IsSet(ls, LineSettings.ConvertKIBytes | LineSettings.CleanKIBytes))
+						{
+							if (IsSet(ls, LineSettings.ConvertKIBytes))
+							{
+								cleaned.Add((Byte)'[');
+								inKeyItemCode = true;
+							}
+							++c;
+						}
+						else if ((s1E[ndx] == '\x02') && IsSet(ls, LineSettings.ConvertItemBytes | LineSettings.CleanItemBytes))
+						{
+							if (IsSet(ls, LineSettings.ConvertItemBytes))
+							{
+								cleaned.Add((Byte)'{');
+								inItemCode = true;
+							}
+							++c;
+						}
+						else if (inItemCode && (s1E[ndx] == '\x01') && IsSet(ls, LineSettings.ConvertItemBytes | LineSettings.CleanItemBytes))
+						{
+							if (IsSet(ls, LineSettings.ConvertItemBytes))
+							{
+								cleaned.Add((Byte)'}');
+								inItemCode = false;
+							}
+							++c;
+						}
+						else if (inKeyItemCode && (s1E[ndx] == '\x01') && IsSet(ls, LineSettings.ConvertKIBytes | LineSettings.CleanKIBytes))
+						{
+							if (IsSet(ls, LineSettings.ConvertKIBytes))
+							{
+								cleaned.Add((Byte)']');
+								inKeyItemCode = false;
+							}
+							++c;
+						}
+						else if (IsSet(ls, LineSettings.CleanOthers))
+						{
+							++c;
+						}
+						else
+						{
+							cleaned.Add(bytearray1252[c]);
+						}
+					}
+					else
+					{
+						i = sExtra.IndexOf((char)bytearray1252[c]);
+						if (i >= 3) // \r\n\07 are singles, others are doubles
+						{
+							if (((bytearray1252[c] == '\x7F') && (((c + 1) < len) && bytearray1252[c + 1] == '\x31')) ||
+								((bytearray1252[c] == '\x81') && (((c + 1) < len) && bytearray1252[c + 1] == '\xA1')) ||
+								((bytearray1252[c] == '\x87') && (((c + 1) < len) && bytearray1252[c + 1] == '\xB2')) ||
+								((bytearray1252[c] == '\x87') && (((c + 1) < len) && bytearray1252[c + 1] == '\xB3')))
+							{
+								if (IsSet(ls, LineSettings.CleanOthers))
+									++c;
+								else
+									i = -1;
+							}
+							else
+							{
+								i = -1; // not a target, so "wasn't found"
+							}
+						}
+						else if (i != -1)
+						{
+							if ((sExtra[i] == '\r') || (sExtra[i] == '\n'))
+							{
+								if (IsSet(ls, LineSettings.CleanNewLine))
+									++c;
+								else
+									i = -1;
+							}
+							else if (IsSet(ls, LineSettings.CleanOthers))
+							{
+								++c;
+							}
+							else
+								i = -1;
+						}
+
+						if (i < 0)
+						{
+							cleaned.Add(bytearray1252[c]);
+						}
+					}
+				}
+				cleaned.Add(0);
+				#region The above code done with all line.Replace() instead.
+				/*
 				if (cleanedString.IndexOf('\xEF') >= 0)
 				{
 				  cleanedString = cleanedString.Replace("\xEF\x1F", "");  // Fire
@@ -351,9 +483,9 @@ namespace FFACETools
 				  cleanedString = cleanedString.Replace("\x07", "");
 				}
 			  */
-			  #endregion
-			  #region Original code (fail)
-			  /*
+				#endregion
+				#region Original code (fail)
+				/*
 				// change the dot to a [ for start of string
 				string startingChars = System.Text.Encoding.GetEncoding(1252).GetString(new byte[2] { 0x1e, 0xfc });
 				if (cleanedString.StartsWith(startingChars))
@@ -387,52 +519,106 @@ namespace FFACETools
 				
 				cleanedString = cleanedString.TrimStart('');
 				*/
-			  #endregion
+				#endregion
 
-			  if (cleaned[0] != 0)
-			  {
-				  byte[] arr = cleaned.ToArray();
-				  cleanedString = System.Text.Encoding.GetEncoding(932).GetString(arr, 0, arr.Length);
-			  }
-			  else
-				  cleanedString = String.Empty;
-			  if (cleanedString.StartsWith("["))  // Detect and remove Windower Timestamp plugin text.
-			  {
-				  string text = cleanedString.Substring(1, 8);
-				  string re1 = ".*?";	// Non-greedy match on filler
-				  string re2 = "((?:(?:[0-1][0-9])|(?:[2][0-3])|(?:[0-9])):(?:[0-5][0-9])(?::[0-5][0-9])?(?:\\s?(?:am|AM|pm|PM))?)";
-
-				  Regex r = new Regex(re1+re2,RegexOptions.IgnoreCase|RegexOptions.Singleline);
-				  Match m = r.Match(text);
-				  if (m.Success)
-				  {
-				    cleanedString = cleanedString.Remove(0, 11); // this assumes timestamp found is only 10+1 space in length
-				    // Better way? : line = line.Remove(0,m.Length+1);
-				  }
-			  } // Detect and remove Windower Timestamp plugin text.
-
-			  return cleanedString.TrimEnd('\0');
+				if (cleaned[0] != 0)
+				{
+					byte[] arr = cleaned.ToArray();
+					cleanedString = System.Text.Encoding.GetEncoding(932).GetString(arr, 0, arr.Length);
+				}
+				else
+					cleanedString = String.Empty;
+				//if (IsSet(ls, LineSettings.CleanTimeStamp) && cleanedString.StartsWith("["))  // Detect and remove Windower Timestamp plugin text.
+				//{
+				//	cleanedString = CleanTimeStamp(cleanedString);
+				cleanedString = cleanedString.TrimEnd('\0');
+				//} // Detect and remove Windower Timestamp plugin text.
+				if (!IsSet(ls, LineSettings.CleanNewLine))
+				{
+					if (!cleanedString.EndsWith("\r\n"))
+						cleanedString += Environment.NewLine;
+				}
+				return cleanedString;
 
 			} // private CleanLine(string line)
+
+			/// <summary>
+			/// Cleans Timestamp plugin's addition to the chatlog. (Call before stripping color codes)
+			/// </summary>
+			/// <param name="s">String to strip Timestamp from (if present).</param>
+			/// <returns>String containing the modified line.</returns>
+			internal static String CleanTimeStamp(String s)
+			{
+				String stringToClean = s;
+				byte[] textb = System.Text.Encoding.GetEncoding(1252).GetBytes(stringToClean);
+				int index = -1, index2 = -1;
+				for (index = 0; (index+1) < textb.Length; index++)
+				{
+					// to allow for extra color codes in Timestamp later.
+					if ((textb[index] == 0x1E) && (textb[index+1] != 0x01))
+						break;
+				}
+
+				for (index2 = index; (index2+1) < textb.Length; index2++)
+				{
+					if ((textb[index2] == 0x1E) && (textb[index2 + 1] == 0x01))
+					{
+						index2++;
+						break;
+					}
+				}
+
+				// 9 is an arbitrary index, it assumes the color code needed is within the first 9 bytes.
+				if ((index <= 9) && index2 >= 0 && ((index2 + 2) < textb.Length))
+				{
+					String txt = String.Empty;
+					try
+					{
+						byte[] textb2 = new byte[textb.Length];
+
+						Array.ConstrainedCopy(textb, index2 + 1, textb2, 0, textb.Length - (index2 + 1));
+						stringToClean = System.Text.Encoding.GetEncoding(1252).GetString(textb2);
+					}
+					catch
+					{
+						stringToClean = "Error";
+					}
+					return stringToClean;
+				}
+				// keeping this here in case people try to run CleanTimeStamp after the color byte codes are stripped.
+				String text = (stringToClean.Length >= 9) ? stringToClean.Substring(1, 8) : String.Empty;
+				string re1 = ".*?";	// Non-greedy match on filler
+				string re2 = "((?:(?:[0-1][0-9])|(?:[2][0-3])|(?:[0-9])):(?:[0-5][0-9])(?::[0-5][0-9])?(?:\\s?(?:am|AM|pm|PM))?)";
+
+				Regex r = new Regex(re1 + re2, RegexOptions.IgnoreCase | RegexOptions.Singleline);
+				Match m = r.Match(text);
+				if (m.Success)
+				{
+					stringToClean = stringToClean.Remove(0, 11); // this assumes timestamp found is only 10+1 space in length
+					// Better way? : line = line.Remove(0,m.Length+1);
+				}  
+				return stringToClean;
+			}
 
 			/// <summary>
 			/// Will get a chat line directly from FFACE
 			/// </summary>
 			/// <param name="index">Index of the line to get (0 being most recent)</param>
+			/// <returns>null if error, ChatLogEntry containing raw text of line matching index</returns>
+			[Obsolete("Use GetLineRaw(index) instead.")]
 			internal ChatLogEntry GetLine(short index)
 			{
 				// 210 to make sure it reads to end of string
 				// for some reason 200 isn't big enough and it will strip some of the line off if it's long
-				int size = 255;
-				byte[] buffer = new byte[255];
+				int size = 1024;
+				byte[] buffer = new byte[size];
 				GetChatLine(_InstanceID, index, buffer, ref size);
 				if (size <= 0)
-					return new ChatLogEntry() { LineText = String.Empty, LineType = ChatMode.Unknown, Index = 0 };
+					return new ChatLogEntry() { LineText = String.Empty, LineType = ChatMode.Error, Index = 0 };
 
 				string tempLine = System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
 
-				return new ChatLogEntry()
-				{
+				return new ChatLogEntry() {
 					LineText = tempLine,
 					Index = index
 				};
@@ -443,24 +629,25 @@ namespace FFACETools
 			/// Will get a chat line and type directly from FFACE
 			/// </summary>
 			/// <param name="index">Index of the line to get (0 being most recent)</param>
+			/// <returns>null if error, ChatLogEntry containing Type, index, and raw text of the line matching index.</returns>
+			[Obsolete("Use GetLineRaw(index) instead.")]
 			internal ChatLogEntry GetLineExtra(short index)
 			{
 				// 210 to make sure it reads to end of string
 				// for some reason 200 isn't big enough and it will strip some of the line off if it's long
-				int size = 255;
-				byte[] buffer = new byte[255];
+				int size = 1024;
+				byte[] buffer = new byte[size];
 				ChatMode mode = new ChatMode();
 				GetChatLineEx(_InstanceID, index, buffer, ref size, ref mode);
 				if (size <= 0)
-					return new ChatLogEntry() { LineText = String.Empty, LineType = ChatMode.Unknown, Index = 0 };
+					return new ChatLogEntry() { LineText = String.Empty, LineType = ChatMode.Error, Index = 0 };
 
 				string tempLine = System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
 
-				return new ChatLogEntry()
-				{
+				return new ChatLogEntry() {
 					LineText = tempLine,
 					LineType = mode,
-					Index	= index
+					Index = index
 				};
 
 			} // @ internal ChatLogEntry GetLineExtra(short index)
@@ -469,58 +656,102 @@ namespace FFACETools
 			/// Will get the raw data of a chat line from FFACE
 			/// </summary>
 			/// <param name="index">Index of the line to get (0 being most recent)</param>
+			/// <returns>null if error, Fully populated ChatLogEntry otherwise. In event of a bad chat line, ChatType == Chat.Error and line contains error message.</returns>
 			public ChatLogEntry GetLineRaw(short index)
 			{
 				// 210 to make sure it reads to end of string
 				// for some reason 200 isn't big enough and it will strip some of the line off if it's long
-				int size = 255;
-				byte[] buffer = new byte[255];
+				int size = 1024;
+				byte[] buffer = new byte[size];
 				GetChatLineR(_InstanceID, index, buffer, ref size);
 				if (size <= 0)
-					return new ChatLogEntry() { LineTime = DateTime.Now, LineTimeString = "[" + DateTime.Now.ToString("HH:mm:ss") + "] ", LineColor = string.Empty, LineText = String.Empty, LineType = ChatMode.Unknown, Index = 0 };
+					return null; //	new ChatLogEntry() { LineTime = DateTime.Now, LineTimeString = "[" + DateTime.Now.ToString("HH:mm:ss") + "] ", LineColor = String.Empty, ActualLineColor = Color.Empty, LineText = String.Empty, LineType = ChatMode.Error, Index = 0 };
 
 				// System.Text.Encoding.GetEncoding(932)
 				string tempLine = System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
-				
-				string[] sArray = tempLine.Split(new char[1] {','}, 12);
 
-				/*
-				 * [0] Chat Type
-				 * [1] UNKNOWN 
-				 * [2] UNKNOWN
-				 * [3] Line Color
-				 * [4] Index merging wrapping
-				 * [5] Index not merging wrapping (a line wrap gets its own index)
-				 * [6] UNKNOWN
-				 * [7] UNKNOWN (always zero?)
-				 * [8] UNKNOWN
-				 * [9] UNKNOWN
-				 * [10] UNKNOWN
-				 * [11] Actual line text
-				 */
-				try {  // Temporary fix for index out of bounds error.
-					return new ChatLogEntry()
-					{
+				string[] sArray = tempLine.Split(new char[1] { ',' }, 12, StringSplitOptions.None);
+
+				if (sArray.Length != 12)
+				{
+					return new ChatLogEntry() {
 						LineTime = DateTime.Now,
 						LineTimeString = "[" + DateTime.Now.ToString("HH:mm:ss") + "] ",
-						// Original Line:  LineColor = ColorTranslator.FromHtml("#" + sArray[3]),
-                        LineColor = sArray[3],
-						LineText = sArray[11].Remove(0, 4),
-						LineType = (ChatMode)short.Parse(sArray[0], System.Globalization.NumberStyles.AllowHexSpecifier),
-						Index = int.Parse(sArray[5], System.Globalization.NumberStyles.AllowHexSpecifier)
-					};
-				} catch (Exception e) {
-					return new ChatLogEntry()
-					{
-						LineTime = DateTime.Now,
-						LineTimeString = "[" + DateTime.Now.ToString("HH:mm:ss") + "] ",
-						LineColor = "#FF0000",
-						LineText = "Error: " + e.Message,
-						LineType = ChatMode.Unknown,
+						LineColor = "FF0000",
+						ActualLineColor = Color.Empty,
+						LineText = "Error: Array length too short, RawString contains hard data.",
+						LineType = ChatMode.Error,
+						RawString = sArray,
 						Index = 0
 					};
 				}
+				/*
+				 * [0] Chat Type
+				 * [1] UNKNOWN Observed to be 3 (GuildClosed, Synergy status), 2 (Talking to NPC/Dialogs), 0 (chat messages)
+				 * [2] UNKNOWN Observed to be 1 (Possibly when chat lines are shared) 0 (not shared?)
+				 * [3] Line Color
+				 * [4] Index merging wrapping
+				 * [5] Index not merging wrapping (a line wrap gets its own index)
+				 * [6] strlen (assume a double-byte special characters and Shift-JIS encoding as String)
+				 * [7] UNKNOWN (always zero?)
+				 * [8] UNKNOWN (always one?)
+				 * [9] UNKNOWN (known values, 00 (echo/syscommands?), 01 (chat?), 02 (spells/abilities/etc?))
+				 * [10] UNKNOWN  known values: 1 (Possibly when chat lines are shared) 0 (not shared?) (Duplicate of [2]?)
+				 * [11] Actual line text
+				 */
+				String colorString = String.Empty;
+				Color clr = Color.Empty;
+				ChatMode linetype = ChatMode.Error;
+				String lnTxt = String.Empty;
+				String errorMsg = String.Empty;
 
+				int ndx = -1;
+				try
+				{
+					linetype = (ChatMode)short.Parse(sArray[0], System.Globalization.NumberStyles.AllowHexSpecifier);
+				}
+				catch (Exception e)
+				{
+					linetype = ChatMode.Error;
+					errorMsg += String.Format("{0} ", e.Message);
+				}
+				colorString = sArray[3].Trim('#');
+				try
+				{
+					clr = ColorTranslator.FromHtml(String.Format("#{0}", colorString));
+				}
+				catch
+				{
+					clr = Color.Empty;
+				}
+				if (colorString == String.Empty)
+					colorString = "FF0000";
+				try
+				{
+					ndx = int.Parse(sArray[5], System.Globalization.NumberStyles.AllowHexSpecifier);
+				}
+				catch (Exception e)
+				{
+					ndx = -1;
+					errorMsg += String.Format("{0} ", e.Message);
+				}
+				lnTxt = sArray[11].TrimEnd('\0');
+				if (errorMsg != String.Empty)
+				{
+					String temp = errorMsg + lnTxt;
+					lnTxt = temp;
+				}
+				return new ChatLogEntry() {
+					LineTime = DateTime.Now,
+					LineTimeString = "[" + DateTime.Now.ToString("HH:mm:ss") + "] ",
+					// Original Line:  LineColor = ColorTranslator.FromHtml("#" + sArray[3]),
+					ActualLineColor = clr,
+					RawString = sArray, 
+					LineColor = colorString,	//LineColor = sArray[3],
+					LineText = lnTxt,			//sArray[11].Remove(0, 4);
+					LineType = linetype,		//(ChatMode)short.Parse(sArray[0], System.Globalization.NumberStyles.AllowHexSpecifier),
+					Index = ndx					//int.Parse(sArray[5], System.Globalization.NumberStyles.AllowHexSpecifier)
+				};
 			} // @ private ChatLogEntry GetLineRaw(short index)
 
 			/// <summary>
@@ -552,7 +783,7 @@ namespace FFACETools
 
 				// we know our most recent chat line
 				// (every other time but the first call to this function)
-				else 
+				else
 				{
 					// for tracking our most recent chat line
 					ChatLogEntry mostCurrentEntry = null;
@@ -622,9 +853,9 @@ namespace FFACETools
 			/// <param name="cleanLine">Whether to return a clean text line</param>
 			/// <param name="addcolor">Whether to return a color coded line</param>
 			/// <returns>Empty string if no new line available, otherwise the new line</returns>
-			public ChatLine GetNextLine(bool cleanLine, bool addcolor)
+			public ChatLine GetNextLine(LineSettings lineSettings) //bool cleanLine, bool addcolor)
 			{
-				ChatLine line = new ChatLine();
+				ChatLine line = null;
 
 				// update our local cache of chat lines
 				Update();
@@ -632,24 +863,33 @@ namespace FFACETools
 				// if we have a new line
 				if (!NumberOfUnparsedLines().Equals(0))
 				{
+					line = new ChatLine();
+					/*{
+						Color = Color.Empty,
+						NowDate = DateTime.Now,
+						Now = "[" + DateTime.Now.ToString("HH:mm:ss") + "] ",
+						Text = String.Empty,
+						Type = ChatMode.Error
+					};*/
 					// get the next chat line
 					line.Now = _ChatLog.Peek().LineTimeString;
 					line.NowDate = _ChatLog.Peek().LineTime;
-					if (addcolor == true)
-                    {
-                        line.Color = ColorTranslator.FromHtml("#" + _ChatLog.Peek().LineColor.Trim('#'));
-                    }
-                    else
-                    {
-                        line.Color = Color.Empty;
-                    }
-                    
+					line.Index = _ChatLog.Peek().Index;
+					line.RawString = _ChatLog.Peek().RawString;
+
+					try
+					{
+						line.Color = ColorTranslator.FromHtml("#" + _ChatLog.Peek().LineColor.Trim('#'));
+					}
+					catch
+					{
+						line.Color = _ChatLog.Peek().ActualLineColor;
+					}
+
 					line.Type = _ChatLog.Peek().LineType;
-					line.Text = _ChatLog.Peek().LineText;
 
 					// if user wanted to strip off color characters, do so
-					if (cleanLine)
-						line.Text = CleanLine(line.Text);
+					line.Text = FFACE.ChatTools.CleanLine(_ChatLog.Peek().LineText, lineSettings);
 
 					LineParsed();
 
@@ -664,9 +904,18 @@ namespace FFACETools
 			/// </summary>
 			/// <param name="cleanLine">Whether to return a clean text line</param>
 			/// <returns>Empty string if no new line available, otherwise the new line</returns>
-			internal ChatLine GetCurrentLine(bool cleanLine)
+			[Obsolete("Use GetNextLine() instead.")]
+			internal ChatLine GetCurrentLine(LineSettings lineSettings)
 			{
-				ChatLine line = new ChatLine();
+				ChatLine line = null;
+				/*
+				new ChatLine() {
+					Color = Color.Empty,
+					NowDate = DateTime.Now,
+					Now = "[" + DateTime.Now.ToString("HH:mm:ss") + "] ",
+					Text = String.Empty,
+					Type = ChatMode.Error
+				};*/
 
 				// update our local cache of chat lines
 				Update();
@@ -674,13 +923,23 @@ namespace FFACETools
 				// if we have a new line
 				if (!NumberOfUnparsedLines().Equals(0))
 				{
+					line = new ChatLine();
 					// get the next chat line
 					line.Type = _ChatLog.Peek().LineType;
 					line.Text = _ChatLog.Peek().LineText;
+					line.Index = _ChatLog.Peek().Index;
+					line.RawString = _ChatLog.Peek().RawString;
 
+					try
+					{
+						line.Color = ColorTranslator.FromHtml("#" + _ChatLog.Peek().LineColor.Trim('#'));
+					}
+					catch
+					{
+						line.Color = _ChatLog.Peek().ActualLineColor;
+					}
 					// if user wanted to strip off color characters, do so
-					if (cleanLine)
-						line.Text = CleanLine(line.Text);
+					line.Text = FFACE.ChatTools.CleanLine(line.Text, lineSettings);
 
 				} // @ if (!NumberOfUnparsedLines().Equals(0))
 

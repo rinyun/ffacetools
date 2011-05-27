@@ -519,7 +519,7 @@
 		//--------------------------------------Tekz eChatModes-------------------------------------'
 		//------------------------------------------------------------------------------------------'
 		Error = -1,				// "Invented" chat mode, to help catch errors
-		Unknown = 0,			 // Catch all.
+		Generic = 0,		// Unknown = 0,			 // Catch all. it's not a catch all.
 
 		//--------------------------------------------------------------'
 		//-Text That's Been Sent To The ChatLog By You aKa (The Player-)'
@@ -547,9 +547,11 @@
 		PlayerHits = 20,	// eg. Teknical hits the Thread Leech for 63 points of damage.
 		PlayerMisses = 21,
 		TargetUsesJobAbility = 22, // eg. The Thread Leech uses TP Drainkiss.
+		SomeoneRecoversHP = 23,
 		TargetHits = 28,	 // eg. The Thread Leech hits Teknical for 4 points of damage.
 		TargetMisses = 29,	   // eg. The Thread Leech misses Teknical.
 		PlayerAdditionalEffect = 30,
+		PlayerRecoversHP = 31,		// Player casts Cure. Player recovers 30 HP.
 		PlayerDefeats = 36,	  // eg. Teknical Defeats the River Crab. or whatever
 		PlayedDefeated = 38,
 		NPCHit = 40,
@@ -624,6 +626,98 @@
 
 
 	} // @ public enum ChatMode : short
+
+	/// <summary>
+	/// LineSettings for GetNextLine
+	/// </summary>
+	[System.FlagsAttribute]
+	public enum LineSettings : uint {
+		/// <summary>
+		/// Used if you want the Raw Text.
+		/// </summary>
+		RawText = 0,
+		/// <summary>
+		/// Cleans \x1E\x02 and \x1E\x01 for Items used in NPC Chat.
+		/// </summary>
+		CleanItemBytes = 1,
+		/// <summary>
+		/// Cleans \x1E\x03 and \x1E\x01 for Key Items used in NPC Chat.
+		/// </summary>
+		CleanKIBytes = 2,
+		/// <summary>
+		/// Cleans \xEF#### combinations for Elemental Icons (#### being \x1F through \x26)
+		/// </summary>
+		CleanElementIcons = 4,
+		/// <summary>
+		/// Cleans \xEF\x27 and \xEF\x28 (Open and Closing Brace)
+		/// </summary>
+		CleanATBrackets = 8,
+		/// <summary>
+		/// Cleans \r\n
+		/// </summary>
+		CleanNewLine = 16,
+		/// <summary>
+		/// Cleans uncategorized combinations (\x07, \x1E\xFC, \x1E\xFD, \x7F\x31, \x81\xA1, \x87\xB2, \x87\xB3, and \x1F\x## combinations)
+		/// </summary>
+		CleanOthers = 32,
+		/// <summary>
+		/// Cleans TimeStamp plugin's addition to the chatlog.
+		/// </summary>
+		CleanTimeStamp = 64,
+		/// <summary>
+		/// Puts items inside { and }. (Braces)  (overrides CleanItemBytes)
+		/// </summary>
+		ConvertItemBytes = 128,
+		/// <summary>
+		/// Puts Key Items inside [ and ]. (Brackets) (overrides CleanKIBytes)
+		/// </summary>
+		ConvertKIBytes = 256,
+		/// <summary>
+		/// Replaces the 8 elements with printable 3-character combinations. &lt; FIAETWLD &gt;   (overrides CleanElementIcons)
+		/// </summary>
+		ConvertElementIcons = 512,
+		/// <summary>
+		/// Replaces Auto-Translate Brackets with &lt;{ and }&gt;  (overrides CleanATBrackets)
+		/// </summary>
+		ConvertATBrackets = 1024,
+		/// <summary>
+		/// Cleans everything INCLUDING new line, no conversion.
+		/// </summary>
+		CleanAll = CleanOthers | CleanNewLine | CleanItemBytes | CleanKIBytes | CleanATBrackets | CleanElementIcons | CleanTimeStamp,
+		/// <summary>
+		/// Cleans everything EXCEPT new line, no conversion.
+		/// </summary>
+		CleanAllKeepNewLine = CleanOthers | CleanItemBytes | CleanKIBytes | CleanATBrackets | CleanElementIcons | CleanTimeStamp,
+		/// <summary>
+		/// Converts everything that can be converted. (Please don't use this by itself.)
+		/// </summary>
+		ConvertAll = ConvertATBrackets | ConvertElementIcons | ConvertItemBytes | ConvertKIBytes,
+		/// <summary>
+		/// Converts everything that can be converted, cleans everything else INCLUDING new line.
+		/// </summary>
+		CleanAndConvertAll = ConvertAll | CleanNewLine | CleanOthers | CleanTimeStamp,
+		/// <summary>
+		/// Converts everything that can be converted, cleans everything else EXCEPT new line.
+		/// </summary>
+		KeepNewLine = ConvertAll | CleanOthers | CleanTimeStamp,
+		/// <summary>
+		/// Converts everything that can be converted, cleans everything else EXCEPT new line (same as KeepNewLine).
+		/// </summary>
+		CleanAndConvertAllKeepNewLine = ConvertAll | CleanOthers | CleanTimeStamp,
+		/// <summary>
+		/// Yekyaa's personal favorite.  Converts AT Brackets, Element Icons, cleans everything else INCLUDING new line.
+		/// </summary>
+		OldSchool = CleanTimeStamp | CleanOthers | CleanNewLine | CleanItemBytes | CleanKIBytes | ConvertATBrackets | ConvertElementIcons,
+		/// <summary>
+		/// Converts AT Brackets, Element Icons, cleans everything else EXCEPT new line.
+		/// </summary>
+		ReallyOldSchool = CleanTimeStamp | CleanOthers | CleanItemBytes | CleanKIBytes | ConvertATBrackets | ConvertElementIcons,
+		/// <summary>
+		/// Default used when getting DialogText.Question and Options (ConvertAll|CleanOthers|CleanNewLine)
+		/// </summary>
+		DialogDefault = ConvertAll | CleanOthers | CleanNewLine
+
+	};
 
 	#endregion
 

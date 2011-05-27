@@ -325,11 +325,17 @@ namespace FFACETools {
 
 			private string[] CleanLine(string[] lines)
 			{
+				return CleanLine(lines, LineSettings.DialogDefault);
+			}
+
+			private string[] CleanLine(string[] lines, LineSettings lineSettings)
+			{
 				System.Collections.ArrayList ret = new System.Collections.ArrayList();
 
 				for (int i = 0; i < lines.Length; i++)
 				{
-					string x = CleanLine(lines[i]);
+					//	CleanLine(lines[i]);
+					string x = FFACE.ChatTools.CleanLine(lines[i], lineSettings); 
 					if (x == ".")
 						continue;
 					ret.Add(x);
@@ -338,6 +344,8 @@ namespace FFACETools {
 				return returnList;
 			}
 
+			#region Old_Code
+			/*
 			/// <summary>
 			/// Will strip abnormal characters (colors, etc) from the string
 			/// </summary>
@@ -396,9 +404,6 @@ namespace FFACETools {
 								i = -1; // not a target, so "wasn't found"
 							}
 						}
-						/*else if (i >= 0) {
-					  ++c; // using an auto-incrementing for loop this becomes { }
-						}*/
 						if (i < 0)
 						{
 							cleaned.Add(bytearray1252[c]);
@@ -428,8 +433,12 @@ namespace FFACETools {
 				return cleanedString;
 
 			} // private CleanLine(string line)
+			*/
+			#endregion
 
-			public DialogText(string RawText)
+			public DialogText(string RawText) : this(RawText, LineSettings.DialogDefault) { }
+
+			public DialogText(string RawText, LineSettings lineSettings)
 			{
 				_RawText = RawText;
 				if (RawText == String.Empty)
@@ -439,9 +448,9 @@ namespace FFACETools {
 				}
 				else
 				{
-					_Question = CleanLine(RawText.Substring(0, RawText.IndexOf("\v") - 1));
+					_Question = FFACE.ChatTools.CleanLine(RawText.Substring(0, RawText.IndexOf("\v") - 1), lineSettings);
 					string buffer = RawText.Substring(RawText.IndexOf("\v") + 1);
-					_Options = CleanLine(buffer.Split(new string[] { "\a" }, StringSplitOptions.RemoveEmptyEntries));
+					_Options = CleanLine(buffer.Split(new string[] { "\a" }, StringSplitOptions.RemoveEmptyEntries), lineSettings);
 				}
 			}
 			public string Question
