@@ -51,7 +51,78 @@ Version 1.1.1.2
 		- ChatLine.NowDate = DateTime.Now of chat, for manual conversion or logging.
 		- ChatLine.Color = RGB color value for ChatLines from FFXI
 	- Chat lines automatically have timestamps from plugins/programs stripped.  Append ChatLine.Now for Windower style timestamp.
+	- NOTE: FFACETools had to be reuploaded at this point (by Minako).
+	
+Version 1.2.0.0
+	- h1pp0:
+	- Changed description for PetID (requires index not ID)
+	- Changed ID from short to int since VS2008 complains about conversion
+	- Updated SpellList and a few Job Abilities
+	- Updated AbilityList with Yonin/Innin and a few group 2 Scholar Abilities
+	- Updated AbilityList (to include Avatar's Favor and Ready) and StatusEffect (to include favors)
+	- Updated Zone IDs
+	- [OPTIMIZED] GetLineRaw is now 200% faster in parsing chatlog
+	- [CHANGED] GetNextLine can now return color codes or just plain Text
+	- Fixed up a few variable names and missing syntax in enums.cs
+	- enums.cs is 100% working now
+	- Changed StatusEffect type back to "short"
+	- Added LoginStatus:
+	- Messagebox.Show(FFACE.Player.GetLoginStatus.ToString());
+	- cpirie:
+	- Added Target.Position
+	- Added numerous enums to ChatMode
+	- Update to 1.2.0.0
+			
+Version 1.3.0.0
+	- Yekyaa:
+	- Update version info to 1.3.0.0 for FFACETools.dll
+	- Add Import for FightFish from FFACE.dll
+	- Add "Fight" to FishTools using FightFish export from FFACE
+	- Add XYZ equivalents of all XZ() functions (Account for height difference (Y))
+	- Fix resource parsing to base off the WindowerPath which should be set to the plugins directory
+	- Added enums I've found that're NOT in the list
+	- Fixes for Windower resources. 
+	- Add an error check for GetInventoryCount (returns -1 on error [usually logging/zoning or just not loaded], 0 on empty, count of items in inventory otherwise)
 
+	- h1pp0:
+	- [*]ParseResources has been updated to work with the new windower method of splitting the resource file data into subfiles.
+	- [*]Fixed up some mispelling in enums.cs, changed the name of UtsusemiIchi and Ni to Utsusemi_Ichi/Utsusemi_Ni in spelllist enum for consistency so it will break some bots that rely on the old spelling to check for recast times. This change does not affect checking of how many utsusemi shadows are left.
+	- [+]Added imports for: GetNPCTradeInfo, SetNPCTradeInfo, SetCraftItem, IsSynthesis, SetFishHP, SetTimeOut
+	- [+]Added IsSynthesis() to Player.cs
+	- [+]Added SetNPCTradeInformation and SetCraftItems to Menu.cs and added NPCTRADEINFO struct
+	- [+]Added SetFishHP and SetTimeOut to Fish.cs. These can be used for instant kill and to increase how long the lik/gugs are on your line.
+	- [+]Added Weather imports and types
+	- [*] Updated Avatars Favor Ability to correct value
+	- [*] Updated AbilityList
+	- [*] Updated SpellList
+	- [+] Added new StatusEffect IDs
+	- [*] Fixed up Zone IDs
+	- [+] Added last 3 Abyssea zones
+	- [Fixed] Imports.cs Error
+	- [Added] Abyssea Zones
+	- [Added] Enums for counting shadows
+	- Added check for contributor status to Imports.cs
+	- bool Access(void* instance)
+	- Added Lobby value to zone enums.cs
+	- Added spells and fixed up SpellList in enums.cs
+
+Version 1.3.0.1
+	- Fix Fight to be a function instead of an accessor.
+		
+Version 1.3.0.2
+	- Update to version 1.3.0.2
+	- Rename ChatMode.CaughtOnHook to ChatMode.NPCSpeaking
+	- Add Exception throwing into ParseResources.Get*() when file not found.
+	- Switch to 1252 codepage for internal chat parsing to preserve byte information.
+	- Strip and Convert to codepage 932 in CleanLine for display purposes.
+	- Add Auto-Translate conversion to CleanLine <{ }> and <F> <I> <A> <W> <T> <E> <D> <L>
+	- Add final modifications to completely fix chat functions.
+
+Version 1.3.0.3
+	- Update version to 1.3.0.3
+	- Add check for WindowerPath Null Or Empty before checking if File.Exists, duh.
+	- This check has been applied to all ParseResources.Get* functions.
+	
 Version 1.3.0.4
 	- Add new Menu Dialog imports and corresponding functions into MenuTools section.
 	- New class added as well.
@@ -64,3 +135,29 @@ Version 1.3.0.6
 	- Add Get*ItemCountByIndex and renamed GetItemCountByIndex to GetInventoryItemCountByIndex to follow naming conventions
 	- Add Get*ItemIDByIndex, Get*ItemCount for Safe/Storage/Locker/Temp/Satchel/Sack
 	- Update dll to 1.3.0.6 to indicate an additional change.
+	
+Version 1.3.0.8
+	- Add a Trim('#') to the GetNextLine function to (hopefully) solve random crashes.
+	- Add a true fix to the extra \0 at the end of CleanLine
+	- Bump to 1.3.0.8
+
+Version 1.3.1.0
+	- Update ChatMode with 2 new enums (31 and 23) PlayerRecoversHP and SomeoneRecoversHP
+	- Add LineSettings Enum bitfield.
+	- Add RawString (String[]) and Index to ChatLine
+	- Add RawString (String[]) and ActualLineColor to ChatLogEntry
+	- Change GetNextLine to use LineSettings and will return Color without requiring a bool
+	- Change CleanLine to be public static so anyone can use it and to simplify DialogText class.
+	- Extract internal CleanTimeStamp function which has code that works based on color bytes, but keeps original functionality if that fails.
+	- Fix internal CleanTimeStamp to handle bounds checking for Substring() function.
+	- Made GetLine() and GetLineExtra() Obsolete
+	- Fix Index Out Of Range error in GetLineRaw().
+	- Fix GetLineRaw() to do bounds checking. Return RawString with split array on error.
+	- Obsolete GetCurrentLine() "Use GetNextLine() instead."
+	- Modify DialogText.Question and Dialog.Options to use LineSettings for line cleaning.
+	- Bump to 1.3.1.0 (1.3.0.9 was internal)
+
+Version 1.3.1.1
+	- Fix potential issue with GetLineRaw returning null on error.
+	- Fix version number to check vs UInt64 instead of Int64
+	- Bump to 1.3.1.1 to let people know there's a new version.
