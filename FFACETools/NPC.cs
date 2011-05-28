@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FFACETools
-{
-	public partial class FFACE
-	{
+namespace FFACETools {
+	public partial class FFACE {
 		/// <summary>
 		/// Class container for position of NPC
 		/// </summary>
-		public class Position
-		{
+		public class Position {
 			#region Members
 
 			/// <summary>
@@ -72,8 +69,7 @@ namespace FFACETools
 		/// <summary>
 		/// Wrapper class for NPC information from FFACE
 		/// </summary>
-		public class NPCTools
-		{
+		public class NPCTools {
 			#region Constructor
 
 			/// <summary>
@@ -150,11 +146,11 @@ namespace FFACETools
 			/// </summary>
 			public string Name(int id)
 			{
-					int size = 20;
-					byte[] buffer = new byte[size];
-					GetNPCName(_InstanceID, id, buffer, ref size);
+				int size = 20;
+				byte[] buffer = new byte[size];
+				GetNPCName(_InstanceID, id, buffer, ref size);
 
-					return System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
+				return System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
 
 			} // @ public bool Name
 
@@ -199,13 +195,12 @@ namespace FFACETools
 			/// </summary>
 			public Position GetPosition(int id)
 			{
-				return new Position 
-						   { 
-							   X = GetNPCPosX(_InstanceID, id),
-							   Y = GetNPCPosY(_InstanceID, id),
-							   Z = GetNPCPosZ(_InstanceID, id),
-							   H = GetNPCPosH(_InstanceID, id)
-						   };
+				return new Position {
+					X = GetNPCPosX(_InstanceID, id),
+					Y = GetNPCPosY(_InstanceID, id),
+					Z = GetNPCPosZ(_InstanceID, id),
+					H = GetNPCPosH(_InstanceID, id)
+				};
 
 			} // @ public Position GetPosition(short index)
 

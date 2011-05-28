@@ -1,14 +1,11 @@
 ﻿using System;
 
-namespace FFACETools
-{
-	public partial class FFACE
-	{
+namespace FFACETools {
+	public partial class FFACE {
 		/// <summary>
 		/// Wrapper class for party member information
 		/// </summary>
-		public class PartyMemberTools
-		{
+		public class PartyMemberTools {
 			#region Constructor
 
 			/// <summary>
@@ -40,7 +37,7 @@ namespace FFACETools
 			/// Name of the member
 			/// </summary>
 			public string Name
-			{ 
+			{
 				get { return GetPartyMemberInformation().Name; }
 
 			} // @ public string Name
@@ -49,7 +46,7 @@ namespace FFACETools
 			/// ID of the member
 			/// </summary>
 			public int ID
-			{ 
+			{
 				get { return GetPartyMemberInformation().ID; }
 
 			} // @ public int ID
@@ -67,7 +64,7 @@ namespace FFACETools
 			/// Members current TP
 			/// </summary>
 			public int TPCurrent
-			{ 
+			{
 				get { return GetPartyMemberInformation().CurrentTP; }
 
 			} // @ public int TPCurrent
@@ -76,7 +73,7 @@ namespace FFACETools
 			/// Members current hit points
 			/// </summary>
 			public int HPCurrent
-			{ 
+			{
 				get { return GetPartyMemberInformation().CurrentHP; }
 
 			} // @ public int HPCurrent
@@ -94,7 +91,7 @@ namespace FFACETools
 			/// Members current mana
 			/// </summary>
 			public int MPCurrent
-			{ 
+			{
 				get { return GetPartyMemberInformation().CurrentMP; }
 
 			} // @ public int MPCurrent
@@ -103,7 +100,7 @@ namespace FFACETools
 			/// Members current mp in percent
 			/// </summary>
 			public int MPPCurrent
-			{ 
+			{
 				get { return GetPartyMemberInformation().CurrentMPP; }
 
 			} // @ public int MPPCurrent
@@ -112,7 +109,7 @@ namespace FFACETools
 			/// Members current zone
 			/// </summary>
 			public Zone Zone
-			{ 
+			{
 				get { return (Zone)GetPartyMemberInformation().Zone; }
 
 			} // @ public int Zone
@@ -134,11 +131,11 @@ namespace FFACETools
 				get { return Convert.ToBoolean(GetPartyMemberInformation().Active); }
 
 			} // @ public bool Active
-			
+
 			#endregion
 
 			#region Methods
-			
+
 			/// <summary>
 			/// Gets the party member information for the passed party member
 			/// </summary>

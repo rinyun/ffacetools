@@ -47,7 +47,7 @@ namespace FFACETools {
 					else
 						return GetDialogIndexCount(_InstanceID);
 				}
-				
+
 			}
 
 			///<summary>

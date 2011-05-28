@@ -1,21 +1,17 @@
 ﻿using System;
 
-namespace FFACETools
-{
-	public partial class FFACE
-	{
+namespace FFACETools {
+	public partial class FFACE {
 		/// <summary>
 		/// Wrapper class for Fishing information from FFACE
 		/// </summary>
-		public class FishTools
-		{
+		public class FishTools {
 			#region Classes
 
 			/// <summary>
 			/// ID of a fish
 			/// </summary>
-			public struct FishID
-			{
+			public struct FishID {
 				/// <summary>
 				/// Part 1 of the fish ID
 				/// </summary>
@@ -141,7 +137,7 @@ namespace FFACETools
 			/// </summary>
 			public FishID ID
 			{
-				get 
+				get
 				{
 					// get all the fish id's
 					FishID id = new FishID();
@@ -155,47 +151,48 @@ namespace FFACETools
 
 			} // @ public FishID ID
 
-            /// <summary>
-            /// Set the current HP of the fish on the line.
-            /// </summary>
-            /// <param name="value"></param>
-            /// <returns></returns>
-            public bool SetHP(int value)
-            {
-                bool result = false;
+			/// <summary>
+			/// Set the current HP of the fish on the line.
+			/// </summary>
+			/// <param name="value"></param>
+			/// <returns></returns>
+			public bool SetHP(int value)
+			{
+				bool result = false;
 
-                if (SetFishHP(_InstanceID, value))
-                {
-                    result = true;
-                }
-                return result;
-            } // @ public bool SetHP
+				if (SetFishHP(_InstanceID, value))
+				{
+					result = true;
+				}
+				return result;
+			} // @ public bool SetHP
 
-            /// <summary>
-            /// Set the timeout value in seconds for the fish on the line (second before you lose your catch).
-            /// </summary>
-            /// <param name="value"></param>
-            /// <returns></returns>
-            public bool SetFishTimeOut(short value)
-            {
-                bool result = false;
+			/// <summary>
+			/// Set the timeout value in seconds for the fish on the line (second before you lose your catch).
+			/// </summary>
+			/// <param name="value"></param>
+			/// <returns></returns>
+			public bool SetFishTimeOut(short value)
+			{
+				bool result = false;
 
-                if (SetTimeOut(_InstanceID, value))
-                {
-                    result = true;
-                }
-                return result;
-            } // @ public bool SetFishTimeOut
+				if (SetTimeOut(_InstanceID, value))
+				{
+					result = true;
+				}
+				return result;
+			} // @ public bool SetFishTimeOut
 
-		#endregion
+			#endregion
 
-	    /// <summary>
-	    /// Return value of FightFish success.
-	    /// </summary>
-	    public bool FightFish() {
-	      return FFACE.FightFish(_InstanceID);
-	    } // @ public bool Fight
+			/// <summary>
+			/// Return value of FightFish success.
+			/// </summary>
+			public bool FightFish()
+			{
+				return FFACE.FightFish(_InstanceID);
+			} // @ public bool Fight
 
-	} // @ public class FishTools
-    } // @ public partial class FFACE
+		} // @ public class FishTools
+	} // @ public partial class FFACE
 }

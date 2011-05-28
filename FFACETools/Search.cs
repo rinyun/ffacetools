@@ -1,14 +1,11 @@
 ﻿using System;
 
-namespace FFACETools
-{
-	public partial class FFACE
-	{
+namespace FFACETools {
+	public partial class FFACE {
 		/// <summary>
 		/// Wrapper class for the search information returned from FFACE
 		/// </summary>
-		public class SearchTools
-		{
+		public class SearchTools {
 			#region Constructor
 
 			/// <summary>
@@ -103,7 +100,7 @@ namespace FFACETools
 				GetSearchName(_InstanceID, index, buffer, ref size);
 
 				return System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
-		 
+
 			} // @ public bool Name
 
 			#endregion

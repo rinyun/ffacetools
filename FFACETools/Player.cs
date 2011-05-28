@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FFACETools
-{
-	public partial class FFACE
-	{
+namespace FFACETools {
+	public partial class FFACE {
 		/// <summary>
 		/// Wrapper class for all player information from FFACE
 		/// </summary>
-		public class PlayerTools
-		{
+		public class PlayerTools {
 			#region Classes
 
 			/// <summary>
 			/// Details about a specific craft
 			/// </summary>
-			public class CraftDetails
-			{
+			public class CraftDetails {
 				/// <summary>
 				/// Level of the craft
 				/// </summary>
@@ -37,8 +33,7 @@ namespace FFACETools
 			/// <summary>
 			/// Details about a specific skill
 			/// </summary>
-			public class SkillDetails
-			{
+			public class SkillDetails {
 				/// <summary>
 				/// Level of the skill
 				/// </summary>
@@ -262,8 +257,7 @@ namespace FFACETools
 			{
 				get
 				{
-					return new Position
-					{
+					return new Position {
 						X = GetNPCPosX(_InstanceID, ID),
 						Y = GetNPCPosY(_InstanceID, ID),
 						Z = GetNPCPosZ(_InstanceID, ID),
@@ -340,7 +334,7 @@ namespace FFACETools
 			/// </summary>
 			public ushort EXPForLevel
 			{
-				get {  return GetPlayerInformation().EXPForLVL; }
+				get { return GetPlayerInformation().EXPForLVL; }
 
 			} // @ public ushort EXPForLVL
 
@@ -451,7 +445,7 @@ namespace FFACETools
 			/// </summary>
 			public Nation Nation
 			{
-				get {  return (Nation)GetPlayerInformation().Nation; }
+				get { return (Nation)GetPlayerInformation().Nation; }
 
 			} // @ public byte Nation
 
@@ -478,47 +472,47 @@ namespace FFACETools
 				get { return GetPlayerInformation().HomePoint; }
 
 			} // @ public int HomePoint_ID
-			
+
 			/// <summary>
-            /// Get Login Status
-            /// </summary>
-            public LoginStatus GetLoginStatus
-            {
-                get { return (LoginStatus)GetLoginStatus(_InstanceID); }
-            }
+			/// Get Login Status
+			/// </summary>
+			public LoginStatus GetLoginStatus
+			{
+				get { return (LoginStatus)GetLoginStatus(_InstanceID); }
+			}
 
-            /// <summary>
-            /// Will get information about the trade window
-            /// </summary>
-            public TRADEINFO GetTradeWindowInformation
-            {
-                get
-                {
-                    TRADEINFO information = new TRADEINFO();
-                    GetNPCTradeInfo(_InstanceID, ref information);
-                    return information;
-                }
-            } // @ public TRADEINFO GetTradeWindowInformation
+			/// <summary>
+			/// Will get information about the trade window
+			/// </summary>
+			public TRADEINFO GetTradeWindowInformation
+			{
+				get
+				{
+					TRADEINFO information = new TRADEINFO();
+					GetNPCTradeInfo(_InstanceID, ref information);
+					return information;
+				}
+			} // @ public TRADEINFO GetTradeWindowInformation
 
-            /// <summary>
-            /// Weather of the Zone player is in
-            /// </summary>
-            public Weather Weather
-            {
-                get { return (Weather)GetWeatherType(_InstanceID); }
+			/// <summary>
+			/// Weather of the Zone player is in
+			/// </summary>
+			public Weather Weather
+			{
+				get { return (Weather)GetWeatherType(_InstanceID); }
 
-            } // @ public Weather Weather
+			} // @ public Weather Weather
 
-            /// <summary>
+			/// <summary>
 
-            /// <summary>
-            /// Returns true if you are in the middle of a synth
-            /// </summary>
-            public bool IsSynthing ()
-            {
-                return IsSynthesis(_InstanceID);
+			/// <summary>
+			/// Returns true if you are in the middle of a synth
+			/// </summary>
+			public bool IsSynthing()
+			{
+				return IsSynthesis(_InstanceID);
 
-            } // @ public bool Synthing()
+			} // @ public bool Synthing()
 
 			#endregion
 
@@ -585,9 +579,9 @@ namespace FFACETools
 
 				// create return result
 				CraftDetails details = new CraftDetails();
-				details.Capped	   = Convert.ToBoolean(((value & 0x8000) >> 15));
-				details.Level		= ((value & 0x1FE0) >> 5);
-				details.Rank		 = (value & 0x1F);
+				details.Capped = Convert.ToBoolean(((value & 0x8000) >> 15));
+				details.Level = ((value & 0x1FE0) >> 5);
+				details.Rank = (value & 0x1F);
 
 				return details;
 
@@ -651,8 +645,8 @@ namespace FFACETools
 				} // @ switch (skill)
 
 				SkillDetails details = new SkillDetails();
-				details.Level		= (value & 0xFFF);
-				details.Capped	   = Convert.ToBoolean(((value & 0x8000) >> 15));
+				details.Level = (value & 0xFFF);
+				details.Capped = Convert.ToBoolean(((value & 0x8000) >> 15));
 
 				return details;
 
@@ -745,7 +739,7 @@ namespace FFACETools
 			} // @ public SkillDetails GetCombatSkillDetail(CombatSkill skill)
 
 			#endregion
-			
+
 		} // @ public class PlayerTools
 	}
 }

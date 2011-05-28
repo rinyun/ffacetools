@@ -335,7 +335,7 @@ namespace FFACETools {
 				for (int i = 0; i < lines.Length; i++)
 				{
 					//	CleanLine(lines[i]);
-					string x = FFACE.ChatTools.CleanLine(lines[i], lineSettings); 
+					string x = FFACE.ChatTools.CleanLine(lines[i], lineSettings);
 					if (x == ".")
 						continue;
 					ret.Add(x);

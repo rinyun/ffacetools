@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FFACETools
-{
-	public partial class FFACE
-	{
+namespace FFACETools {
+	public partial class FFACE {
 		/// <summary>
 		/// Class container to impliment Pyrolol's navigation system
 		/// </summary>
-		public class NavigatorTools
-		{
+		public class NavigatorTools {
 			#region Members
 
 			/// <summary>
@@ -62,12 +59,12 @@ namespace FFACETools
 			/// <param name="player">Current player</param>
 			public NavigatorTools(FFACE fface)
 			{
-				_FFACE			  = fface;
-				HeadingTolerance	= 40;
-				DistanceTolerance   = 3f;
-				SpeedDelay		  = 40;
-				StayRunningAmount   = 2.5f;
-				GotoDelay		   = 40;
+				_FFACE = fface;
+				HeadingTolerance = 40;
+				DistanceTolerance = 3f;
+				SpeedDelay = 40;
+				StayRunningAmount = 2.5f;
+				GotoDelay = 40;
 
 			} // @ public NavigatorTools(PlayerTools player)
 
@@ -171,8 +168,9 @@ namespace FFACETools
 			/// Will go to the passed NPC's location
 			/// </summary>
 			/// <param name="ID">ID of the NPC</param>
-			public void GotoNPCXZ(short ID) {
-			  GotoXYZ(() => _FFACE.NPC.PosX(ID), () => _FFACE.NPC.PosY(ID), () => _FFACE.NPC.PosZ(ID), false);
+			public void GotoNPCXZ(short ID)
+			{
+				GotoXYZ(() => _FFACE.NPC.PosX(ID), () => _FFACE.NPC.PosY(ID), () => _FFACE.NPC.PosZ(ID), false);
 
 			} // @ public void GotoNPCXZ(short ID)
 
@@ -189,8 +187,9 @@ namespace FFACETools
 			/// <summary>
 			/// Will go to the current target's location
 			/// </summary>
-			public void GotoTargetXZ() {
-			  GotoXYZ(() => _FFACE.Target.PosX, () => _FFACE.Target.PosY, () => _FFACE.Target.PosZ, false);
+			public void GotoTargetXZ()
+			{
+				GotoXYZ(() => _FFACE.Target.PosX, () => _FFACE.Target.PosY, () => _FFACE.Target.PosZ, false);
 
 			} // @ public void GotoTargetXZ()
 
@@ -219,8 +218,8 @@ namespace FFACETools
 			/// <param name="Z">Z coordinate of destination</param>
 			public double DistanceToPosXZ(double X, double Z)
 			{
-			  //return DistanceToPosXYZ(X, _FFACE.Player.PosY, Z);  Fail since DTPXYZ's Y would == Player.PosY in all cases
-			  return Math.Sqrt(Math.Pow((_FFACE.Player.PosX - X), 2) + Math.Pow((Z - _FFACE.Player.PosZ), 2));
+				//return DistanceToPosXYZ(X, _FFACE.Player.PosY, Z);  Fail since DTPXYZ's Y would == Player.PosY in all cases
+				return Math.Sqrt(Math.Pow((_FFACE.Player.PosX - X), 2) + Math.Pow((Z - _FFACE.Player.PosZ), 2));
 
 			} // @ public double DistanceToPosXZ(double X, double Z)
 
@@ -230,8 +229,9 @@ namespace FFACETools
 			/// <param name="X">X coordinate of destination</param>
 			/// <param name="Y">Y coordinate of destination</param>
 			/// <param name="Z">Z coordinate of destination</param>
-			public double DistanceToPosXYZ(double X, double Y, double Z) {
-			  return Math.Sqrt(Math.Pow((_FFACE.Player.PosX - X), 2) + Math.Pow((_FFACE.Player.PosY - Y), 2) + Math.Pow((Z - _FFACE.Player.PosZ), 2));
+			public double DistanceToPosXYZ(double X, double Y, double Z)
+			{
+				return Math.Sqrt(Math.Pow((_FFACE.Player.PosX - X), 2) + Math.Pow((_FFACE.Player.PosY - Y), 2) + Math.Pow((Z - _FFACE.Player.PosZ), 2));
 
 			} // @ public double DistanceToPosXYZ(double X, double Y, double Z)
 
@@ -242,7 +242,7 @@ namespace FFACETools
 			/// <param name="Z">Z coordinate of destination</param>
 			public double HeadingToPosXZ(double X, double Z)
 			{
-			  return HeadingToPosXYZ(X, 0, Z);
+				return HeadingToPosXYZ(X, 0, Z);
 			} // @ public double HeadingToPosXZ(double X, double Z)
 
 			/// <summary>
@@ -251,15 +251,16 @@ namespace FFACETools
 			/// <param name="X">X coordinate of destination</param>
 			/// <param name="Y">Y coordinate of destination (not used, here for consistency)</param>
 			/// <param name="Z">Z coordinate of destination</param>
-			public double HeadingToPosXYZ(double X, double Y, double Z) {
-			  X = X - _FFACE.Player.PosX;
-			  Z = Z - _FFACE.Player.PosZ;
-			  double p = 180 * Math.Atan2(X, Z) / Math.PI;
+			public double HeadingToPosXYZ(double X, double Y, double Z)
+			{
+				X = X - _FFACE.Player.PosX;
+				Z = Z - _FFACE.Player.PosZ;
+				double p = 180 * Math.Atan2(X, Z) / Math.PI;
 
-			  if (Z < 0)
-			    return p + 360;
-			  else
-			    return p;
+				if (Z < 0)
+					return p + 360;
+				else
+					return p;
 			} // @ public double HeadingToPosXYZ(double X, double Y, double Z)
 
 			/// <summary>
@@ -267,8 +268,9 @@ namespace FFACETools
 			/// </summary>
 			/// <param name="X">X coordinate of destination</param>
 			/// <param name="Z">Z coordinate of destination</param>
-			public void FacePosXZ(double X, double Z) {
-			  FaceHeadingXZ(HeadingToPosXYZ(X, 0, Z));
+			public void FacePosXZ(double X, double Z)
+			{
+				FaceHeadingXZ(HeadingToPosXYZ(X, 0, Z));
 			} // @ public void FacePosXZ(double X, double Z)
 
 			/// <summary>
@@ -296,7 +298,7 @@ namespace FFACETools
 			private double GetPlayerPosHInDegrees()
 			{
 				double degrees = _FFACE.Player.PosH * (180 / Math.PI) + 90;
-				
+
 				if (degrees > 360)
 					degrees -= 360;
 				else if (degrees < 0)
@@ -349,21 +351,21 @@ namespace FFACETools
 			private void FaceHeadingXYZ(double H)
 			{
 				double RH = 180;
-				
+
 				// if we're moving, stop
 				if (_IsRunning)
 					StopRunning();
-				
+
 				while (Math.Abs(RH) > HeadingTolerance)
 				{
 					RH = Math.Abs(H - GetPlayerPosHInDegrees());
 
 					if (GetPlayerPosHInDegrees() > H)
 						RH = 360 - RH;
-					
+
 					if (RH > 180)
 						RH = RH - 360;
-					
+
 					if (RH < -HeadingTolerance)
 					{
 						_FFACE.Windower.SendKeyPress(KeyCode.NP_Number4);

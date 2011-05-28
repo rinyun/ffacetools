@@ -1,21 +1,17 @@
 ﻿using System;
 
-namespace FFACETools
-{
-	public partial class FFACE
-	{
+namespace FFACETools {
+	public partial class FFACE {
 		/// <summary>
 		/// Class wrapper to consume timer methods
 		/// </summary>
-		public class TimerTools
-		{
+		public class TimerTools {
 			#region Classes
 
 			/// <summary>
 			/// Structure containing 
 			/// </summary>
-			public struct VanaTime
-			{
+			public struct VanaTime {
 				#region Members
 
 				/// <summary>
@@ -201,13 +197,18 @@ namespace FFACETools
 			private int _InstanceID { get; set; }
 
 			/// <summary>
+			/// Maximum Ability Index for use with GetAbilityRecast/GetAbilityID
+			/// </summary>
+			static readonly public byte MAX_ABILITY_INDEX = 32;
+
+			/// <summary>
 			/// Current server time in UTC
 			/// 
 			/// NOTE: Japan is +9 hours from UTC (ie: UTC midnight is 9am JST)
 			/// </summary>
 			public DateTime ServerTimeUTC
 			{
-				get 
+				get
 				{
 					// get UTC start time
 					TimeSpan tsUTCStart = new TimeSpan(new DateTime(1970, 1, 1).Ticks);
@@ -239,6 +240,22 @@ namespace FFACETools
 			/// Will get the time left in seconds before being able to recast a spell
 			/// </summary>
 			/// <param name="spell">Spell to check recast timer on</param>
+			public short GetSpellRecast(short id)
+			{
+				// get recast time from fface
+				short time = FFACE.GetSpellRecast(_InstanceID, (SpellList)id);
+
+				// FFACE seems to return the recast 1 second shorter then it is
+				if (0 < time)
+					time += 60;
+
+				return (short)(time / 60);
+			} // @ public short GetSpellRecast(short id)
+
+			/// <summary>
+			/// Will get the time left in seconds before being able to recast a spell
+			/// </summary>
+			/// <param name="spell">Spell to check recast timer on</param>
 			public short GetSpellRecast(SpellList spell)
 			{
 				// get recast time from fface
@@ -251,6 +268,20 @@ namespace FFACETools
 				return (short)(time / 60);
 
 			} // @ public TimeSpan GetSpellRecast(eSpellList spell)
+
+			/// <summary>
+			/// Gets the time left in seconds before being able to reuse an ability (use sparingly)
+			/// </summary>
+			/// <param name="abil">Ability List</param>
+			/// <returns>-1 if Ability is not "equipped", Recast of the ability otherwise</returns>
+			public int GetAbilityRecast(AbilityList abil)
+			{
+				for (byte i = 0; i < MAX_ABILITY_INDEX; i++)
+					if (GetAbilityID(i) == abil)
+						return FFACE.GetAbilityRecast(_InstanceID, i) / 60;
+				// not found.
+				return -1;
+			}
 
 			/// <summary>
 			/// Gets the time left in seconds before being able to reuse an ability
@@ -299,7 +330,7 @@ namespace FFACETools
 
 				// calculate moon phase/percent
 				decimal moonPhase = (dayOfYear + (decimal)26) % 84;
-				
+
 				// calculate moon percent
 				decimal moonPercent = (((42 - moonPhase) * 100) / 42);
 				if (0 > moonPercent)

@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FFACETools
-{
-	public partial class FFACE
-	{
+namespace FFACETools {
+	public partial class FFACE {
 		/// <summary>
 		/// Wrapper class for sending Windower commands through FFACE
 		/// </summary>
-		public class WindowerTools
-		{
+		public class WindowerTools {
 			#region Classes
 
 			/// <summary>
 			/// Text object to display in FFXi
 			/// </summary>
-			public class TextObject
-			{
+			public class TextObject {
 				#region Constants
 
 				/// <summary>
@@ -31,8 +27,7 @@ namespace FFACETools
 				/// <summary>
 				/// Color parameters
 				/// </summary>
-				private enum Colors
-				{
+				private enum Colors {
 					Blue,
 					Red,
 					Green,
@@ -185,7 +180,7 @@ namespace FFACETools
 				/// <param name="blue">Blue depth (0-255)</param>
 				public void SetFontColor(byte transparent, byte red, byte green, byte blue)
 				{
-					
+
 					// make sure we're not out of range
 					if (0 > blue || 255 < blue)
 						throw new ArgumentOutOfRangeException(GetExceptionMessage(Colors.Blue));
@@ -214,7 +209,7 @@ namespace FFACETools
 				/// <param name="bold">If the font should be in bold</param>
 				/// <param name="italic">If the font should be in italic</param>
 				/// <param name="rightJustified">If the font should be right justified</param>
-				public void SetFontColor(byte transparent, byte red, byte green, byte blue, 
+				public void SetFontColor(byte transparent, byte red, byte green, byte blue,
 										 bool visible, bool bold, bool italic, bool rightJustified)
 				{
 
@@ -228,14 +223,14 @@ namespace FFACETools
 					if (0 > transparent || 255 < transparent)
 						throw new ArgumentOutOfRangeException(GetExceptionMessage(Colors.Transparent));
 
-					_FontColor[0]			= transparent;
-					_FontColor[1]			= red;
-					_FontColor[2]			= green;
-					_FontColor[3]			= blue;
+					_FontColor[0] = transparent;
+					_FontColor[1] = red;
+					_FontColor[2] = green;
+					_FontColor[3] = blue;
 
-					FontBold				= bold;
-					FontItalic			  = italic;
-					FontRightJustified	  = rightJustified;
+					FontBold = bold;
+					FontItalic = italic;
+					FontRightJustified = rightJustified;
 
 				} // @ public void Color(byte Transparent, byte Red, byte Green, byte Blue)
 

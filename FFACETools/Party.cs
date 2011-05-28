@@ -1,14 +1,11 @@
 ﻿using System;
 
-namespace FFACETools
-{
-	public partial class FFACE
-	{
+namespace FFACETools {
+	public partial class FFACE {
 		/// <summary>
 		/// Wrapper class for Alliance information from FFACE
 		/// </summary>
-		public class PartyTools
-		{
+		public class PartyTools {
 			#region Constructor
 
 			/// <summary>

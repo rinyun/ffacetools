@@ -1,14 +1,11 @@
 ﻿using System;
 
-namespace FFACETools
-{
-	public partial class FFACE
-	{
+namespace FFACETools {
+	public partial class FFACE {
 		/// <summary>
 		/// Wrapper class for target information from FFACE
 		/// </summary>
-		public class TargetTools
-		{
+		public class TargetTools {
 			#region Constructor
 
 			/// <summary>
@@ -165,22 +162,21 @@ namespace FFACETools
 
 			} // @ public double PosH
 
-            /// <summary>
-            /// Target position and heading
-            /// </summary>
-            public Position Position
-            {
-                get
-                {
-                    return new Position
-                    {
-                        X = GetNPCPosX(_InstanceID, ID),
-                        Y = GetNPCPosY(_InstanceID, ID),
-                        Z = GetNPCPosZ(_InstanceID, ID),
-                        H = GetNPCPosH(_InstanceID, ID)
-                    };
-                }
-            } // @ public Position Position
+			/// <summary>
+			/// Target position and heading
+			/// </summary>
+			public Position Position
+			{
+				get
+				{
+					return new Position {
+						X = GetNPCPosX(_InstanceID, ID),
+						Y = GetNPCPosY(_InstanceID, ID),
+						Z = GetNPCPosZ(_InstanceID, ID),
+						H = GetNPCPosH(_InstanceID, ID)
+					};
+				}
+			} // @ public Position Position
 
 			/// <summary>
 			/// The type of NPC is it

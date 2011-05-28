@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace FFACETools
-{
-	public partial class FFACE
-	{
+namespace FFACETools {
+	public partial class FFACE {
 		#region Constants
 
 		/// <summary>
@@ -149,18 +147,18 @@ namespace FFACETools
 
 
 			// instantiate our classes
-			Player	    = new PlayerTools(_InstanceID);
-			Target	    = new TargetTools(_InstanceID);
-			Party	    = new PartyTools(_InstanceID);
-			Fish		= new FishTools(_InstanceID);
-			Windower	= new WindowerTools(_InstanceID);
-			Timer	    = new TimerTools(_InstanceID);
-			Chat		= new ChatTools(_InstanceID);
-			Item		= new ItemTools(_InstanceID);
-			NPC		    = new NPCTools(_InstanceID);
-			Menu		= new MenuTools(_InstanceID);
-			Search	    = new SearchTools(_InstanceID);
-			Navigator   = new NavigatorTools(this);
+			Player = new PlayerTools(_InstanceID);
+			Target = new TargetTools(_InstanceID);
+			Party = new PartyTools(_InstanceID);
+			Fish = new FishTools(_InstanceID);
+			Windower = new WindowerTools(_InstanceID);
+			Timer = new TimerTools(_InstanceID);
+			Chat = new ChatTools(_InstanceID);
+			Item = new ItemTools(_InstanceID);
+			NPC = new NPCTools(_InstanceID);
+			Menu = new MenuTools(_InstanceID);
+			Search = new SearchTools(_InstanceID);
+			Navigator = new NavigatorTools(this);
 
 			#region Party Members
 
@@ -194,13 +192,16 @@ namespace FFACETools
 		/// </summary>
 		~FFACE()
 		{
-		  if (!_InstanceID.Equals(0)) {
-		    try {
-		      DeleteInstance(_InstanceID);
-		    }
-		    catch {
-		    }
-		  }
+			if (!_InstanceID.Equals(0))
+			{
+				try
+				{
+					DeleteInstance(_InstanceID);
+				}
+				catch
+				{
+				}
+			}
 		} // @ ~FFACEWrapper()
 
 		#endregion

@@ -6,16 +6,13 @@ using System.Xml.XPath;
 
 using System.IO;
 
-namespace FFACETools
-{
-	public partial class FFACE
-	{
+namespace FFACETools {
+	public partial class FFACE {
 		/// <summary>
 		/// This class will parse the resources.xml file to
 		/// translate ID <-> Names of spells/abilities/items
 		/// </summary>
-		public class ParseResources
-		{
+		public class ParseResources {
 			#region Constants
 
 			/// <summary>
@@ -36,12 +33,12 @@ namespace FFACETools
 			private static Dictionary<UInt32, String> ResourcesCache = new Dictionary<UInt32, String>(50);
 			[Flags]
 			private enum ResourceBit : uint {
-				None		= 0,
-				Area		= 0x010000U,
-				Item		= 0x020000U,
-				Status		= 0x040000U,
-				Spell		= 0x080000U,
-				Abils		= 0x100000U
+				None = 0,
+				Area = 0x010000U,
+				Item = 0x020000U,
+				Status = 0x040000U,
+				Spell = 0x080000U,
+				Abils = 0x100000U
 			};
 
 			#endregion
@@ -86,7 +83,7 @@ namespace FFACETools
 					sResult = String.Empty;
 				}
 
-				if (sResult != String.Empty)
+				if ((sResult != String.Empty) && !ResourcesCache.ContainsKey(cacheHash))
 				{
 					ResourcesCache.Add(cacheHash, sResult);
 				}
@@ -137,7 +134,7 @@ namespace FFACETools
 					sResult = String.Empty;
 				}
 
-				if (sResult != String.Empty)
+				if ((sResult != String.Empty) && !ResourcesCache.ContainsKey(cacheHash))
 				{
 					ResourcesCache.Add(cacheHash, sResult);
 				}
@@ -187,7 +184,7 @@ namespace FFACETools
 					sResult = String.Empty;
 				}
 
-				if (sResult != String.Empty)
+				if ((sResult != String.Empty) && !ResourcesCache.ContainsKey(cacheHash))
 				{
 					ResourcesCache.Add(cacheHash, sResult);
 				}
@@ -237,7 +234,7 @@ namespace FFACETools
 					sResult = String.Empty;
 				}
 
-				if (sResult != String.Empty)
+				if ((sResult != String.Empty) && !ResourcesCache.ContainsKey(cacheHash))
 				{
 					ResourcesCache.Add(cacheHash, sResult);
 				}
@@ -287,7 +284,7 @@ namespace FFACETools
 					sResult = String.Empty;
 				}
 
-				if (sResult != String.Empty)
+				if ((sResult != String.Empty) && !ResourcesCache.ContainsKey(cacheHash))
 				{
 					ResourcesCache.Add(cacheHash, sResult);
 				}
@@ -330,7 +327,7 @@ namespace FFACETools
 					sResult = GetItemNameWeapons(id);
 				}
 
-				if (sResult != String.Empty)
+				if ((sResult != String.Empty) && !ResourcesCache.ContainsKey(cacheHash))
 				{
 					ResourcesCache.Add(cacheHash, sResult);
 				}
@@ -398,9 +395,10 @@ namespace FFACETools
 					}
 				}
 
-				if (iResult >= 0)
+				UInt32 cacheHash = ((UInt32)iResult | (UInt32)ResourceBit.Item);
+				if ((iResult >= 0) && !ResourcesCache.ContainsKey(cacheHash))
 				{
-					ResourcesCache.Add(((UInt32)iResult | (UInt32)ResourceBit.Item), name);
+					ResourcesCache.Add(cacheHash, name);
 				}
 				return iResult;
 			}
@@ -450,9 +448,10 @@ namespace FFACETools
 					}
 				}
 
-				if (iResult >= 0)
+				UInt32 cacheHash = ((UInt32)iResult | (UInt32)ResourceBit.Item);
+				if ((iResult >= 0) && !ResourcesCache.ContainsKey(cacheHash))
 				{
-					ResourcesCache.Add(((UInt32)iResult | (UInt32)ResourceBit.Item), name);
+					ResourcesCache.Add(cacheHash, name);
 				}
 
 				return iResult;
@@ -503,9 +502,10 @@ namespace FFACETools
 					}
 				}
 
-				if (iResult >= 0)
+				UInt32 cacheHash = ((UInt32)iResult | (UInt32)ResourceBit.Item);
+				if ((iResult >= 0) && !ResourcesCache.ContainsKey(cacheHash))
 				{
-					ResourcesCache.Add(((UInt32)iResult | (UInt32)ResourceBit.Item), name);
+					ResourcesCache.Add(cacheHash, name);
 				}
 
 				return iResult;
@@ -603,7 +603,7 @@ namespace FFACETools
 
 						_FileNumberArrayList[_FileNumberArrayList.Length - 1] = filenameToCheck;
 					}
-					else 
+					else
 						_FileNumberArrayList[_FileNumberArrayList.Length - 1] = "INVALID_FILE - num less than 0";
 
 				}
@@ -625,8 +625,7 @@ namespace FFACETools
 				return String.Format("ROM\\{0}\\{1}.DAT", fileID >> 7, fileID & 0x007F);
 			}
 
-			private static class ffxiFileTypes
-			{
+			private static class ffxiFileTypes {
 				public static readonly int ITEMS = 0;
 				public static readonly int OBJS = 1;
 				public static readonly int WPNS = 2;

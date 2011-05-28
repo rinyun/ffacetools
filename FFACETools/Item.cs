@@ -1,14 +1,11 @@
 ﻿using System;
 
-namespace FFACETools
-{
-	public partial class FFACE
-	{
+namespace FFACETools {
+	public partial class FFACE {
 		/// <summary>
 		/// Wrapper class for item information from FFACE
 		/// </summary>
-		public class ItemTools
-		{
+		public class ItemTools {
 			#region Constants
 
 			/// <summary>
@@ -23,11 +20,10 @@ namespace FFACETools
 			/// <summary>
 			/// Class container for Inventory Items
 			/// </summary>
-			public class InventoryItem
-			{
+			public class InventoryItem {
 				#region Constructors
 
-				public InventoryItem(ushort iD, byte index, uint count, uint flag, uint price, ushort extra)
+				public InventoryItem(ushort iD, byte index, uint count, uint flag, uint price, ushort extra, InventoryType loc)
 				{
 					ID = iD;
 					Index = index;
@@ -35,6 +31,7 @@ namespace FFACETools
 					Flag = flag;
 					Price = price;
 					Extra = extra;
+					Location = loc;
 				}
 
 				public InventoryItem(ushort iD, byte index, uint count)
@@ -78,6 +75,10 @@ namespace FFACETools
 				/// </summary>
 				public ushort Extra { get; set; }
 
+				/// <summary>
+				/// Location item was in.
+				/// </summary>
+				public InventoryType Location { get; set; }
 				#endregion
 
 			} // @ public class InventoryItem
@@ -108,9 +109,9 @@ namespace FFACETools
 			/// <summary>
 			/// Player's Current Gil
 			/// </summary>
-			public uint CurrentGil 
+			public uint CurrentGil
 			{
-			  get { return GetInventoryItem(0).Count; }
+				get { return GetInventoryItem(0).Count; }
 			}
 
 			/// <summary>
@@ -183,15 +184,16 @@ namespace FFACETools
 			{
 				get
 				{
-				    // calculate amount of slots are not empty
-				    // -1 for error (loading/zoning), count Gil too because of this.
-				    short count = -1;
+					// calculate amount of slots are not empty
+					// -1 for error (loading/zoning), count Gil too because of this.
+					short count = -1;
 
-				    for (byte i = 0; i <= 80; i++)
-				      if (!GetInventoryItem(i).ID.Equals(0)) {
-					count++;
-				      }
-				    return count;
+					for (byte i = 0; i <= 80; i++)
+						if (!GetInventoryItem(i).ID.Equals(0))
+						{
+							count++;
+						}
+					return count;
 				}
 
 			} // @ public short InventoryCount
@@ -278,7 +280,7 @@ namespace FFACETools
 			} // @ public int GetItemIDByIndex(short index)
 
 			/// <summary>
-			/// The amount of passed items you have in your inventory
+			/// The amount of items matching iD that you have in your inventory
 			/// </summary>
 			/// <param name="iD">ID of the item to count</param>
 			public uint GetInventoryItemCount(ushort iD)
@@ -306,9 +308,75 @@ namespace FFACETools
 			{
 				// done this way because INVENTORYITEM is a private structure
 				INVENTORYITEM item = FFACE.GetInventoryItem(_InstanceID, index);
-				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra);
+				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra, InventoryType.Inventory);
 
 			} // @ public INVENTORYITEM GetInventoryItem(int index)
+
+			private bool IsSet(InventoryType val, InventoryType settings)
+			{
+				return (((uint)val & (uint)settings) != 0);
+			}
+
+			/// <summary>
+			/// Returns a list of all inventory items matching ID
+			/// </summary>
+			/// <param name="iD">ID of item to get list of.</param>
+			/// <returns></returns>
+			public System.Collections.Generic.List<InventoryItem> GetItemList(int iD, InventoryType location)
+			{
+				System.Collections.Generic.List<InventoryItem> retList = new System.Collections.Generic.List<InventoryItem>();
+				InventoryItem item;
+				if (location != InventoryType.None)
+				{
+					for (byte i = 1; i <= 80; i++)
+					{
+						if (IsSet(location, InventoryType.Inventory))
+						{
+							item = GetInventoryItem(i);
+							if (item.ID == iD)
+								retList.Add(item);
+						}
+						if (IsSet(location, InventoryType.Safe))
+						{
+							item = GetSafeItem(i);
+							if (item.ID == iD)
+								retList.Add(item);
+						}
+						if (IsSet(location, InventoryType.Storage))
+						{
+							item = GetStorageItem(i);
+							if (item.ID == iD)
+								retList.Add(item);
+						}
+						if (IsSet(location, InventoryType.Locker))
+						{
+							item = GetLockerItem(i);
+							if (item.ID == iD)
+								retList.Add(item);
+						}
+						if (IsSet(location, InventoryType.Temp))
+						{
+							item = GetTempItem(i);
+							if (item.ID == iD)
+								retList.Add(item);
+						}
+						if (IsSet(location, InventoryType.Satchel))
+						{
+							item = GetSatchelItem(i);
+							if (item.ID == iD)
+								retList.Add(item);
+						}
+						if (IsSet(location, InventoryType.Sack))
+						{
+							item = GetSackItem(i);//GetInventoryItem(i);
+							if (item.ID == iD)
+								retList.Add(item);
+						}
+					}
+				}
+
+				return retList;
+			}
 
 			#endregion
 
@@ -368,7 +436,7 @@ namespace FFACETools
 
 				// done this way because INVENTORYITEM is a private structure
 				INVENTORYITEM item = FFACE.GetSafeItem(_InstanceID, (byte)index);
-				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra);
+				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra, InventoryType.Safe);
 
 			} // @ public INVENTORYITEM GetSafeItem(byte index)
 			#endregion
@@ -426,7 +494,7 @@ namespace FFACETools
 			{
 				// done this way because INVENTORYITEM is a private structure
 				INVENTORYITEM item = FFACE.GetStorageItem(_InstanceID, index);
-				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra);
+				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra, InventoryType.Storage);
 
 			} // @ public INVENTORYITEM GetStorageItem(int index)
 			#endregion
@@ -487,7 +555,7 @@ namespace FFACETools
 
 				// done this way because INVENTORYITEM is a private structure
 				INVENTORYITEM item = FFACE.GetLockerItem(_InstanceID, (byte)index);
-				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra);
+				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra, InventoryType.Locker);
 
 			} // @ public InventoryItem GetLockerItem(ushort index)
 			#endregion
@@ -548,7 +616,7 @@ namespace FFACETools
 
 				// done this way because INVENTORYITEM is a private structure
 				INVENTORYITEM item = FFACE.GetTempItem(_InstanceID, (byte)index);
-				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra);
+				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra, InventoryType.Temp);
 
 			} // @ public InventoryItem GetLockerItem(ushort index)
 			#endregion
@@ -609,7 +677,7 @@ namespace FFACETools
 
 				// done this way because INVENTORYITEM is a private structure
 				INVENTORYITEM item = FFACE.GetSatchelItem(_InstanceID, (byte)index);
-				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra);
+				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra, InventoryType.Satchel);
 
 			} // @ public InventoryItem GetSatchelItem(ushort index)
 			#endregion
@@ -670,33 +738,33 @@ namespace FFACETools
 
 				// done this way because INVENTORYITEM is a private structure
 				INVENTORYITEM item = FFACE.GetSackItem(_InstanceID, (byte)index);
-				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra);
+				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra, InventoryType.Sack);
 
 			} // @ public InventoryItem GetSatchelItem(ushort index)
-			#endregion 
+			#endregion
 
 			#region Methods relating to Equipment
 			/// <summary>
-            /// The count of an item in a specific equipment slot
-            /// </summary>
-            /// <param name="slot">Slot to count</param>
-            public uint GetEquippedItemCount(EquipSlot slot)
-            {
+			/// The count of an item in a specific equipment slot
+			/// </summary>
+			/// <param name="slot">Slot to count</param>
+			public uint GetEquippedItemCount(EquipSlot slot)
+			{
 				byte index = GetEquippedItemIndex(slot);
-				if(index != 0)
+				if (index != 0)
 					return GetInventoryItem(index).Count;
 				else
 					return 0;
 			} // @ public byte GetEquippedItemCount(EquipSlot slot)
 
-            /// <summary>
-            /// Gets the item id for passed equipment slot
-            /// </summary>
-            /// <param name="slot">Slot to get the ID for</param>
-            public ushort GetEquippedItemID(EquipSlot slot)
-            {
+			/// <summary>
+			/// Gets the item id for passed equipment slot
+			/// </summary>
+			/// <param name="slot">Slot to get the ID for</param>
+			public ushort GetEquippedItemID(EquipSlot slot)
+			{
 				byte index = GetEquippedItemIndex(slot);
-				if(index != 0)
+				if (index != 0)
 					return GetInventoryItem(index).ID;
 				else
 					return 0;
@@ -728,4 +796,4 @@ namespace FFACETools
 		} // @ class ItemTools
 	} // @ public partial class FFACE
 }
- 
+

@@ -627,6 +627,10 @@
 
 	} // @ public enum ChatMode : short
 
+	#endregion
+
+	#region LineSettings
+
 	/// <summary>
 	/// LineSettings for GetNextLine
 	/// </summary>
@@ -2235,6 +2239,72 @@
 
 	} // @ public enum Weather : byte
 
+	#endregion
+
+	#region Inventory related
+	[System.Flags]
+	public enum InventoryType : uint {
+		/// <summary>
+		/// By itself means NONE.
+		/// </summary>
+		None = 0,
+		/// <summary>
+		/// Inventory
+		/// </summary>
+		Inventory = 1,
+		/// <summary>
+		/// Mog Safe
+		/// </summary>
+		Safe = 2,
+		/// <summary>
+		/// Storage
+		/// </summary>
+		Storage = 4,
+		/// <summary>
+		/// Mog Locker
+		/// </summary>
+		Locker = 8,
+		/// <summary>
+		/// Mog Satchel
+		/// </summary>
+		Satchel = 16,
+		/// <summary>
+		/// Mog Sack
+		/// </summary>
+		Sack = 32,
+		/// <summary>
+		/// Temporary Items
+		/// </summary>
+		Temp = 64,
+		/// <summary>
+		/// Future expansion (no effect)
+		/// </summary>
+		Unknown = 128,
+		/// <summary>
+		/// Future expansion (no effect)
+		/// </summary>
+		Unknown2 = 256,
+		/// <summary>
+		/// Inventory, Satchel, And Sack
+		/// </summary>
+		AllBagsNoTemp = Inventory | Satchel | Sack,
+		/// <summary>
+		/// Inventory, Satchel, Sack, Temporary Items
+		/// </summary>
+		AllBagsPlusTemp = Inventory | Satchel | Sack | Temp,
+		/// <summary>
+		/// Everything including Temporary Items
+		/// </summary>
+		AllPlusTemp = Inventory | Safe | Storage | Locker | Satchel | Sack | Temp,
+		/// <summary>
+		/// AllPlusTemp (Everything including Temporary Items)
+		/// </summary>
+		All = Inventory | Safe | Storage | Locker | Satchel | Sack | Temp,
+		/// <summary>
+		/// Everything not including temporary items
+		/// </summary>
+		AllNoTemp = Inventory | Safe | Storage | Locker | Satchel | Sack
+	}
 	#endregion
 
 	#region Treasure

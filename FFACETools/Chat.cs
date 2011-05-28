@@ -95,7 +95,7 @@ namespace FFACETools {
 					return (Text.GetHashCode()) & (~(short)Type);
 
 				} // @ public override int GetHashCode()
-			}
+			} // @ public class ChatLine
 
 			/// <summary>
 			/// Structure to hold a Chat log message and it's type
@@ -125,7 +125,7 @@ namespace FFACETools {
 						return false;
 					else
 						return item1.Equals(item2);
-				}
+				} // @ public static bool operator ==
 
 				public static bool operator !=(ChatLogEntry item1, ChatLogEntry item2)
 				{
@@ -135,7 +135,7 @@ namespace FFACETools {
 						return true;
 					else
 						return !item1.Equals(item2);
-				}
+				} // @ public static bool operator !=
 
 				/// <summary>
 				/// Returns a value indicating whether this instance is is equal to a specified instance
@@ -178,11 +178,11 @@ namespace FFACETools {
 					ms.Close();
 
 					return obj;
-				}
+				} // @ public object Clone()
 
 				#endregion
 
-			} // @ private struct ChatLogEntry
+			} // @ private class ChatLogEntry
 
 			#endregion
 
@@ -198,7 +198,7 @@ namespace FFACETools {
 				Update();
 				Clear();
 
-			} // @ public ChatWrapper(int instanceID)
+			} // @ public ChatTools(int instanceID)
 
 			#endregion
 
@@ -248,14 +248,14 @@ namespace FFACETools {
 				if (value == bit)
 					return true;
 				return ((value & bit) != 0); // generic, means i don't have to be exact on settings.
-			}
+			} // @ internal static bool IsSet(UInt32 value, UInt32 bit)
 
 			internal static bool IsSet(LineSettings value, LineSettings bit)
 			{
 				if (value == bit)
 					return true;
 				return (((UInt32)value & (UInt32)bit) != 0);
-			}
+			} // @ internal static bool IsSet(LineSettings value, LineSettings bit)
 
 			/// <summary>
 			/// Will convert AT Brackets, Element Icons, and strip everything else.
@@ -265,7 +265,7 @@ namespace FFACETools {
 			public static String CleanLine(String line)
 			{
 				return FFACE.ChatTools.CleanLine(line, LineSettings.OldSchool);
-			}
+			} // @ public static String CleanLine(String line)
 
 			/// <summary>
 			/// Will strip/convert requested items based on LineSettings passed.
@@ -335,13 +335,15 @@ namespace FFACETools {
 						}
 						if (IsSet(ls, LineSettings.ConvertATBrackets | LineSettings.ConvertElementIcons | LineSettings.CleanElementIcons | LineSettings.CleanATBrackets))
 							++c;
-						else cleaned.Add(bytearray1252[c]);
+						else
+							cleaned.Add(bytearray1252[c]);
 					}
 					else if ((bytearray1252[c] == '\x1F') && (((c + 1) < len) && ((ndx = s1F.IndexOf((char)bytearray1252[c + 1])) >= 0)))
 					{
 						if (IsSet(ls, LineSettings.CleanOthers))
 							++c;
-						else cleaned.Add(bytearray1252[c]);
+						else
+							cleaned.Add(bytearray1252[c]);
 					}
 					else if ((bytearray1252[c] == '\x1E') && (((c + 1) < len)))
 					{
@@ -432,21 +434,28 @@ namespace FFACETools {
 						}
 						else if (i != -1)
 						{
+							// Target character at this point is either a \r\n or \x07
 							if ((sExtra[i] == '\r') || (sExtra[i] == '\n'))
 							{
-								if (IsSet(ls, LineSettings.CleanNewLine))
-									++c;
-								else
+								// ++c; for Double-Byte combinations, this is not one.
+								// if we are NOT doing CleanNewLine
+								// then say we didn't find it.
+								if (!IsSet(ls, LineSettings.CleanNewLine))
 									i = -1;
 							}
-							else if (IsSet(ls, LineSettings.CleanOthers))
+							else if (!IsSet(ls, LineSettings.CleanOthers))
 							{
-								++c;
-							}
-							else
+								// At this point, it's a \x07
+								// if we are NOT doing CleanOthers
+								// then say we didn't find it.
 								i = -1;
+								// ++c; for Double-Byte combinations, \x07 is not one
+							}
 						}
 
+						// If the byte was not in a previous if/else,
+						// and we didn't find it in our "exceptions"
+						// then add it to the list.
 						if (i < 0)
 						{
 							cleaned.Add(bytearray1252[c]);
@@ -553,16 +562,24 @@ namespace FFACETools {
 				//if (IsSet(ls, LineSettings.CleanTimeStamp) && cleanedString.StartsWith("["))  // Detect and remove Windower Timestamp plugin text.
 				//{
 				//	cleanedString = CleanTimeStamp(cleanedString);
+
+				// C#/.Net Strings can have \0 at the end and it fucks with Windows RichTextBox
 				cleanedString = cleanedString.TrimEnd('\0');
+
 				//} // Detect and remove Windower Timestamp plugin text.
+
+
 				if (!IsSet(ls, LineSettings.CleanNewLine))
 				{
+					// if it doesn't end with \r\n and we weren't supposed to CleanNewLine
+					// add it back on.
 					if (!cleanedString.EndsWith("\r\n"))
 						cleanedString += Environment.NewLine;
 				}
+
 				return cleanedString;
 
-			} // private CleanLine(string line)
+			} //  @ public static String CleanLine(String line, LineSettings ls)
 
 			/// <summary>
 			/// Cleans Timestamp plugin's addition to the chatlog. (Call before stripping color codes)
@@ -574,14 +591,14 @@ namespace FFACETools {
 				String stringToClean = s;
 				byte[] textb = System.Text.Encoding.GetEncoding(1252).GetBytes(stringToClean);
 				int index = -1, index2 = -1;
-				for (index = 0; (index+1) < textb.Length; index++)
+				for (index = 0; (index + 1) < textb.Length; index++)
 				{
 					// to allow for extra color codes in Timestamp later.
-					if ((textb[index] == 0x1E) && (textb[index+1] != 0x01))
+					if ((textb[index] == 0x1E) && (textb[index + 1] != 0x01))
 						break;
 				}
 
-				for (index2 = index; (index2+1) < textb.Length; index2++)
+				for (index2 = index; (index2 + 1) < textb.Length; index2++)
 				{
 					if ((textb[index2] == 0x1E) && (textb[index2 + 1] == 0x01))
 					{
@@ -618,68 +635,16 @@ namespace FFACETools {
 				{
 					stringToClean = stringToClean.Remove(0, 11); // this assumes timestamp found is only 10+1 space in length
 					// Better way? : line = line.Remove(0,m.Length+1);
-				}  
+				}
 				return stringToClean;
-			}
-
-			/// <summary>
-			/// Will get a chat line directly from FFACE
-			/// </summary>
-			/// <param name="index">Index of the line to get (0 being most recent)</param>
-			/// <returns>null if error, ChatLogEntry containing raw text of line matching index</returns>
-			[Obsolete("Use GetLineRaw(index) instead.")]
-			internal ChatLogEntry GetLine(short index)
-			{
-				// 210 to make sure it reads to end of string
-				// for some reason 200 isn't big enough and it will strip some of the line off if it's long
-				int size = 1024;
-				byte[] buffer = new byte[size];
-				GetChatLine(_InstanceID, index, buffer, ref size);
-				if (size <= 0)
-					return new ChatLogEntry() { LineText = String.Empty, LineType = ChatMode.Error, Index = 0 };
-
-				string tempLine = System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
-
-				return new ChatLogEntry() {
-					LineText = tempLine,
-					Index = index
-				};
-
-			} // @ internal ChatLogEntry GetLine(short index)
-
-			/// <summary>
-			/// Will get a chat line and type directly from FFACE
-			/// </summary>
-			/// <param name="index">Index of the line to get (0 being most recent)</param>
-			/// <returns>null if error, ChatLogEntry containing Type, index, and raw text of the line matching index.</returns>
-			[Obsolete("Use GetLineRaw(index) instead.")]
-			internal ChatLogEntry GetLineExtra(short index)
-			{
-				// 210 to make sure it reads to end of string
-				// for some reason 200 isn't big enough and it will strip some of the line off if it's long
-				int size = 1024;
-				byte[] buffer = new byte[size];
-				ChatMode mode = new ChatMode();
-				GetChatLineEx(_InstanceID, index, buffer, ref size, ref mode);
-				if (size <= 0)
-					return new ChatLogEntry() { LineText = String.Empty, LineType = ChatMode.Error, Index = 0 };
-
-				string tempLine = System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
-
-				return new ChatLogEntry() {
-					LineText = tempLine,
-					LineType = mode,
-					Index = index
-				};
-
-			} // @ internal ChatLogEntry GetLineExtra(short index)
+			} // @ internal static String CleanTimeStamp(String s)
 
 			/// <summary>
 			/// Will get the raw data of a chat line from FFACE
 			/// </summary>
 			/// <param name="index">Index of the line to get (0 being most recent)</param>
 			/// <returns>null if error, Fully populated ChatLogEntry otherwise. In event of a bad chat line, ChatType == Chat.Error and line contains error message.</returns>
-			public ChatLogEntry GetLineRaw(short index)
+			internal ChatLogEntry GetLineRaw(short index)
 			{
 				// 210 to make sure it reads to end of string
 				// for some reason 200 isn't big enough and it will strip some of the line off if it's long
@@ -710,7 +675,7 @@ namespace FFACETools {
 					return new ChatLogEntry() {
 						LineTime = DateTime.Now,
 						LineTimeString = "[" + DateTime.Now.ToString("HH:mm:ss") + "] ",
-						LineColor = "FF0000",
+						LineColor = "FFFF0000",
 						ActualLineColor = Color.Red,
 						LineText = "Error: Array length too short, RawString contains hard data.",
 						LineType = ChatMode.Error,
@@ -780,13 +745,13 @@ namespace FFACETools {
 					LineTimeString = "[" + DateTime.Now.ToString("HH:mm:ss") + "] ",
 					// Original Line:  LineColor = ColorTranslator.FromHtml("#" + sArray[3]),
 					ActualLineColor = clr,
-					RawString = sArray, 
+					RawString = sArray,
 					LineColor = colorString,	//LineColor = sArray[3],
 					LineText = lnTxt,			//sArray[11].Remove(0, 4);
 					LineType = linetype,		//(ChatMode)short.Parse(sArray[0], System.Globalization.NumberStyles.AllowHexSpecifier),
 					Index = ndx					//int.Parse(sArray[5], System.Globalization.NumberStyles.AllowHexSpecifier)
 				};
-			} // @ private ChatLogEntry GetLineRaw(short index)
+			} // @ internal ChatLogEntry GetLineRaw(short index)
 
 			/// <summary>
 			/// Updates the internal ChatTools queue
@@ -859,7 +824,7 @@ namespace FFACETools {
 				while (0 < currentLines.Count)
 					_ChatLog.Enqueue(currentLines.Pop());
 
-			} // @ public void Update()
+			} // @ internal void Update()
 
 			/// <summary>
 			/// Returns the number of unparsed lines in the internal ChatTools queue
@@ -868,7 +833,7 @@ namespace FFACETools {
 			{
 				return _ChatLog.Count;
 
-			} // @ public int NumberOfUnparsedLines()
+			} // @ internal int NumberOfUnparsedLines()
 
 			/// <summary>
 			/// Marks a line as parsed in the internal ChatTools queue
@@ -878,7 +843,7 @@ namespace FFACETools {
 				if (!_ChatLog.Count.Equals(0))
 					_ChatLog.Dequeue();
 
-			} // @ public void LineParsed()
+			} // @ internal void LineParsed()
 
 			/// <summary>
 			/// Clears the internal ChatTools queue
@@ -939,7 +904,59 @@ namespace FFACETools {
 
 				return line;
 
-			} // @ public string GetNextLine(bool cleanLine)
+			} // @ public String GetNextLine(LineSettings lineSettings)
+
+			/// <summary>
+			/// Will get a chat line directly from FFACE
+			/// </summary>
+			/// <param name="index">Index of the line to get (0 being most recent)</param>
+			/// <returns>null if error, ChatLogEntry containing raw text of line matching index</returns>
+			[Obsolete("Use GetLineRaw(index) instead.")]
+			internal ChatLogEntry GetLine(short index)
+			{
+				// 210 to make sure it reads to end of string
+				// for some reason 200 isn't big enough and it will strip some of the line off if it's long
+				int size = 1024;
+				byte[] buffer = new byte[size];
+				GetChatLine(_InstanceID, index, buffer, ref size);
+				if (size <= 0)
+					return new ChatLogEntry() { LineText = String.Empty, LineType = ChatMode.Error, Index = 0 };
+
+				string tempLine = System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
+
+				return new ChatLogEntry() {
+					LineText = tempLine,
+					Index = index
+				};
+
+			} // @ internal ChatLogEntry GetLine(short index)
+
+			/// <summary>
+			/// Will get a chat line and type directly from FFACE
+			/// </summary>
+			/// <param name="index">Index of the line to get (0 being most recent)</param>
+			/// <returns>null if error, ChatLogEntry containing Type, index, and raw text of the line matching index.</returns>
+			[Obsolete("Use GetLineRaw(index) instead.")]
+			internal ChatLogEntry GetLineExtra(short index)
+			{
+				// 210 to make sure it reads to end of string
+				// for some reason 200 isn't big enough and it will strip some of the line off if it's long
+				int size = 1024;
+				byte[] buffer = new byte[size];
+				ChatMode mode = new ChatMode();
+				GetChatLineEx(_InstanceID, index, buffer, ref size, ref mode);
+				if (size <= 0)
+					return new ChatLogEntry() { LineText = String.Empty, LineType = ChatMode.Error, Index = 0 };
+
+				string tempLine = System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
+
+				return new ChatLogEntry() {
+					LineText = tempLine,
+					LineType = mode,
+					Index = index
+				};
+
+			} // @ internal ChatLogEntry GetLineExtra(short index)
 
 			/// <summary>
 			/// Will get the next chat line
@@ -991,6 +1008,6 @@ namespace FFACETools {
 
 			#endregion
 
-		} // @ public class ChatWrapper
+		} // @ public class ChatTools
 	} // @ public partial FFACE
 }
