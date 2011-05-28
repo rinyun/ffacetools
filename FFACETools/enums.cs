@@ -645,53 +645,61 @@
 		/// </summary>
 		CleanKIBytes = 2,
 		/// <summary>
+		/// Cleans \x1E\x05 and \x1E\x01 for Objects mentioned in NPC Chat/Dialog. (Petra/Quarry/etc)
+		/// </summary>
+		CleanObjectBytes = 4,
+		/// <summary>
 		/// Cleans \xEF#### combinations for Elemental Icons (#### being \x1F through \x26)
 		/// </summary>
-		CleanElementIcons = 4,
+		CleanElementIcons = 8,
 		/// <summary>
 		/// Cleans \xEF\x27 and \xEF\x28 (Open and Closing Brace)
 		/// </summary>
-		CleanATBrackets = 8,
+		CleanATBrackets = 16,
 		/// <summary>
 		/// Cleans \r\n
 		/// </summary>
-		CleanNewLine = 16,
+		CleanNewLine = 32,
 		/// <summary>
 		/// Cleans uncategorized combinations (\x07, \x1E\xFC, \x1E\xFD, \x7F\x31, \x81\xA1, \x87\xB2, \x87\xB3, and \x1F\x## combinations)
 		/// </summary>
-		CleanOthers = 32,
+		CleanOthers = 64,
 		/// <summary>
 		/// Cleans TimeStamp plugin's addition to the chatlog.
 		/// </summary>
-		CleanTimeStamp = 64,
+		CleanTimeStamp = 128,
 		/// <summary>
 		/// Puts items inside { and }. (Braces)  (overrides CleanItemBytes)
 		/// </summary>
-		ConvertItemBytes = 128,
+		ConvertItemBytes = 256,
 		/// <summary>
 		/// Puts Key Items inside [ and ]. (Brackets) (overrides CleanKIBytes)
 		/// </summary>
-		ConvertKIBytes = 256,
+		ConvertKIBytes = 512,
+		/// <summary>
+		/// Puts Objects of interest inside ( and ). (Parenthesis) (overrides CleanObjectBytes)
+		/// </summary>
+		ConvertObjectBytes = 1024,
 		/// <summary>
 		/// Replaces the 8 elements with printable 3-character combinations. &lt; FIAETWLD &gt;   (overrides CleanElementIcons)
 		/// </summary>
-		ConvertElementIcons = 512,
+		ConvertElementIcons = 2048,
 		/// <summary>
 		/// Replaces Auto-Translate Brackets with &lt;{ and }&gt;  (overrides CleanATBrackets)
 		/// </summary>
-		ConvertATBrackets = 1024,
+		ConvertATBrackets = 4096,
 		/// <summary>
 		/// Cleans everything INCLUDING new line, no conversion.
 		/// </summary>
-		CleanAll = CleanOthers | CleanNewLine | CleanItemBytes | CleanKIBytes | CleanATBrackets | CleanElementIcons | CleanTimeStamp,
+		CleanAll = CleanOthers | CleanNewLine | CleanItemBytes | CleanKIBytes | CleanObjectBytes | CleanATBrackets | CleanElementIcons | CleanTimeStamp,
 		/// <summary>
 		/// Cleans everything EXCEPT new line, no conversion.
 		/// </summary>
-		CleanAllKeepNewLine = CleanOthers | CleanItemBytes | CleanKIBytes | CleanATBrackets | CleanElementIcons | CleanTimeStamp,
+		CleanAllKeepNewLine = CleanOthers | CleanItemBytes | CleanKIBytes | CleanObjectBytes | CleanATBrackets | CleanElementIcons | CleanTimeStamp,
 		/// <summary>
 		/// Converts everything that can be converted. (Please don't use this by itself.)
 		/// </summary>
-		ConvertAll = ConvertATBrackets | ConvertElementIcons | ConvertItemBytes | ConvertKIBytes,
+		ConvertAll = ConvertATBrackets | ConvertElementIcons | ConvertItemBytes | ConvertKIBytes | ConvertObjectBytes,
 		/// <summary>
 		/// Converts everything that can be converted, cleans everything else INCLUDING new line.
 		/// </summary>
@@ -707,11 +715,11 @@
 		/// <summary>
 		/// Yekyaa's personal favorite.  Converts AT Brackets, Element Icons, cleans everything else INCLUDING new line.
 		/// </summary>
-		OldSchool = CleanTimeStamp | CleanOthers | CleanNewLine | CleanItemBytes | CleanKIBytes | ConvertATBrackets | ConvertElementIcons,
+		OldSchool = CleanTimeStamp | CleanOthers | CleanNewLine | CleanItemBytes | CleanKIBytes | CleanObjectBytes | ConvertATBrackets | ConvertElementIcons,
 		/// <summary>
 		/// Converts AT Brackets, Element Icons, cleans everything else EXCEPT new line.
 		/// </summary>
-		ReallyOldSchool = CleanTimeStamp | CleanOthers | CleanItemBytes | CleanKIBytes | ConvertATBrackets | ConvertElementIcons,
+		ReallyOldSchool = CleanTimeStamp | CleanOthers | CleanItemBytes | CleanKIBytes | CleanObjectBytes | ConvertATBrackets | ConvertElementIcons,
 		/// <summary>
 		/// Default used when getting DialogText.Question and Options (ConvertAll|CleanOthers|CleanNewLine)
 		/// </summary>

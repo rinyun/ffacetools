@@ -295,7 +295,8 @@ namespace FFACETools {
 				const String sEF = "\xFF\x1F\x20\x21\x22\x23\x24\x25\x26\x27\x28\xFF";
 				// 1f 20 21 22 23 24 25 26 27 28
 				const String rep = "<FIAETWLD{}>";
-				const String s1E = "\x01\x02\x03\xFC\xFD";
+				// Turns out \x1E is the start code for color changes/resets in log/dialog text.
+				//const String s1E = "\x01\x02\x03\xFC\xFD";
 				const String s1F = "\x0E\x0F\x2F\x7F\x79\x7B\x7C\x8D\x88\x8A\xA1\xD0";  //\r\n\x07
 				const String sExtra = "\r\n\x07\x7F\x81\x87";
 
@@ -303,6 +304,7 @@ namespace FFACETools {
 				Int32 ndx = -1;
 				bool inItemCode = false;
 				bool inKeyItemCode = false;
+				bool inObjectCode = false;
 
 				// Sanity checks
 				for (Int32 c = 0; c < len; ++c)
@@ -341,9 +343,11 @@ namespace FFACETools {
 							++c;
 						else cleaned.Add(bytearray1252[c]);
 					}
-					else if ((bytearray1252[c] == '\x1E') && (((c + 1) < len) && ((ndx = s1E.IndexOf((char)bytearray1252[c + 1])) >= 0)))
+					else if ((bytearray1252[c] == '\x1E') && (((c + 1) < len)))
 					{
-						if ((s1E[ndx] == '\x03') && IsSet(ls, LineSettings.ConvertKIBytes | LineSettings.CleanKIBytes))
+						byte nextByte = bytearray1252[c + 1];
+
+						if ((nextByte == '\x03') && IsSet(ls, LineSettings.ConvertKIBytes | LineSettings.CleanKIBytes))
 						{
 							if (IsSet(ls, LineSettings.ConvertKIBytes))
 							{
@@ -352,7 +356,7 @@ namespace FFACETools {
 							}
 							++c;
 						}
-						else if ((s1E[ndx] == '\x02') && IsSet(ls, LineSettings.ConvertItemBytes | LineSettings.CleanItemBytes))
+						else if ((nextByte == '\x02') && IsSet(ls, LineSettings.ConvertItemBytes | LineSettings.CleanItemBytes))
 						{
 							if (IsSet(ls, LineSettings.ConvertItemBytes))
 							{
@@ -361,7 +365,16 @@ namespace FFACETools {
 							}
 							++c;
 						}
-						else if (inItemCode && (s1E[ndx] == '\x01') && IsSet(ls, LineSettings.ConvertItemBytes | LineSettings.CleanItemBytes))
+						else if ((nextByte == '\x05') && IsSet(ls, LineSettings.ConvertObjectBytes | LineSettings.CleanObjectBytes))
+						{
+							if (IsSet(ls, LineSettings.ConvertObjectBytes))
+							{
+								cleaned.Add((Byte)'(');
+								inObjectCode = true;
+							}
+							++c;
+						}
+						else if (inItemCode && (nextByte == '\x01') && IsSet(ls, LineSettings.ConvertItemBytes | LineSettings.CleanItemBytes))
 						{
 							if (IsSet(ls, LineSettings.ConvertItemBytes))
 							{
@@ -370,12 +383,21 @@ namespace FFACETools {
 							}
 							++c;
 						}
-						else if (inKeyItemCode && (s1E[ndx] == '\x01') && IsSet(ls, LineSettings.ConvertKIBytes | LineSettings.CleanKIBytes))
+						else if (inKeyItemCode && (nextByte == '\x01') && IsSet(ls, LineSettings.ConvertKIBytes | LineSettings.CleanKIBytes))
 						{
 							if (IsSet(ls, LineSettings.ConvertKIBytes))
 							{
 								cleaned.Add((Byte)']');
 								inKeyItemCode = false;
+							}
+							++c;
+						}
+						else if (inObjectCode && (nextByte == '\x01') && IsSet(ls, LineSettings.ConvertObjectBytes | LineSettings.CleanObjectBytes))
+						{
+							if (IsSet(ls, LineSettings.ConvertObjectBytes))
+							{
+								cleaned.Add((Byte)')');
+								inObjectCode = false;
 							}
 							++c;
 						}
@@ -689,7 +711,7 @@ namespace FFACETools {
 						LineTime = DateTime.Now,
 						LineTimeString = "[" + DateTime.Now.ToString("HH:mm:ss") + "] ",
 						LineColor = "FF0000",
-						ActualLineColor = Color.Empty,
+						ActualLineColor = Color.Red,
 						LineText = "Error: Array length too short, RawString contains hard data.",
 						LineType = ChatMode.Error,
 						RawString = sArray,
@@ -735,8 +757,8 @@ namespace FFACETools {
 				{
 					clr = Color.Empty;
 				}
-				if (colorString == String.Empty)
-					colorString = "FF0000";
+				//if (colorString == String.Empty)
+				//	colorString = "FF0000";
 				try
 				{
 					ndx = int.Parse(sArray[5], System.Globalization.NumberStyles.AllowHexSpecifier);
@@ -751,6 +773,7 @@ namespace FFACETools {
 				{
 					String temp = errorMsg + lnTxt;
 					lnTxt = temp;
+					linetype = ChatMode.Error;
 				}
 				return new ChatLogEntry() {
 					LineTime = DateTime.Now,
