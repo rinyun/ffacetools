@@ -1,7 +1,3 @@
-Version 1.3.1.4
-	- Bump to 1.3.1.4
-	- Added GetNextLine() (no arguments)  Will use the default LineSettings.OldSchool
-
 Version 1.3.1.3
 	- Add public int GetAbilityRecast(AbilityList) (use sparingly, it loops) to mimic GetSpellRecast(SpellList)
 	- GetAbilityRecast(AbilityList) returns -1 if the ability is not "equipped", GetAbilityRecast(short index) will not.
