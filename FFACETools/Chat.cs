@@ -15,6 +15,9 @@ namespace FFACETools {
 			/// Class container for a chat line returned from GetNextLine()
 			/// </summary>
 			public class ChatLine {
+				/// <summary>
+				/// Raw String array containing the strings split from one line of the FFXI chatlog.
+				/// </summary>
 				public String[] RawString { get; set; }
 				/// <summary>
 				/// The time the message was parsed in
@@ -101,7 +104,7 @@ namespace FFACETools {
 			/// Structure to hold a Chat log message and it's type
 			/// </summary>
 			[Serializable]
-			public class ChatLogEntry : ICloneable {
+			internal class ChatLogEntry : ICloneable {
 				#region Members
 
 				public DateTime LineTime { get; set; }
@@ -271,22 +274,23 @@ namespace FFACETools {
 			/// Will strip/convert requested items based on LineSettings passed.
 			/// </summary>
 			/// <param name="line">line to clean (left intact)</param>
+			/// <param name="lineSettings">LineSettings to apply to the line for cleaning/converting.</param>
 			/// <returns>string containing the modified line, original is left unharmed</returns>
-			public static String CleanLine(String line, LineSettings ls)
+			public static String CleanLine(String line, LineSettings lineSettings)
 			{
 				String cleanedString = line;
 
 				// Duh. If we managed to get here, I'm not bothering.
-				if (IsSet(ls, LineSettings.RawText))
+				if (IsSet(lineSettings, LineSettings.RawText))
 				{
 					return cleanedString;
 				}
 
-				if (IsSet(ls, LineSettings.CleanTimeStamp))
+				if (IsSet(lineSettings, LineSettings.CleanTimeStamp))
 				{
 					cleanedString = CleanTimeStamp(cleanedString);
 					// if all we're doing is pulling the TimeStamp, just return.
-					if (ls == LineSettings.CleanTimeStamp)
+					if (lineSettings == LineSettings.CleanTimeStamp)
 						return cleanedString;
 				}
 
@@ -319,28 +323,28 @@ namespace FFACETools {
 
 						if (!isCloseBrace) // Not closing brace? Needs starter char
 						{
-							if ((isOpenBrace && IsSet(ls, LineSettings.ConvertATBrackets)) ||
-								(isElementIcon && IsSet(ls, LineSettings.ConvertElementIcons)))
+							if ((isOpenBrace && IsSet(lineSettings, LineSettings.ConvertATBrackets)) ||
+								(isElementIcon && IsSet(lineSettings, LineSettings.ConvertElementIcons)))
 								cleaned.Add((Byte)rep[0]);
 						}
-						if ((!isElementIcon && IsSet(ls, LineSettings.ConvertATBrackets)) ||
-							(isElementIcon && IsSet(ls, LineSettings.ConvertElementIcons)))
+						if ((!isElementIcon && IsSet(lineSettings, LineSettings.ConvertATBrackets)) ||
+							(isElementIcon && IsSet(lineSettings, LineSettings.ConvertElementIcons)))
 							cleaned.Add((Byte)rep[ndx]); // add rep.char based on Index
 
 						if (!isOpenBrace) // Not opening brace? Needs closer char
 						{
-							if ((isCloseBrace && IsSet(ls, LineSettings.ConvertATBrackets)) ||
-								(isElementIcon && IsSet(ls, LineSettings.ConvertElementIcons)))
+							if ((isCloseBrace && IsSet(lineSettings, LineSettings.ConvertATBrackets)) ||
+								(isElementIcon && IsSet(lineSettings, LineSettings.ConvertElementIcons)))
 								cleaned.Add((Byte)rep[rep.Length - 1]); // >  Final: <{ and }> for Auto-translate braces
 						}
-						if (IsSet(ls, LineSettings.ConvertATBrackets | LineSettings.ConvertElementIcons | LineSettings.CleanElementIcons | LineSettings.CleanATBrackets))
+						if (IsSet(lineSettings, LineSettings.ConvertATBrackets | LineSettings.ConvertElementIcons | LineSettings.CleanElementIcons | LineSettings.CleanATBrackets))
 							++c;
 						else
 							cleaned.Add(bytearray1252[c]);
 					}
 					else if ((bytearray1252[c] == '\x1F') && (((c + 1) < len) && ((ndx = s1F.IndexOf((char)bytearray1252[c + 1])) >= 0)))
 					{
-						if (IsSet(ls, LineSettings.CleanOthers))
+						if (IsSet(lineSettings, LineSettings.CleanOthers))
 							++c;
 						else
 							cleaned.Add(bytearray1252[c]);
@@ -349,61 +353,61 @@ namespace FFACETools {
 					{
 						byte nextByte = bytearray1252[c + 1];
 
-						if ((nextByte == '\x03') && IsSet(ls, LineSettings.ConvertKIBytes | LineSettings.CleanKIBytes))
+						if ((nextByte == '\x03') && IsSet(lineSettings, LineSettings.ConvertKIBytes | LineSettings.CleanKIBytes))
 						{
-							if (IsSet(ls, LineSettings.ConvertKIBytes))
+							if (IsSet(lineSettings, LineSettings.ConvertKIBytes))
 							{
 								cleaned.Add((Byte)'[');
 								inKeyItemCode = true;
 							}
 							++c;
 						}
-						else if ((nextByte == '\x02') && IsSet(ls, LineSettings.ConvertItemBytes | LineSettings.CleanItemBytes))
+						else if ((nextByte == '\x02') && IsSet(lineSettings, LineSettings.ConvertItemBytes | LineSettings.CleanItemBytes))
 						{
-							if (IsSet(ls, LineSettings.ConvertItemBytes))
+							if (IsSet(lineSettings, LineSettings.ConvertItemBytes))
 							{
 								cleaned.Add((Byte)'{');
 								inItemCode = true;
 							}
 							++c;
 						}
-						else if ((nextByte == '\x05') && IsSet(ls, LineSettings.ConvertObjectBytes | LineSettings.CleanObjectBytes))
+						else if ((nextByte == '\x05') && IsSet(lineSettings, LineSettings.ConvertObjectBytes | LineSettings.CleanObjectBytes))
 						{
-							if (IsSet(ls, LineSettings.ConvertObjectBytes))
+							if (IsSet(lineSettings, LineSettings.ConvertObjectBytes))
 							{
 								cleaned.Add((Byte)'(');
 								inObjectCode = true;
 							}
 							++c;
 						}
-						else if (inItemCode && (nextByte == '\x01') && IsSet(ls, LineSettings.ConvertItemBytes | LineSettings.CleanItemBytes))
+						else if (inItemCode && (nextByte == '\x01') && IsSet(lineSettings, LineSettings.ConvertItemBytes | LineSettings.CleanItemBytes))
 						{
-							if (IsSet(ls, LineSettings.ConvertItemBytes))
+							if (IsSet(lineSettings, LineSettings.ConvertItemBytes))
 							{
 								cleaned.Add((Byte)'}');
 								inItemCode = false;
 							}
 							++c;
 						}
-						else if (inKeyItemCode && (nextByte == '\x01') && IsSet(ls, LineSettings.ConvertKIBytes | LineSettings.CleanKIBytes))
+						else if (inKeyItemCode && (nextByte == '\x01') && IsSet(lineSettings, LineSettings.ConvertKIBytes | LineSettings.CleanKIBytes))
 						{
-							if (IsSet(ls, LineSettings.ConvertKIBytes))
+							if (IsSet(lineSettings, LineSettings.ConvertKIBytes))
 							{
 								cleaned.Add((Byte)']');
 								inKeyItemCode = false;
 							}
 							++c;
 						}
-						else if (inObjectCode && (nextByte == '\x01') && IsSet(ls, LineSettings.ConvertObjectBytes | LineSettings.CleanObjectBytes))
+						else if (inObjectCode && (nextByte == '\x01') && IsSet(lineSettings, LineSettings.ConvertObjectBytes | LineSettings.CleanObjectBytes))
 						{
-							if (IsSet(ls, LineSettings.ConvertObjectBytes))
+							if (IsSet(lineSettings, LineSettings.ConvertObjectBytes))
 							{
 								cleaned.Add((Byte)')');
 								inObjectCode = false;
 							}
 							++c;
 						}
-						else if (IsSet(ls, LineSettings.CleanOthers))
+						else if (IsSet(lineSettings, LineSettings.CleanOthers))
 						{
 							++c;
 						}
@@ -419,10 +423,11 @@ namespace FFACETools {
 						{
 							if (((bytearray1252[c] == '\x7F') && (((c + 1) < len) && bytearray1252[c + 1] == '\x31')) ||
 								((bytearray1252[c] == '\x81') && (((c + 1) < len) && bytearray1252[c + 1] == '\xA1')) ||
+								((bytearray1252[c] == '\x81') && (((c + 1) < len) && bytearray1252[c + 1] == '\x40')) ||
 								((bytearray1252[c] == '\x87') && (((c + 1) < len) && bytearray1252[c + 1] == '\xB2')) ||
 								((bytearray1252[c] == '\x87') && (((c + 1) < len) && bytearray1252[c + 1] == '\xB3')))
 							{
-								if (IsSet(ls, LineSettings.CleanOthers))
+								if (IsSet(lineSettings, LineSettings.CleanOthers))
 									++c;
 								else
 									i = -1;
@@ -440,10 +445,10 @@ namespace FFACETools {
 								// ++c; for Double-Byte combinations, this is not one.
 								// if we are NOT doing CleanNewLine
 								// then say we didn't find it.
-								if (!IsSet(ls, LineSettings.CleanNewLine))
+								if (!IsSet(lineSettings, LineSettings.CleanNewLine))
 									i = -1;
 							}
-							else if (!IsSet(ls, LineSettings.CleanOthers))
+							else if (!IsSet(lineSettings, LineSettings.CleanOthers))
 							{
 								// At this point, it's a \x07
 								// if we are NOT doing CleanOthers
@@ -456,11 +461,24 @@ namespace FFACETools {
 						// If the byte was not in a previous if/else,
 						// and we didn't find it in our "exceptions"
 						// then add it to the list.
-						if (i < 0)
+						if ((i < 0) && (bytearray1252[c] != '\0'))
 						{
 							cleaned.Add(bytearray1252[c]);
 						}
 					}
+				}
+				// got to end and didn't close an item/keyitem/object code?
+				if (inKeyItemCode && IsSet(lineSettings, LineSettings.ConvertKIBytes))
+				{
+					cleaned.Add((Byte)']');
+				}
+				else if (inObjectCode && IsSet(lineSettings, LineSettings.ConvertObjectBytes))
+				{
+					cleaned.Add((Byte)')');
+				}
+				else if (inItemCode && IsSet(lineSettings, LineSettings.ConvertItemBytes))
+				{
+					cleaned.Add((Byte)'}');
 				}
 				cleaned.Add(0);
 				#region The above code done with all line.Replace() instead.
@@ -569,7 +587,7 @@ namespace FFACETools {
 				//} // Detect and remove Windower Timestamp plugin text.
 
 
-				if (!IsSet(ls, LineSettings.CleanNewLine))
+				if (!IsSet(lineSettings, LineSettings.CleanNewLine))
 				{
 					// if it doesn't end with \r\n and we weren't supposed to CleanNewLine
 					// add it back on.
@@ -591,14 +609,14 @@ namespace FFACETools {
 				String stringToClean = s;
 				byte[] textb = System.Text.Encoding.GetEncoding(1252).GetBytes(stringToClean);
 				int index = -1, index2 = -1;
-				for (index = 0; (index + 1) < textb.Length; index++)
+				for (index = 0; (index + 2) < textb.Length; index++)
 				{
-					// to allow for extra color codes in Timestamp later.
-					if ((textb[index] == 0x1E) && (textb[index + 1] != 0x01))
+					// to allow for extra color codes in Timestamp later.			              // '['
+					if ((textb[index] == 0x1E) && (textb[index + 1] != 0x01) && (textb[index + 2] == '\x5B'))
 						break;
 				}
 
-				for (index2 = index; (index2 + 1) < textb.Length; index2++)
+				for (index2 = index+2; (index2 + 1) < textb.Length; index2++)
 				{
 					if ((textb[index2] == 0x1E) && (textb[index2 + 1] == 0x01))
 					{
@@ -855,12 +873,19 @@ namespace FFACETools {
 			} // @ public void Clear()
 
 			/// <summary>
+			/// Will get the next chat line with default LineSettings.OldSchool
+			/// </summary>
+			/// <returns>Null if no new line available, otherwise the new line and all assosciated data.</returns>
+			public ChatLine GetNextLine()
+			{
+				return GetNextLine(LineSettings.OldSchool);
+			}
+			/// <summary>
 			/// Will get the next chat line
 			/// </summary>
-			/// <param name="cleanLine">Whether to return a clean text line</param>
-			/// <param name="addcolor">Whether to return a color coded line</param>
-			/// <returns>Empty string if no new line available, otherwise the new line</returns>
-			public ChatLine GetNextLine(LineSettings lineSettings) //bool cleanLine, bool addcolor)
+			/// <param name="lineSettings">LineSettings to apply to cleanline.</param>
+			/// <returns>Null if no new line available, otherwise the new line and all assosciated data.</returns>
+			public ChatLine GetNextLine(LineSettings lineSettings)
 			{
 				ChatLine line = null;
 

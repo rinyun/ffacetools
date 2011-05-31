@@ -108,17 +108,17 @@ namespace FFACETools {
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern INVENTORYITEM GetInventoryItem(int instanceID, int index);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-		private static extern INVENTORYITEM GetSafeItem(int instanceID, byte index);
+		private static extern INVENTORYITEM GetSafeItem(int instanceID, int index);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern INVENTORYITEM GetStorageItem(int instanceID, int index);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-		private static extern INVENTORYITEM GetTempItem(int instanceID, byte index);
+		private static extern INVENTORYITEM GetTempItem(int instanceID, int index);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-		private static extern INVENTORYITEM GetLockerItem(int instanceID, byte index);
+		private static extern INVENTORYITEM GetLockerItem(int instanceID, int index);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-		private static extern INVENTORYITEM GetSatchelItem(int instanceID, byte index);
+		private static extern INVENTORYITEM GetSatchelItem(int instanceID, int index);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-		private static extern INVENTORYITEM GetSackItem(int instanceID, byte index);
+		private static extern INVENTORYITEM GetSackItem(int instanceID, int index);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern void GetSelectedItemName(int instanceID, byte[] buffer, ref int size);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
@@ -175,7 +175,8 @@ namespace FFACETools {
 		private static extern void GetNPCTradeInfo(int instanceID, ref TRADEINFO info);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern bool IsSynthesis(int InstanceID);
-
+		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+		private static extern float SetNPCPosH(int InstanceID, int index, float value);
 		/*		
 		 *		FFACE paid functions
 		 *
@@ -345,6 +346,8 @@ namespace FFACETools {
 		private static extern Job GetSearchSubJob(int instanceID, short index);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern byte GetSearchMainlvl(int instanceID, short index);
+		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+		private static extern byte GetSearchSublvl(int Instance, short index);
 		[DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 		private static extern void GetSearchName(int instanceID, short index, byte[] buffer, ref int size);
 

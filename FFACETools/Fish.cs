@@ -111,7 +111,7 @@ namespace FFACETools {
 			public int HPCurrent
 			{
 				get { return GetFishHP(_InstanceID); }
-
+				set { SetFishHP(_InstanceID, value); }
 			} // @ public int HPCurrent
 
 			/// <summary>
@@ -129,7 +129,7 @@ namespace FFACETools {
 			public int Timeout
 			{
 				get { return GetFishTimeout(_InstanceID); }
-
+				set { SetTimeOut(_InstanceID, (short)value); }
 			} // @ public int Timeout
 
 			/// <summary>
@@ -151,11 +151,22 @@ namespace FFACETools {
 
 			} // @ public FishID ID
 
+			#endregion
+
+			#region Methods
+			/// <summary>
+			/// Return value of FightFish success.
+			/// </summary>
+			public bool FightFish()
+			{
+				return FFACE.FightFish(_InstanceID);
+			} // @ public bool Fight
+
 			/// <summary>
 			/// Set the current HP of the fish on the line.
 			/// </summary>
-			/// <param name="value"></param>
-			/// <returns></returns>
+			/// <param name="value">Value to set the Fish's HP.</param>
+			/// <returns>true on success, false otherwise</returns>
 			public bool SetHP(int value)
 			{
 				bool result = false;
@@ -170,8 +181,8 @@ namespace FFACETools {
 			/// <summary>
 			/// Set the timeout value in seconds for the fish on the line (second before you lose your catch).
 			/// </summary>
-			/// <param name="value"></param>
-			/// <returns></returns>
+			/// <param name="value">Value in seconds to set the timeout to.</param>
+			/// <returns>true on success, false otherwise</returns>
 			public bool SetFishTimeOut(short value)
 			{
 				bool result = false;
@@ -184,15 +195,6 @@ namespace FFACETools {
 			} // @ public bool SetFishTimeOut
 
 			#endregion
-
-			/// <summary>
-			/// Return value of FightFish success.
-			/// </summary>
-			public bool FightFish()
-			{
-				return FFACE.FightFish(_InstanceID);
-			} // @ public bool Fight
-
 		} // @ public class FishTools
 	} // @ public partial class FFACE
 }

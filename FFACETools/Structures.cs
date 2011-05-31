@@ -27,7 +27,7 @@ namespace FFACETools {
 		} // @ public struct PlayerStats
 
 		/// <summary>
-		/// Element reistances of the player
+		/// Elemental resistances of the player
 		/// </summary>
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 		public struct PlayerElements {

@@ -130,7 +130,7 @@ namespace FFACETools {
 				/// <summary>
 				/// Will get a string representation of the current moon phase
 				/// </summary>
-				/// <param name="phase"></param>
+				/// <param name="phase">MoonPhase to get a proper String equivalent of.</param>
 				/// <returns></returns>
 				public string GetMoonPhaseName(MoonPhase phase)
 				{
@@ -289,8 +289,10 @@ namespace FFACETools {
 			/// <param name="index">Index of the ability</param>
 			public int GetAbilityRecast(byte index)
 			{
-				return FFACE.GetAbilityRecast(_InstanceID, index) / 60;
-
+				if (index >= 0 && index <= MAX_ABILITY_INDEX)
+					return FFACE.GetAbilityRecast(_InstanceID, index) / 60;
+				else
+					throw new ArgumentOutOfRangeException("Must be within 0 to MAX_ABILITY_INDEX");
 			} // @ public int GetAbilityRecast(byte index)
 
 			/// <summary>
@@ -299,7 +301,10 @@ namespace FFACETools {
 			/// <param name="index">Index of the ability</param>
 			public AbilityList GetAbilityID(byte index)
 			{
-				return FFACE.GetAbilityID(_InstanceID, index);
+				if (index >= 0 && index <= MAX_ABILITY_INDEX)
+					return FFACE.GetAbilityID(_InstanceID, index);
+				else
+					throw new ArgumentOutOfRangeException("Must be within 0 to MAX_ABILITY_INDEX");
 
 			} // @ public byte GetAbilityID(byte index)
 

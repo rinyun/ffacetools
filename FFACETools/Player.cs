@@ -508,15 +508,23 @@ namespace FFACETools {
 			/// <summary>
 			/// Returns true if you are in the middle of a synth
 			/// </summary>
+			public bool Synthing
+			{
+				get	{ return IsSynthesis(_InstanceID); }
+			}
+
+			#endregion
+
+			#region Methods
+			/// <summary>
+			/// Returns true if you are in the middle of a synth
+			/// </summary>
 			public bool IsSynthing()
 			{
 				return IsSynthesis(_InstanceID);
 
 			} // @ public bool Synthing()
 
-			#endregion
-
-			#region Methods
 
 			/// <summary>
 			/// Gets the PLAYERINFO struct from FFACE

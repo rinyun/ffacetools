@@ -252,6 +252,10 @@ namespace FFACETools {
 			/// <param name="index">Index of the item</param>
 			public uint GetInventoryItemCountByIndex(byte index)
 			{
+				// 0 is gil, rest is 1-80
+				if (0 > index || 80 < index)
+					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+
 				return GetInventoryItem(index).Count;
 			}
 
@@ -272,7 +276,7 @@ namespace FFACETools {
 			/// <param name="index">Index of the item in your inventory</param>
 			public int GetInventoryItemIDByIndex(byte index)
 			{
-				if (1 > index || 80 < index)
+				if (0 > index || 80 < index)
 					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
 
 				return GetInventoryItem(index).ID;
@@ -306,6 +310,9 @@ namespace FFACETools {
 			/// <param name="index">Index of the item</param>
 			public InventoryItem GetInventoryItem(int index)
 			{
+				if (1 > index || 80 < index)
+					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+
 				// done this way because INVENTORYITEM is a private structure
 				INVENTORYITEM item = FFACE.GetInventoryItem(_InstanceID, index);
 				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra, InventoryType.Inventory);
@@ -387,6 +394,9 @@ namespace FFACETools {
 			/// <param name="index">Index of the item</param>
 			public uint GetSafeItemCountByIndex(byte index)
 			{
+				if (1 > index || 80 < index)
+					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+
 				return GetSafeItem(index).Count;
 
 			} // @ public byte GetItemCountByIndex(byte index)
@@ -429,7 +439,7 @@ namespace FFACETools {
 			/// Gets information about an item from your safe
 			/// </summary>
 			/// <param name="index">Index of the item</param>
-			public InventoryItem GetSafeItem(ushort index)
+			public InventoryItem GetSafeItem(int index)
 			{
 				if (1 > index || 80 < index)
 					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
@@ -448,6 +458,9 @@ namespace FFACETools {
 			/// <param name="index">Index of the item</param>
 			public uint GetStorageItemCountByIndex(byte index)
 			{
+				if (1 > index || 80 < index)
+					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+
 				return GetStorageItem(index).Count;
 
 			} // @ public byte GetItemCountByIndex(byte index)
@@ -492,6 +505,9 @@ namespace FFACETools {
 			/// <param name="index">Index of teh item</param>
 			public InventoryItem GetStorageItem(int index)
 			{
+				if (1 > index || 80 < index)
+					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+
 				// done this way because INVENTORYITEM is a private structure
 				INVENTORYITEM item = FFACE.GetStorageItem(_InstanceID, index);
 				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra, InventoryType.Storage);
@@ -506,6 +522,8 @@ namespace FFACETools {
 			/// <param name="index">Index of the item</param>
 			public uint GetLockerItemCountByIndex(byte index)
 			{
+				if (1 > index || 80 < index)
+					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
 				return GetLockerItem(index).Count;
 
 			} // @ public byte GetItemCountByIndex(byte index)
@@ -548,7 +566,7 @@ namespace FFACETools {
 			/// Gets information about an item from your locker
 			/// </summary>
 			/// <param name="index">Index of the item</param>
-			public InventoryItem GetLockerItem(ushort index)
+			public InventoryItem GetLockerItem(int index)
 			{
 				if (1 > index || 80 < index)
 					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
@@ -567,6 +585,9 @@ namespace FFACETools {
 			/// <param name="index">Index of the item</param>
 			public uint GetTempItemCountByIndex(byte index)
 			{
+				if (1 > index || 80 < index)
+					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+
 				return GetTempItem(index).Count;
 
 			} // @ public byte GetItemCountByIndex(byte index)
@@ -609,7 +630,7 @@ namespace FFACETools {
 			/// Gets information about a temporary item
 			/// </summary>
 			/// <param name="index">Index of the item</param>
-			public InventoryItem GetTempItem(ushort index)
+			public InventoryItem GetTempItem(int index)
 			{
 				if (1 > index || 80 < index)
 					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
@@ -628,6 +649,8 @@ namespace FFACETools {
 			/// <param name="index">Index of the item</param>
 			public uint GetSatchelItemCountByIndex(byte index)
 			{
+				if (1 > index || 80 < index)
+					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
 				return GetSatchelItem(index).Count;
 
 			} // @ public byte GetItemCountByIndex(byte index)
@@ -670,7 +693,7 @@ namespace FFACETools {
 			/// Gets information about an item from your Satchel
 			/// </summary>
 			/// <param name="index">Index of the item</param>
-			public InventoryItem GetSatchelItem(ushort index)
+			public InventoryItem GetSatchelItem(int index)
 			{
 				if (1 > index || 80 < index)
 					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
@@ -689,6 +712,8 @@ namespace FFACETools {
 			/// <param name="index">Index of the item</param>
 			public uint GetSackItemCountByIndex(byte index)
 			{
+				if (1 > index || 80 < index)
+					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
 				return GetSackItem(index).Count;
 
 			} // @ public byte GetItemCountByIndex(byte index)
@@ -731,13 +756,13 @@ namespace FFACETools {
 			/// Gets information about an item from your Sack
 			/// </summary>
 			/// <param name="index">Index of the item</param>
-			public InventoryItem GetSackItem(ushort index)
+			public InventoryItem GetSackItem(int index)
 			{
 				if (1 > index || 80 < index)
 					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
 
 				// done this way because INVENTORYITEM is a private structure
-				INVENTORYITEM item = FFACE.GetSackItem(_InstanceID, (byte)index);
+				INVENTORYITEM item = FFACE.GetSackItem(_InstanceID, index);
 				return new InventoryItem(item.ID, item.Index, item.Count, item.Flag, item.Price, item.Extra, InventoryType.Sack);
 
 			} // @ public InventoryItem GetSatchelItem(ushort index)
@@ -785,9 +810,9 @@ namespace FFACETools {
 			/// Gets information about an item currently in the treasure pool
 			/// </summary>
 			/// <param name="index">Index of the treasure item</param>
-			public TREASUREITEM GetTreasureItem(byte index)
+			public TREASUREITEM GetTreasureItem(int index)
 			{
-				return FFACE.GetTreasureItem(_InstanceID, index);
+				return FFACE.GetTreasureItem(_InstanceID, (byte)index);
 
 			} // @ public TREASUREITEM GetTrasureItem(byte index)
 

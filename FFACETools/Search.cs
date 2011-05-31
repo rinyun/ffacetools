@@ -39,9 +39,9 @@ namespace FFACETools {
 			/// <summary>
 			/// Total amount lines shown in the search result (including breaks like "Want to Buy"
 			/// </summary>
-			public byte PageCount
+			public int PageCount
 			{
-				get { return GetSearchPageCount(_InstanceID); }
+				get { return (int)GetSearchPageCount(_InstanceID); }
 
 			} // @ public byte PageCount
 
@@ -86,6 +86,16 @@ namespace FFACETools {
 			public byte MainLvl(short index)
 			{
 				return GetSearchMainlvl(_InstanceID, index);
+
+			} // @ public byte MainLvl
+
+			/// <summary>
+			/// Main level of the search result index
+			/// </summary>
+			/// <param name="index">Index of the search results to check</param>
+			public byte SubLvl(short index)
+			{
+				return GetSearchSublvl(_InstanceID, index);
 
 			} // @ public byte MainLvl
 

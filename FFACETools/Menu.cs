@@ -154,6 +154,9 @@ namespace FFACETools {
 
 			} // @ public byte ShopQuantity
 
+			#endregion
+
+			#region Methods
 			///Set Items in npc trade window
 			///<param name="sTinfo">NPCTRADEINFO structure</param>
 			///</summary>
@@ -161,11 +164,19 @@ namespace FFACETools {
 			{
 				bool result = false;
 
-				for (int i = 0; i < sTinfo.items.Length; i++)
+				if (sTinfo.items == null)
 				{
-					result = FFACE.SetNPCTradeInfo(_InstanceID, 0, sTinfo.items[i].ItemID, sTinfo.items[i].Index, sTinfo.items[i].Count, (byte)i, sTinfo.Gil);
-					if (!result)
-						break;
+					result = FFACE.SetNPCTradeInfo(_InstanceID, 0, 0, 0, 0, 0, sTinfo.Gil);
+
+				}
+				else
+				{
+					for (int i = 0; i < sTinfo.items.Length; i++)
+					{
+						result = FFACE.SetNPCTradeInfo(_InstanceID, 0, sTinfo.items[i].ItemID, sTinfo.items[i].Index, sTinfo.items[i].Count, (byte)i, sTinfo.Gil);
+						if (!result)
+							break;
+					}
 				}
 				return result;
 			} // @ public bool SetNPCTradeInformation
@@ -178,16 +189,44 @@ namespace FFACETools {
 			{
 				bool result = false;
 
-				for (byte i = 0; i < sTinfo.items.Length; i++)
+				if (sTinfo.items == null)
 				{
-					result = FFACE.SetCraftItem(_InstanceID, 0, sTinfo.items[i].ItemID, sTinfo.items[i].Index, sTinfo.items[i].Count, i);
-					if (!result)
-						break;
+					return false;
+				}
+				else
+				{
+					for (byte i = 0; i < sTinfo.items.Length; i++)
+					{
+						result = FFACE.SetCraftItem(_InstanceID, 0, sTinfo.items[i].ItemID, sTinfo.items[i].Index, sTinfo.items[i].Count, i);
+						if (!result)
+							break;
+					}
 				}
 				return result;
 			} // @ public bool SetCraftItems
 
+			///<summary>
+			/// Returns a class containing the dialog text
+			///</summary>
+			public DialogText GetDialogText()
+			{
+				return DialogText;
+			}
 
+			///<summary>
+			/// Returns a class containing the dialog text
+			///</summary>
+			public DialogText GetDialogText(LineSettings lineSettings)
+			{
+				if (DialogID == 0)
+					return new DialogText(String.Empty);
+				int size = 4096;
+				byte[] buffer = new byte[size];
+				GetDialogStrings(_InstanceID, buffer, ref size);
+				if (size <= 3)
+					return new DialogText(String.Empty);
+				return new DialogText(System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 3).Trim(), lineSettings);
+			}
 			#endregion
 
 		} // @ public class Menu

@@ -78,6 +78,15 @@ namespace FFACETools {
 
 			#region Methods
 
+			public void SetViewMode(ViewMode newMode)
+			{
+				if (_FFACE.Player.ViewMode != newMode)
+				{
+					_FFACE.Windower.SendKeyPress(KeyCode.NP_Number5);
+					System.Threading.Thread.Sleep(SpeedDelay);
+				}
+			}
+
 			/// <summary>
 			/// Will move the player to the passed destination
 			/// </summary>
@@ -86,8 +95,19 @@ namespace FFACETools {
 			/// <param name="KeepRunning">Whether to keep moving after reaching the destination</param>
 			public void GotoXZ(dPoint x, dPoint z, bool KeepRunning)
 			{
-				GotoXYZ(x, () => _FFACE.Player.PosY, z, KeepRunning);
+				GotoXYZ(x, () => _FFACE.Player.PosY, z, KeepRunning, -1);
 			} // @ public void GotoXZ(dPoint x, dPoint z, bool KeepRunning)
+
+			/// <summary>
+			/// Will move the player to the passed destination
+			/// </summary>
+			/// <param name="x">X coordinate of the destination</param>
+			/// <param name="z">Z coordinate of the destination</param>
+			/// <param name="KeepRunning">Whether to keep moving after reaching the destination</param>
+			public void GotoXZ(dPoint x, dPoint z, bool KeepRunning, int timeOut)
+			{
+				GotoXYZ(x, () => _FFACE.Player.PosY, z, KeepRunning, timeOut);
+			}
 
 			/// <summary>
 			/// Will move the player to the passed destination
@@ -97,6 +117,51 @@ namespace FFACETools {
 			/// <param name="z">Z coordinate of the destination</param>
 			/// <param name="KeepRunning">Whether to keep moving after reaching the destination</param>
 			public void GotoXYZ(dPoint x, dPoint y, dPoint z, bool KeepRunning)
+			{
+				GotoXYZ(x, y, z, KeepRunning, -1);
+			}
+
+
+			public bool SetPlayerDegrees(double degrees)
+			{
+				if (degrees < 0 || degrees > 360)
+				{
+					return false;
+				}
+				if (FFACE.SetNPCPosH(_FFACE._InstanceID, _FFACE.Player.ID, ConvertDegreesToPosH(degrees)) != 0.0f)
+					return true;
+				return false;
+			}
+
+			private bool SetNPCDegrees(int index, double degrees)
+			{
+				if (degrees < 0 || degrees > 360)
+				{
+					return false;
+				}
+				if (FFACE.SetNPCPosH(_FFACE._InstanceID, index, ConvertDegreesToPosH(degrees)) != 0.0f)
+					return true;
+				return false;
+			}
+
+			public void SetPlayerPosH(float value)
+			{
+				FFACE.SetNPCPosH(_FFACE._InstanceID, _FFACE.Player.ID, value);
+			}
+
+			private void SetNPCPosH(int index, float value)
+			{
+				FFACE.SetNPCPosH(_FFACE._InstanceID, index, value);
+			}
+
+			/// <summary>
+			/// Will move the player to the passed destination
+			/// </summary>
+			/// <param name="x">X coordinate of the destination</param>
+			/// <param name="y">Y coordinate of the destination</param>
+			/// <param name="z">Z coordinate of the destination</param>
+			/// <param name="KeepRunning">Whether to keep moving after reaching the destination</param>
+			public void GotoXYZ(dPoint x, dPoint y, dPoint z, bool KeepRunning, int timeOut)
 			{
 				float X = x();
 				float Y = y();
@@ -109,30 +174,43 @@ namespace FFACETools {
 				if (RH > 180)
 					RH = RH - 360;
 
+				SetViewMode(ViewMode.FirstPerson);
 				if (_IsRunning)
 				{
 					// if we're out of our heading tolerance
 					if (Math.Abs(RH) > HeadingTolerance * StayRunningAmount)
 					{
+						SetPlayerDegrees(HeadingToPosXYZ(X, Y, Z));
 						// stop moving, and adjust heading
+						/* OLD Way
 						StopRunning();
 						FacePosXZ(X, Z);
+						 */
 					}
-					else
-						if (Math.Abs(RH) > HeadingTolerance)
-							FacePosXZ(X, Z);
-
 				} // @ if (_IsRunning)
+				else if (Math.Abs(RH) > HeadingTolerance)
+				{
+					SetPlayerDegrees(HeadingToPosXYZ(X, Y, Z));
+					/* OLD WAY
+					 FacePosXZ(X, Z);
+					 */
+				}
+
+
+				DateTime Now = DateTime.Now;
 
 				StartRunning();
 
 				// while we're not within our distance tolerance
-				while (DistanceToPosXYZ(X, Y, Z) > DistanceTolerance)
+				while ((DistanceToPosXYZ(X, Y, Z) > DistanceTolerance) &&
+					((timeOut <= 0) || ((timeOut > 0) && ((DateTime.Now - Now).TotalMilliseconds) < timeOut)))
 				{
+					SetViewMode(ViewMode.FirstPerson);
 					double dist = DistanceToPosXYZ(X, Y, Z);
 					X = x();
 					Y = y();
 					Z = z();
+
 					RH = Math.Abs(HeadingToPosXZ(X, Z) - GetPlayerPosHInDegrees());
 
 					if (GetPlayerPosHInDegrees() > HeadingToPosXZ(X, Z))
@@ -141,13 +219,16 @@ namespace FFACETools {
 					if (RH > 180)
 						RH = RH - 360;
 
+					//double calcTolerance = Math.Abs(dist - (HeadingTolerance * StayRunningAmount));
+
 					// if we're out of our heading tolerance
-					if (Math.Abs(RH) > HeadingTolerance * StayRunningAmount)
+					if (Math.Abs(RH) > HeadingTolerance * StayRunningAmount) // calcTolerance) 
 					{
 						// stop moving and adjust heading
-						StopRunning();
+						/*StopRunning();
 						FacePosXZ(X, Z);
-						StartRunning();
+						StartRunning();*/
+						SetPlayerDegrees(HeadingToPosXYZ(X, Y, Z));
 					}
 
 					if (RH < -HeadingTolerance)
@@ -170,7 +251,7 @@ namespace FFACETools {
 			/// <param name="ID">ID of the NPC</param>
 			public void GotoNPCXZ(short ID)
 			{
-				GotoXYZ(() => _FFACE.NPC.PosX(ID), () => _FFACE.NPC.PosY(ID), () => _FFACE.NPC.PosZ(ID), false);
+				GotoXYZ(() => _FFACE.NPC.PosX(ID), () => _FFACE.NPC.PosY(ID), () => _FFACE.NPC.PosZ(ID), false, -1);
 
 			} // @ public void GotoNPCXZ(short ID)
 
@@ -178,9 +259,27 @@ namespace FFACETools {
 			/// Will go to the passed NPC's location
 			/// </summary>
 			/// <param name="ID">ID of the NPC</param>
+			public void GotoNPCXZ(short ID, int timeOut)
+			{
+				GotoXYZ(() => _FFACE.NPC.PosX(ID), () => _FFACE.NPC.PosY(ID), () => _FFACE.NPC.PosZ(ID), false, timeOut);
+			}
+			
+			/// <summary>
+			/// Will go to the passed NPC's location
+			/// </summary>
+			/// <param name="ID">ID of the NPC</param>
+			public void GotoNPCXYZ(short ID, int timeOut)
+			{
+				GotoXYZ(() => _FFACE.NPC.PosX(ID), () => _FFACE.NPC.PosY(ID), () => _FFACE.NPC.PosZ(ID), false, timeOut);
+			}
+			
+			/// <summary>
+			/// Will go to the passed NPC's location
+			/// </summary>
+			/// <param name="ID">ID of the NPC</param>
 			public void GotoNPCXYZ(short ID)
 			{
-				GotoXYZ(() => _FFACE.NPC.PosX(ID), () => _FFACE.NPC.PosY(ID), () => _FFACE.NPC.PosZ(ID), false);
+				GotoXYZ(() => _FFACE.NPC.PosX(ID), () => _FFACE.NPC.PosY(ID), () => _FFACE.NPC.PosZ(ID), false, -1);
 
 			} // @ public void GotoNPCXYZ(short ID)
 
@@ -189,19 +288,35 @@ namespace FFACETools {
 			/// </summary>
 			public void GotoTargetXZ()
 			{
-				GotoXYZ(() => _FFACE.Target.PosX, () => _FFACE.Target.PosY, () => _FFACE.Target.PosZ, false);
+				GotoXYZ(() => _FFACE.Target.PosX, () => _FFACE.Target.PosY, () => _FFACE.Target.PosZ, false, -1);
 
 			} // @ public void GotoTargetXZ()
 
 			/// <summary>
 			/// Will go to the current target's location
 			/// </summary>
+			public void GotoTargetXZ(int timeOut)
+			{
+				GotoXYZ(() => _FFACE.Target.PosX, () => _FFACE.Target.PosY, () => _FFACE.Target.PosZ, false, timeOut);
+			}
+			
+			/// <summary>
+			/// Will go to the current target's location
+			/// </summary>
 			public void GotoTargetXYZ()
 			{
-				GotoXYZ(() => _FFACE.Target.PosX, () => _FFACE.Target.PosY, () => _FFACE.Target.PosZ, false);
+				GotoXYZ(() => _FFACE.Target.PosX, () => _FFACE.Target.PosY, () => _FFACE.Target.PosZ, false, -1);
 
 			} // @ public void GotoTargetXYZ()
 
+			/// <summary>
+			/// Will go to the current target's location
+			/// </summary>
+			public void GotoTargetXYZ(int timeOut)
+			{
+				GotoXYZ(() => _FFACE.Target.PosX, () => _FFACE.Target.PosY, () => _FFACE.Target.PosZ, false, timeOut);
+			}
+			
 			/// <summary>
 			/// Whether we're currently moving or not
 			/// </summary>
@@ -297,9 +412,17 @@ namespace FFACETools {
 			/// </summary>
 			private double GetPlayerPosHInDegrees()
 			{
-				double degrees = _FFACE.Player.PosH * (180 / Math.PI) + 90;
+				return GetPosHInDegrees(_FFACE.Player.PosH);
+			} // @ private double GetPlayerPosHInDegrees()
 
-				if (degrees > 360)
+			/// <summary>
+			/// Will get the heading in degrees, and north as 0/360
+			/// </summary>
+			public double GetPosHInDegrees(float PosH)
+			{
+				double degrees = PosH * (180 / Math.PI) + 90;
+
+				if (degrees >= 360)
 					degrees -= 360;
 				else if (degrees < 0)
 					degrees += 360;
@@ -307,6 +430,34 @@ namespace FFACETools {
 				return degrees;
 
 			} // @ private double GetPlayerPosHInDegrees()
+
+			public float ConvertDegreesToPosH(double Degrees)
+			{
+				// Normal Radians			FFXI Radians			Turns
+				//		N 0/2Pi					N -Pi/2				N  0 or Turn
+				//	W Pi/2	E 3Pi/2			W -Pi/Pi	E 0		W Turn/4	E 3Turn/4
+				//		S Pi					S Pi/2				S Turn/2
+
+				double degrees = Degrees;
+				float PosH;
+				degrees = degrees + 90;
+				if (degrees > 360)
+					degrees -= 360;
+				else if (degrees < 0)
+					degrees += 360;
+				PosH = ((float)(((degrees * Math.PI) / 180.0f)) - (float)Math.PI);
+				//if (PosH > (2*Math.PI))
+				//{
+				//    PosH -= (float)(2*Math.PI);
+				//}
+				//else if (PosH < -(2*Math.PI))
+				//{
+				//    PosH += (float)(2*Math.PI);
+				//}
+				// 359 degrees = -Pi/2   0 = -Pi/2
+				// 
+				return PosH;
+			}
 
 			/// <summary>
 			/// Will start moving the player to the destination
@@ -317,7 +468,7 @@ namespace FFACETools {
 				{
 					_IsRunning = true;
 					_FFACE.Windower.SendKey(KeyCode.NP_Number8, true);
-					System.Threading.Thread.Sleep(SpeedDelay * 5);
+					System.Threading.Thread.Sleep(SpeedDelay);
 
 				} // @ if (!_IsRunning)
 			} // @ private void StartRunning()
@@ -331,7 +482,7 @@ namespace FFACETools {
 				{
 					_IsRunning = false;
 					_FFACE.Windower.SendKey(KeyCode.NP_Number8, false);
-					System.Threading.Thread.Sleep(SpeedDelay * 5);
+					System.Threading.Thread.Sleep(SpeedDelay);
 
 				} // @ if (_IsRunning)
 			} // @ private void StopRunning()
@@ -369,12 +520,10 @@ namespace FFACETools {
 					if (RH < -HeadingTolerance)
 					{
 						_FFACE.Windower.SendKeyPress(KeyCode.NP_Number4);
-						System.Threading.Thread.Sleep(SpeedDelay);
 					}
 					else if (RH > HeadingTolerance)
 					{
 						_FFACE.Windower.SendKeyPress(KeyCode.NP_Number6);
-						System.Threading.Thread.Sleep(SpeedDelay);
 					}
 
 					System.Threading.Thread.Sleep(SpeedDelay);

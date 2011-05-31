@@ -99,9 +99,9 @@ namespace FFACETools {
 		#region Constructor/Destructor
 
 		/// <summary>
-		/// Constructor that instanciates FFACE
+		/// Constructor that instantiates FFACE
 		/// </summary>
-		/// <param name="processID"></param>
+		/// <param name="processID">The Process ID of the POL Process you want to interface with.</param>
 		public FFACE(int processID)
 		{
 			// create our FFACE instance

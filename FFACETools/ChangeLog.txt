@@ -1,3 +1,33 @@
+Version 1.3.1.4
+	- Bump to 1.3.1.4
+	- Add GetNextLine() (no arguments)  Will use the default LineSettings.OldSchool
+	- FishTools.TimeOut can now be used as an alternative to SetTimeOut which will return false on failure if you don't care about return values.
+	- Add fix for line splits caused by small resolutions. Issue caused font to auto-change to fixed-width in some RTB displays.
+	- Final fix to CleanLine for additional NULLs showing up in Strings (No longer adding bytes if they're equal to \0.
+	- Fix for item/key item/object item codes being split on smaller resolutions causing text to disappear when LineSettings.CleanTimeStamp is set.
+	- Fix mentioned also causes these items to be displayed as {gold } and {carp} when split onto multiple lines.
+	- Fix for CleanTimeStamp to resolve issue with smaller resolutions and items disappearing from cleaned lines.
+	- FishTools.HPCurrent is now a writable property.  HPCurrent = 0.  Calls SetFishHP (Same as FishTools.SetHP())
+	- FishTools.TimeOut is now a writeable property. TimeOut = 30, Calls SetTimeOut (Same as FishTools.SetTimeOut())
+	- Fix imports internally for some FFACE functions
+	- Add import for FFACE SetNPCPosH() (used in NavTools)
+	- Add import for GetSearchSublvl() (used in SearchTools)
+	- Add range checks to Get*ItemCountByIndex functions they were missing from.
+	- Allow people to use an index of 0 with GetInventoryItemIDByIndex (the ID is 0xFFFF)
+	- Add range checks to Get*Item functions they were missing from
+	- Add fix to MenuTools.SetNPCTradeInformation() to not crash if TRADEITEM[] was null (sets gil)
+	- Add fix to MenuTools.SetCraftItems() to not crash if TRADEITEM[] was null (returns false)
+	- Add GetDialogText() and GetDialogText(LineSettings lineSettings) to allow folks to Clean their own dialog text
+	- Add Navigator.SetViewMode(ViewMode vm). Forces ViewMode if not set.  Used automatically in GoTo*() functions
+	- Add 'int timeOut' overloads to all GoTo*() functions to set a timeOut (in ms, <= 0 for infinite) to give up running toward target.
+	- Add SetPlayerPosH(float value) and SetPlayerDegrees(double degrees) functions.  Used in GoTo*() functions.
+	- Add float ConvertDegreesToPosH(double degrees) - Converts a degree (0/360 north, 90 east, 270 west) to an FFXI PosH
+	- NPCTools.Name returns String.Empty if size is 0 instead of crashing
+	- Add PlayerTools.Synthing property (same as IsSynthing() Method)
+	- Modify SearchTools.PageCount to an int instead of a byte
+	- Add SearchTools.SubLvl(short index) to complete SearchTools
+	- Add range checking to TimerTools.GetAbilityRecast/GetAbilityID
+
 Version 1.3.1.3
 	- Add public int GetAbilityRecast(AbilityList) (use sparingly, it loops) to mimic GetSpellRecast(SpellList)
 	- GetAbilityRecast(AbilityList) returns -1 if the ability is not "equipped", GetAbilityRecast(short index) will not.

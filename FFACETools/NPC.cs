@@ -149,7 +149,8 @@ namespace FFACETools {
 				int size = 20;
 				byte[] buffer = new byte[size];
 				GetNPCName(_InstanceID, id, buffer, ref size);
-
+				if (size <= 0)
+					return String.Empty;
 				return System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
 
 			} // @ public bool Name
