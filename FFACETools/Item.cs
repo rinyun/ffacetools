@@ -11,7 +11,11 @@ namespace FFACETools {
 			/// <summary>
 			/// Argument exception for inventory item calls
 			/// </summary>
-			private const string INVENTORY_RANGE = "Index must be between 1 and 80";
+			private const string INVENTORY_RANGE = "Index must be between 0 and 80";
+			/// <summary>
+			/// Argument exception for non-inventory item calls (satchel/sack/etc)
+			/// </summary>
+			private const string OTHERBAG_RANGE = "Index must be between 1 and 80";
 
 			#endregion
 
@@ -178,7 +182,7 @@ namespace FFACETools {
 			} // @ public short SatchelMax
 
 			/// <summary>
-			/// Inventory slots in use
+			/// Inventory slots in use, returns -1 on error
 			/// </summary>
 			public short InventoryCount
 			{
@@ -197,6 +201,156 @@ namespace FFACETools {
 				}
 
 			} // @ public short InventoryCount
+
+			/// <summary>
+			/// Sack slots in use, returns -1 on error
+			/// </summary>
+			public short SackCount
+			{
+				get
+				{
+					// calculate amount of slots are not empty
+					// -1 for error (loading/zoning)
+					short count = -1;
+
+					for (byte i = 1; i <= 80; i++)
+						if (!GetSackItem(i).ID.Equals(0))
+						{
+							count++;
+						}
+					// since we found at least ONE item, we want to report count+1 (0 == 1 item)
+					// since we started counting at item 1
+					if (count != -1)
+						count++;
+					return count;
+				}
+
+			} // @ public short SackCount
+
+			/// <summary>
+			/// Locker slots in use, returns -1 on error
+			/// </summary>
+			public short LockerCount
+			{
+				get
+				{
+					// calculate amount of slots are not empty
+					// -1 for error (loading/zoning)
+					short count = -1;
+
+					for (byte i = 1; i <= 80; i++)
+						if (!GetLockerItem(i).ID.Equals(0))
+						{
+							count++;
+						}
+					// since we found at least ONE item, we want to report count+1 (0 == 1 item)
+					// since we started counting at item 1
+					if (count != -1)
+						count++;
+					return count;
+				}
+
+			} // @ public short LockerCount
+
+			/// <summary>
+			/// Safe slots in use, returns -1 on error
+			/// </summary>
+			public short SafeCount
+			{
+				get
+				{
+					// calculate amount of slots are not empty
+					// -1 for error (loading/zoning)
+					short count = -1;
+
+					for (byte i = 1; i <= 80; i++)
+						if (!GetSafeItem(i).ID.Equals(0))
+						{
+							count++;
+						}
+					// since we found at least ONE item, we want to report count+1 (0 == 1 item)
+					// since we started counting at item 1
+					if (count != -1)
+						count++;
+					return count;
+				}
+
+			} // @ public short SafeCount
+
+			/// <summary>
+			/// Storage slots in use, returns -1 on error
+			/// </summary>
+			public short StorageCount
+			{
+				get
+				{
+					// calculate amount of slots are not empty
+					// -1 for error (loading/zoning)
+					short count = -1;
+
+					for (byte i = 1; i <= 80; i++)
+						if (!GetStorageItem(i).ID.Equals(0))
+						{
+							count++;
+						}
+					// since we found at least ONE item, we want to report count+1 (0 == 1 item)
+					// since we started counting at item 1
+					if (count != -1)
+						count++;
+					return count;
+				}
+
+			} // @ public short StorageCount
+
+			/// <summary>
+			/// Temporary slots in use, returns -1 on error
+			/// </summary>
+			public short TemporaryCount
+			{
+				get
+				{
+					// calculate amount of slots are not empty
+					// -1 for error (loading/zoning)
+					short count = -1;
+
+					for (byte i = 1; i <= 80; i++)
+						if (!GetTempItem(i).ID.Equals(0))
+						{
+							count++;
+						}
+					// since we found at least ONE item, we want to report count+1 (0 == 1 item)
+					// since we started counting at item 1
+					if (count != -1)
+						count++;
+					return count;
+				}
+
+			} // @ public short TemporaryCount
+
+			/// <summary>
+			/// Satchel slots in use, returns -1 on error
+			/// </summary>
+			public short SatchelCount
+			{
+				get
+				{
+					// calculate amount of slots are not empty
+					// -1 for error (loading/zoning)
+					short count = -1;
+
+					for (byte i = 1; i <= 80; i++)
+						if (!GetSatchelItem(i).ID.Equals(0))
+						{
+							count++;
+						}
+					// since we found at least ONE item, we want to report count+1 (0 == 1 item)
+					// since we started counting at item 1
+					if (count != -1)
+						count++;
+					return count;
+				}
+
+			} // @ public short SatchelCount
 
 			/// <summary>
 			/// Name of the selected item
@@ -225,12 +379,12 @@ namespace FFACETools {
 			} // @ public short SelectedItemIndex
 
 			///<summary>
-			///Id of the selected item
+			/// Id of the selected item
 			///</summary>
 			public int SelectedItemID
 			{
 				get { return GetInventoryItemIDByIndex(GetSelectedItemIndex(_InstanceID)); }
-			}
+			} // @ public int SelectedItemID
 
 			/// <summary>
 			/// Place in inventory (1 -> max inventory)
@@ -291,7 +445,7 @@ namespace FFACETools {
 			{
 				uint count = 0;
 
-				for (byte i = 1; i <= 80; i++)
+				for (byte i = 0; i <= 80; i++)
 				{
 					InventoryItem item = GetInventoryItem(i);
 
@@ -310,7 +464,7 @@ namespace FFACETools {
 			/// <param name="index">Index of the item</param>
 			public InventoryItem GetInventoryItem(int index)
 			{
-				if (1 > index || 80 < index)
+				if (0 > index || 80 < index)
 					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
 
 				// done this way because INVENTORYITEM is a private structure
@@ -395,7 +549,7 @@ namespace FFACETools {
 			public uint GetSafeItemCountByIndex(byte index)
 			{
 				if (1 > index || 80 < index)
-					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+					throw new ArgumentOutOfRangeException(OTHERBAG_RANGE);
 
 				return GetSafeItem(index).Count;
 
@@ -408,7 +562,7 @@ namespace FFACETools {
 			public int GetSafeItemIDByIndex(byte index)
 			{
 				if (1 > index || 80 < index)
-					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+					throw new ArgumentOutOfRangeException(OTHERBAG_RANGE);
 
 				return GetSafeItem(index).ID;
 
@@ -442,7 +596,7 @@ namespace FFACETools {
 			public InventoryItem GetSafeItem(int index)
 			{
 				if (1 > index || 80 < index)
-					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+					throw new ArgumentOutOfRangeException(OTHERBAG_RANGE);
 
 				// done this way because INVENTORYITEM is a private structure
 				INVENTORYITEM item = FFACE.GetSafeItem(_InstanceID, (byte)index);
@@ -459,7 +613,7 @@ namespace FFACETools {
 			public uint GetStorageItemCountByIndex(byte index)
 			{
 				if (1 > index || 80 < index)
-					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+					throw new ArgumentOutOfRangeException(OTHERBAG_RANGE);
 
 				return GetStorageItem(index).Count;
 
@@ -472,7 +626,7 @@ namespace FFACETools {
 			public int GetStorageItemIDByIndex(byte index)
 			{
 				if (1 > index || 80 < index)
-					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+					throw new ArgumentOutOfRangeException(OTHERBAG_RANGE);
 
 				return GetStorageItem(index).ID;
 
@@ -506,7 +660,7 @@ namespace FFACETools {
 			public InventoryItem GetStorageItem(int index)
 			{
 				if (1 > index || 80 < index)
-					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+					throw new ArgumentOutOfRangeException(OTHERBAG_RANGE);
 
 				// done this way because INVENTORYITEM is a private structure
 				INVENTORYITEM item = FFACE.GetStorageItem(_InstanceID, index);
@@ -523,7 +677,7 @@ namespace FFACETools {
 			public uint GetLockerItemCountByIndex(byte index)
 			{
 				if (1 > index || 80 < index)
-					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+					throw new ArgumentOutOfRangeException(OTHERBAG_RANGE);
 				return GetLockerItem(index).Count;
 
 			} // @ public byte GetItemCountByIndex(byte index)
@@ -535,7 +689,7 @@ namespace FFACETools {
 			public int GetLockerItemIDByIndex(byte index)
 			{
 				if (1 > index || 80 < index)
-					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+					throw new ArgumentOutOfRangeException(OTHERBAG_RANGE);
 
 				return GetLockerItem(index).ID;
 
@@ -569,7 +723,7 @@ namespace FFACETools {
 			public InventoryItem GetLockerItem(int index)
 			{
 				if (1 > index || 80 < index)
-					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+					throw new ArgumentOutOfRangeException(OTHERBAG_RANGE);
 
 				// done this way because INVENTORYITEM is a private structure
 				INVENTORYITEM item = FFACE.GetLockerItem(_InstanceID, (byte)index);
@@ -586,7 +740,7 @@ namespace FFACETools {
 			public uint GetTempItemCountByIndex(byte index)
 			{
 				if (1 > index || 80 < index)
-					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+					throw new ArgumentOutOfRangeException(OTHERBAG_RANGE);
 
 				return GetTempItem(index).Count;
 
@@ -599,7 +753,7 @@ namespace FFACETools {
 			public int GetTempItemIDByIndex(byte index)
 			{
 				if (1 > index || 80 < index)
-					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+					throw new ArgumentOutOfRangeException(OTHERBAG_RANGE);
 
 				return GetTempItem(index).ID;
 
@@ -633,7 +787,7 @@ namespace FFACETools {
 			public InventoryItem GetTempItem(int index)
 			{
 				if (1 > index || 80 < index)
-					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+					throw new ArgumentOutOfRangeException(OTHERBAG_RANGE);
 
 				// done this way because INVENTORYITEM is a private structure
 				INVENTORYITEM item = FFACE.GetTempItem(_InstanceID, (byte)index);
@@ -650,7 +804,7 @@ namespace FFACETools {
 			public uint GetSatchelItemCountByIndex(byte index)
 			{
 				if (1 > index || 80 < index)
-					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+					throw new ArgumentOutOfRangeException(OTHERBAG_RANGE);
 				return GetSatchelItem(index).Count;
 
 			} // @ public byte GetItemCountByIndex(byte index)
@@ -662,7 +816,7 @@ namespace FFACETools {
 			public int GetSatchelItemIDByIndex(byte index)
 			{
 				if (1 > index || 80 < index)
-					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+					throw new ArgumentOutOfRangeException(OTHERBAG_RANGE);
 
 				return GetSatchelItem(index).ID;
 
@@ -696,7 +850,7 @@ namespace FFACETools {
 			public InventoryItem GetSatchelItem(int index)
 			{
 				if (1 > index || 80 < index)
-					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+					throw new ArgumentOutOfRangeException(OTHERBAG_RANGE);
 
 				// done this way because INVENTORYITEM is a private structure
 				INVENTORYITEM item = FFACE.GetSatchelItem(_InstanceID, (byte)index);
@@ -713,7 +867,7 @@ namespace FFACETools {
 			public uint GetSackItemCountByIndex(byte index)
 			{
 				if (1 > index || 80 < index)
-					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+					throw new ArgumentOutOfRangeException(OTHERBAG_RANGE);
 				return GetSackItem(index).Count;
 
 			} // @ public byte GetItemCountByIndex(byte index)
@@ -725,7 +879,7 @@ namespace FFACETools {
 			public int GetSackItemIDByIndex(byte index)
 			{
 				if (1 > index || 80 < index)
-					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+					throw new ArgumentOutOfRangeException(OTHERBAG_RANGE);
 
 				return GetSackItem(index).ID;
 
@@ -759,7 +913,7 @@ namespace FFACETools {
 			public InventoryItem GetSackItem(int index)
 			{
 				if (1 > index || 80 < index)
-					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
+					throw new ArgumentOutOfRangeException(OTHERBAG_RANGE);
 
 				// done this way because INVENTORYITEM is a private structure
 				INVENTORYITEM item = FFACE.GetSackItem(_InstanceID, index);

@@ -509,6 +509,18 @@
 
 	#endregion
 
+	#region NavigatorTools Type-Enum
+
+	/// <summary>
+	/// HeadingType enum for determining return/set values for Navigator functions.
+	/// </summary>
+	public enum HeadingType : byte {
+		Radians,
+		Degrees
+	}
+
+	#endregion
+
 	#region ChatMode
 
 	/// <summary>

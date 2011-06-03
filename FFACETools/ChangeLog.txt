@@ -1,3 +1,33 @@
+Version 1.3.1.5
+	- Add SatchelCount, SafeCount, TemporaryCount, LockerCount, SackCount, StorageCount (analog of InventoryCount)
+	- Fix InventoryItem stuff to allow indexes from 0 to 80.  The rest require indexes from 1 to 80.
+	- Internal: Reorganize NavigatorTools
+	- Cap HeadingTolerance to a range of 5 to 175
+	- Cap DistanceTolerance to a range of 0.75 to 49
+	- Add HeadingType enum for the purpose of consolidating a lot of common functions.
+	- Rename all GotoTarget* overloads to just GotoTarget (they were all using the same code)
+	- Rename all GotoNPC* overloads to just GotoNPC (they were all using the same code)
+	- Rename the GotoXZ/GotoXYZ overloads to just Goto (they were all using the same code)
+	- Fix Goto to avoid running if we're within DistanceTolerance to Target values.
+	- Along with above, Goto will NOT set FirstPersonView unless we are outside of DistanceTolerance
+	- Goto also will return immediately if the X, Y, Z coords are all 0 (Why are you chasing yourself WHILE ZONING?!)
+	- Consolidate all Face* overloads into FaceHeading overloads.
+	- Add FaceHeading(ID) variety
+	- Add DistanceTo(ID) variety
+	- Add HeadingTo(ID) variety
+	- Add 6 more variations to Goto to allow for moving to static points
+	-   * They don't live update, good for static points.  Use GotoNPC for NPC/PC that can potentially move.
+	- Rename all HeadingTo* overloads to just HeadingTo (consolidation)
+	- Rename all DistanceTo* overloads to DistanceTo (consolidation)
+	- Add GetPlayerPosHInDegrees. Output value is in range of (0 <= value < 360)
+	- Add DegreesToPosH and PosHToDegrees
+	- Add SetViewMode, used in Goto automatically.  SAVE PLAYER'S VIEWMODE BEFORE CALLING GOTO* METHODS IF YOU WISH TO RESTORE IT AFTER RUNNING IT.
+	- DO NOT REPLACE OLD DLLs WITH THIS ONE. This version WILL break backward compatibility. YOU HAVE BEEN WARNED!!!
+	- Also, fuck backward compatibility. :-)
+	- Updated wiki...
+	- I probably forgot something and I'll have to release a fix later.
+	- Bump to 1.3.1.5
+
 Version 1.3.1.4
 	- Bump to 1.3.1.4
 	- Add GetNextLine() (no arguments)  Will use the default LineSettings.OldSchool
