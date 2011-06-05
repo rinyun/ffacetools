@@ -192,7 +192,7 @@ namespace FFACETools {
 		/// </summary>
 		~FFACE()
 		{
-			if (!_InstanceID.Equals(0))
+			if (_InstanceID != 0)
 			{
 				try
 				{

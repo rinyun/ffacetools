@@ -192,8 +192,8 @@ namespace FFACETools {
 					// -1 for error (loading/zoning), count Gil too because of this.
 					short count = -1;
 
-					for (byte i = 0; i <= 80; i++)
-						if (!GetInventoryItem(i).ID.Equals(0))
+					for (ushort i = 0; i <= 80; i++)
+						if (GetInventoryItem(i).ID > 0)
 						{
 							count++;
 						}
@@ -214,7 +214,7 @@ namespace FFACETools {
 					short count = -1;
 
 					for (byte i = 1; i <= 80; i++)
-						if (!GetSackItem(i).ID.Equals(0))
+						if (GetSackItem(i).ID > 0)
 						{
 							count++;
 						}
@@ -238,8 +238,8 @@ namespace FFACETools {
 					// -1 for error (loading/zoning)
 					short count = -1;
 
-					for (byte i = 1; i <= 80; i++)
-						if (!GetLockerItem(i).ID.Equals(0))
+					for (ushort i = 1; i <= 80; i++)
+						if (GetLockerItem(i).ID > 0)
 						{
 							count++;
 						}
@@ -264,7 +264,7 @@ namespace FFACETools {
 					short count = -1;
 
 					for (byte i = 1; i <= 80; i++)
-						if (!GetSafeItem(i).ID.Equals(0))
+						if (GetSafeItem(i).ID > 0)
 						{
 							count++;
 						}
@@ -289,7 +289,7 @@ namespace FFACETools {
 					short count = -1;
 
 					for (byte i = 1; i <= 80; i++)
-						if (!GetStorageItem(i).ID.Equals(0))
+						if (GetStorageItem(i).ID > 0)
 						{
 							count++;
 						}
@@ -314,7 +314,7 @@ namespace FFACETools {
 					short count = -1;
 
 					for (byte i = 1; i <= 80; i++)
-						if (!GetTempItem(i).ID.Equals(0))
+						if (GetTempItem(i).ID > 0)
 						{
 							count++;
 						}
@@ -339,7 +339,7 @@ namespace FFACETools {
 					short count = -1;
 
 					for (byte i = 1; i <= 80; i++)
-						if (!GetSatchelItem(i).ID.Equals(0))
+						if (GetSatchelItem(i).ID > 0)
 						{
 							count++;
 						}
@@ -449,7 +449,7 @@ namespace FFACETools {
 				{
 					InventoryItem item = GetInventoryItem(i);
 
-					if (item.ID.Equals(iD))
+					if (item.ID == iD)
 						count += item.Count;
 
 				} // @ for (short i = 0; i < 80; i++)
@@ -580,7 +580,7 @@ namespace FFACETools {
 				{
 					InventoryItem item = GetSafeItem(i);
 
-					if (item.ID.Equals(iD))
+					if (item.ID == iD)
 						count += item.Count;
 
 				} // @ for (short i = 0; i < 80; i++)
@@ -644,7 +644,7 @@ namespace FFACETools {
 				{
 					InventoryItem item = GetStorageItem(i);
 
-					if (item.ID.Equals(iD))
+					if (item.ID == iD)
 						count += item.Count;
 
 				} // @ for (short i = 0; i < 80; i++)
@@ -707,7 +707,7 @@ namespace FFACETools {
 				{
 					InventoryItem item = GetLockerItem(i);
 
-					if (item.ID.Equals(iD))
+					if (item.ID == iD)
 						count += item.Count;
 
 				} // @ for (short i = 0; i < 80; i++)
@@ -771,7 +771,7 @@ namespace FFACETools {
 				{
 					InventoryItem item = GetTempItem(i);
 
-					if (item.ID.Equals(iD))
+					if (item.ID == iD)
 						count += item.Count;
 
 				} // @ for (short i = 0; i < 80; i++)
@@ -834,7 +834,7 @@ namespace FFACETools {
 				{
 					InventoryItem item = GetSatchelItem(i);
 
-					if (item.ID.Equals(iD))
+					if (item.ID == iD)
 						count += item.Count;
 
 				} // @ for (short i = 0; i < 80; i++)
@@ -897,7 +897,7 @@ namespace FFACETools {
 				{
 					InventoryItem item = GetSackItem(i);
 
-					if (item.ID.Equals(iD))
+					if (item.ID == iD)
 						count += item.Count;
 
 				} // @ for (short i = 0; i < 80; i++)

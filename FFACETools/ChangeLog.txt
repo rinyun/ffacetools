@@ -1,3 +1,7 @@
+Version 1.3.1.6
+	- Changed all .Equals() functions where type may be different to use the == or != check instead where appropriate.
+	- UInt32.Equals(Int32) always retuns false, so checking ushort IDs vs int IDs always returned false.
+	
 Version 1.3.1.5
 	- Add SatchelCount, SafeCount, TemporaryCount, LockerCount, SackCount, StorageCount (analog of InventoryCount)
 	- Fix InventoryItem stuff to allow indexes from 0 to 80.  The rest require indexes from 1 to 80.

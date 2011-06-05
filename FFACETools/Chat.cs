@@ -793,7 +793,7 @@ namespace FFACETools {
 							continue;
 
 						// only add the first 3 most recent lines
-						if (index.Equals(0))
+						if (index == 0)
 							_LastSeenEntry = (ChatLogEntry)currentEntry.Clone();
 
 						// add the line to the unparsed line list
@@ -822,7 +822,7 @@ namespace FFACETools {
 						currentLines.Push(currentEntry);
 
 						// get the 3 most current lines
-						if (index.Equals(0))
+						if (index == 0)
 							mostCurrentEntry = (ChatLogEntry)currentEntry.Clone();
 
 						// check if the current line (most recent so far)
@@ -858,7 +858,7 @@ namespace FFACETools {
 			/// </summary>
 			internal void LineParsed()
 			{
-				if (!_ChatLog.Count.Equals(0))
+				if (_ChatLog.Count != 0)
 					_ChatLog.Dequeue();
 
 			} // @ internal void LineParsed()
@@ -893,7 +893,7 @@ namespace FFACETools {
 				Update();
 
 				// if we have a new line
-				if (!NumberOfUnparsedLines().Equals(0))
+				if (NumberOfUnparsedLines() != 0)
 				{
 					line = new ChatLine();
 					/*{
@@ -1005,7 +1005,7 @@ namespace FFACETools {
 				Update();
 
 				// if we have a new line
-				if (!NumberOfUnparsedLines().Equals(0))
+				if (NumberOfUnparsedLines() != 0)
 				{
 					line = new ChatLine();
 					// get the next chat line
