@@ -31,7 +31,8 @@ Version 1.3.1.7
 	- Add StatusEffect.Unknown in order to parse StatusEffect array more efficiently
 	- Add LimitMode (byte) property to get the actual value from memory
 	- Add IsMeritMode and IsExpMode (uses LimitMode) to determine if EXP or Merit Points is set in Status/Merit Points/Mode Switch
-		
+	- Add Pianissimo to the AbilityList enum
+			
 Version 1.3.1.6
 	- Change all .Equals() functions where type may be different to use the == or != check instead where appropriate.
 	- UInt32.Equals(Int32) always retuns false, so checking ushort IDs vs int IDs always returned false.

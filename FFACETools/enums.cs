@@ -2142,6 +2142,7 @@
 		Snarl = 107,
 		Nightingale = 109,
 		Troubadour = 110,
+		Pianissimo = 112,
 		Deus_Ex_Automata = 115,
 		Scavenge = 121,
 		Shadowbind = 122,
