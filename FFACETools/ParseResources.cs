@@ -85,7 +85,7 @@ namespace FFACETools {
 
 				if ((sResult != String.Empty) && !ResourcesCache.ContainsKey(cacheHash))
 				{
-					ResourcesCache.Add(cacheHash, sResult);
+					ResourcesCache.Add(cacheHash, CapitalizeWords(sResult));
 				}
 
 				return sResult;
@@ -136,7 +136,7 @@ namespace FFACETools {
 
 				if ((sResult != String.Empty) && !ResourcesCache.ContainsKey(cacheHash))
 				{
-					ResourcesCache.Add(cacheHash, sResult);
+					ResourcesCache.Add(cacheHash, CapitalizeWords(sResult));
 				}
 
 				return sResult;
@@ -186,7 +186,7 @@ namespace FFACETools {
 
 				if ((sResult != String.Empty) && !ResourcesCache.ContainsKey(cacheHash))
 				{
-					ResourcesCache.Add(cacheHash, sResult);
+					ResourcesCache.Add(cacheHash, CapitalizeWords(sResult));
 				}
 				return sResult;
 			}
@@ -236,7 +236,7 @@ namespace FFACETools {
 
 				if ((sResult != String.Empty) && !ResourcesCache.ContainsKey(cacheHash))
 				{
-					ResourcesCache.Add(cacheHash, sResult);
+					ResourcesCache.Add(cacheHash, CapitalizeWords(sResult));
 				}
 				return sResult;
 			}
@@ -286,7 +286,7 @@ namespace FFACETools {
 
 				if ((sResult != String.Empty) && !ResourcesCache.ContainsKey(cacheHash))
 				{
-					ResourcesCache.Add(cacheHash, sResult);
+					ResourcesCache.Add(cacheHash, CapitalizeWords(sResult));
 				}
 				return sResult;
 			}
@@ -329,7 +329,7 @@ namespace FFACETools {
 
 				if ((sResult != String.Empty) && !ResourcesCache.ContainsKey(cacheHash))
 				{
-					ResourcesCache.Add(cacheHash, sResult);
+					ResourcesCache.Add(cacheHash, CapitalizeWords(sResult));
 				}
 				return sResult;
 			} // @ public static string GetItemName(int id)
@@ -344,12 +344,39 @@ namespace FFACETools {
 			{
 				foreach (KeyValuePair<UInt32, String> pair in lookup)
 				{
-					if (pair.Value == value)
+					if (pair.Value.ToLower() == value.ToLower())
 						return pair.Key;
 				}
 				return null;
 			}
 
+			internal static string CapitalizeWords(string value)
+			{
+				if (value == null)
+					throw new ArgumentNullException("value");
+				if (value.Length == 0)
+					return value;
+
+				System.Text.StringBuilder sb = new System.Text.StringBuilder(value.Length);
+				// Upper the first char.
+				sb.Append(char.ToUpper(value[0]));
+				for (int i = 1; i < value.Length; i++)
+				{
+					// Get the current char.
+					char c = value[i];
+
+					// Upper if after a space or if after a period.
+					if (char.IsWhiteSpace(value[i - 1]) || (value[i - 1] == '.'))
+						c = char.ToUpper(c);
+					else
+						c = char.ToLower(c);
+
+					sb.Append(c);
+				}
+
+				return sb.ToString();
+			}
+	
 			/// <summary>
 			/// Will get the ID of of the passed item name (case insenstitive)
 			/// </summary>
@@ -398,7 +425,7 @@ namespace FFACETools {
 				UInt32 cacheHash = ((UInt32)iResult | (UInt32)ResourceBit.Item);
 				if ((iResult >= 0) && !ResourcesCache.ContainsKey(cacheHash))
 				{
-					ResourcesCache.Add(cacheHash, name);
+					ResourcesCache.Add(cacheHash, CapitalizeWords(name));
 				}
 				return iResult;
 			}
@@ -451,7 +478,7 @@ namespace FFACETools {
 				UInt32 cacheHash = ((UInt32)iResult | (UInt32)ResourceBit.Item);
 				if ((iResult >= 0) && !ResourcesCache.ContainsKey(cacheHash))
 				{
-					ResourcesCache.Add(cacheHash, name);
+					ResourcesCache.Add(cacheHash, CapitalizeWords(name));
 				}
 
 				return iResult;
@@ -505,7 +532,7 @@ namespace FFACETools {
 				UInt32 cacheHash = ((UInt32)iResult | (UInt32)ResourceBit.Item);
 				if ((iResult >= 0) && !ResourcesCache.ContainsKey(cacheHash))
 				{
-					ResourcesCache.Add(cacheHash, name);
+					ResourcesCache.Add(cacheHash, CapitalizeWords(name));
 				}
 
 				return iResult;

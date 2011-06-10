@@ -1,5 +1,39 @@
+Version 1.3.1.7
+	- Fix (possibly) cacheing issues with ParseResources.
+	- Fix: Name of item is now stored in the cache with proper capitalization and won't harm the lookup either.
+	- Benchmark: Tested ParseResources, 80s to load 974 items into the cache, 2.1s to use the exact same code again after cacheing.
+	- Lower DistanceTolerance minimum to 0.25, testing indicates this is not too low of a number.
+	- Add Synergy to CraftDetails and appropriate enum to Craft
+	- Add Skill to CraftDetails (Craft enum)
+	- Add a CraftRank enum
+	- CraftDetails.Rank now returns a CraftRank enum.
+	- Add a ToString() override for CraftDetails and a ToString(string) overload for 'special' formatting.
+	- Add GetAllCraftDetails which will return a List<> of CraftDetails
+	- Add a MagicOrCombat enum for SkillDetails to be used with determining skill type.
+	- Add Skill and SkillType to SkillDetails for discerning if it's magic or combat enum
+	- Add a ToString() override for SkillDetails and a ToString(string) overload for 'special' formatting.
+	- Move IsSet internal functions to FFACETools.cs to make them easier to access from anywhere within the assembly.
+	- Add GetFirstIndexByItemID(int ID, InventoryType location) will return the first index occuppied by item matching ID.
+	- Add GetItemCountByIndex(int index, InventoryType location) will return number of items at index in location.
+	- Add GetItemIDByIndex(int index, InventoryType location) will return Item ID in location at index.
+	- Add GetItemCount(int iD, InventoryType location) will return total number of items matching ID in location.
+	- Add GetItem(int index, InventoryType location) will return InventoryItem at index in location (first).
+	- Change all Get* functions to use the InventoryType versions for returning information.
+	- new TreasureItem class for accessing Treasure Pool information.
+	- struct TREASUREITEM is now a private struct to allow for null return values from GetTreasureItem()
+	- GetTreasureItem() can now return null if no item present.
+	- Add OpenTradeMenu(int) for use with NPCS ONLY. This does NOT work with PCs and will return Failed if attempted.
+	- Made OpenTradeMenu(int) start it's own thread for this purpose (it stops after 30 seconds no matter what).
+	- Add public bool SetTradeGil(uint Gil); for putting JUST gil into the Trade Menu
+	- Last step in phasing out GetLineExtra and GetLineRaw completed.
+	- Fix GetPlayerInformation.Buffs() being off by one 'short' in size (2 bytes)
+	- Fix LimitPoints and MeritPoints being off by one 'short' in size (2 bytes)
+	- Add StatusEffect.Unknown in order to parse StatusEffect array more efficiently
+	- Add LimitMode (byte) property to get the actual value from memory
+	- Add IsMeritMode and IsExpMode (uses LimitMode) to determine if EXP or Merit Points is set in Status/Merit Points/Mode Switch
+		
 Version 1.3.1.6
-	- Changed all .Equals() functions where type may be different to use the == or != check instead where appropriate.
+	- Change all .Equals() functions where type may be different to use the == or != check instead where appropriate.
 	- UInt32.Equals(Int32) always retuns false, so checking ushort IDs vs int IDs always returned false.
 	
 Version 1.3.1.5

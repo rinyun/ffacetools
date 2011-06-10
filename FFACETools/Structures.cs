@@ -119,6 +119,7 @@ namespace FFACETools {
 			public ushort Bonecraft;
 			public ushort Alchemy;
 			public ushort Cooking;
+			public ushort Synergy;
 
 		} // @ public struct PlayerCraftLevels
 
@@ -149,7 +150,7 @@ namespace FFACETools {
 			public PlayerCombatSkills CombatSkills;
 			public PlayerMagicSkills MagicSkills;
 			public PlayerCraftLevels CraftLevels;
-			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 146)]
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 144)]
 			private byte[] null0;
 			public ushort LimitPoints;
 			public byte MeritPoints;
@@ -255,7 +256,7 @@ namespace FFACETools {
 		/// Structure to hold information about an item in the treasure pool
 		/// </summary>
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-		public struct TREASUREITEM {
+		private struct TREASUREITEM {
 			public byte Flag; //3=no item, 2=item	
 			public short ItemID;
 			public byte Count;
@@ -435,6 +436,27 @@ namespace FFACETools {
 			} // private CleanLine(string line)
 			*/
 			#endregion
+
+			public DialogText Clone(DialogText dt)
+			{
+				if (dt == null)
+					return null;
+				DialogText ret = new DialogText(String.Empty);
+				ret._Question = dt._Question;
+				System.Collections.Generic.List<String> tmp = new System.Collections.Generic.List<string>();
+				tmp.AddRange(dt._Options);
+				ret._Options = new string[dt._Options.Length];
+				for (int i = 0; i < dt._Options.Length; i++)
+				{
+					ret._Options[i] = dt._Options[i];
+				}
+				return ret;
+			}
+
+			public DialogText Clone()
+			{
+				return Clone(this);
+			}
 
 			public DialogText(string RawText) : this(RawText, LineSettings.DialogDefault) { }
 

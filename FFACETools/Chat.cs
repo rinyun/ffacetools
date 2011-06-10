@@ -246,20 +246,6 @@ namespace FFACETools {
 
 			#region Methods
 
-			internal static bool IsSet(UInt32 value, UInt32 bit)
-			{
-				if (value == bit)
-					return true;
-				return ((value & bit) != 0); // generic, means i don't have to be exact on settings.
-			} // @ internal static bool IsSet(UInt32 value, UInt32 bit)
-
-			internal static bool IsSet(LineSettings value, LineSettings bit)
-			{
-				if (value == bit)
-					return true;
-				return (((UInt32)value & (UInt32)bit) != 0);
-			} // @ internal static bool IsSet(LineSettings value, LineSettings bit)
-
 			/// <summary>
 			/// Will convert AT Brackets, Element Icons, and strip everything else.
 			/// </summary>
@@ -931,13 +917,15 @@ namespace FFACETools {
 
 			} // @ public String GetNextLine(LineSettings lineSettings)
 
+			#region GetLine, GetLineExtra, GetCurrentLine (Obsoleted and private, but kept for future)
+
 			/// <summary>
 			/// Will get a chat line directly from FFACE
 			/// </summary>
 			/// <param name="index">Index of the line to get (0 being most recent)</param>
 			/// <returns>null if error, ChatLogEntry containing raw text of line matching index</returns>
 			[Obsolete("Use GetLineRaw(index) instead.")]
-			internal ChatLogEntry GetLine(short index)
+			private ChatLogEntry GetLine(short index)
 			{
 				// 210 to make sure it reads to end of string
 				// for some reason 200 isn't big enough and it will strip some of the line off if it's long
@@ -962,7 +950,7 @@ namespace FFACETools {
 			/// <param name="index">Index of the line to get (0 being most recent)</param>
 			/// <returns>null if error, ChatLogEntry containing Type, index, and raw text of the line matching index.</returns>
 			[Obsolete("Use GetLineRaw(index) instead.")]
-			internal ChatLogEntry GetLineExtra(short index)
+			private ChatLogEntry GetLineExtra(short index)
 			{
 				// 210 to make sure it reads to end of string
 				// for some reason 200 isn't big enough and it will strip some of the line off if it's long
@@ -1030,6 +1018,8 @@ namespace FFACETools {
 				return line;
 
 			} // @ public string GetCurrentLine(bool cleanLine)
+
+			#endregion
 
 			#endregion
 

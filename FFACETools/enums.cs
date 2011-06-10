@@ -74,6 +74,7 @@
 	/// Status effects
 	/// </summary>
 	public enum StatusEffect : short {
+		Unknown = -1,
 		KO = 0,
 		Weakness = 1,
 		Sleep = 2,
@@ -2336,6 +2337,22 @@
 	#region Player related
 
 	/// <summary>
+	/// Enum for rank levels
+	/// </summary>
+	public enum CraftRank : int {
+		Amateur,
+		Recruit,
+		Initiate,
+		Novice,
+		Apprentice,
+		Journeyman,
+		Craftsman,
+		Artisan,
+		Adept,
+		Veteran
+	}
+
+	/// <summary>
 	/// Craft types
 	/// </summary>
 	public enum Craft : byte {
@@ -2347,9 +2364,19 @@
 		Goldsmithing,
 		Leathercraft,
 		Smithing,
-		Woodworking
+		Woodworking,
+		Synergy
 
 	} // @ public enum Craft : byte
+
+	/// <summary>
+	/// Flags for bitsetting to determinte skill type.
+	/// </summary>
+	[System.Flags]
+	public enum MagicOrCombat : uint {
+		Magic = 0x1000,
+		Combat = 0x2000
+	}
 
 	/// <summary>
 	/// Magic skill types

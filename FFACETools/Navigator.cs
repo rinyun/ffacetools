@@ -11,9 +11,14 @@ namespace FFACETools {
 			#region Members
 
 			/// <summary>
-			/// Our link to the Player Tools
+			/// Our link to FFACE
 			/// </summary>
 			private FFACE _FFACE { get; set; }
+
+			/// <summary>
+			/// Our FFACE ID
+			/// </summary>
+			private int _InstanceID { get; set; }
 
 			/// <summary>
 			/// Whether or not we're currently moving.
@@ -46,7 +51,7 @@ namespace FFACETools {
 			}
 
 			/// <summary>
-			/// How close we need to get to the target position. (Range: 0.75 - 49)
+			/// How close we need to get to the target position. (Range: 0.25 - 49)
 			/// </summary>
 			public double DistanceTolerance
 			{
@@ -56,7 +61,7 @@ namespace FFACETools {
 				}
 				set
 				{
-					_DistanceTolerance = Math.Max((double)0.75, Math.Min(49, value));
+					_DistanceTolerance = Math.Max((double)0.25, Math.Min(49, value));
 				}
 			}
 
@@ -92,6 +97,7 @@ namespace FFACETools {
 			public NavigatorTools(FFACE fface)
 			{
 				_FFACE = fface;
+				_InstanceID = fface._InstanceID;
 				_HeadingTolerance = 40;
 				_DistanceTolerance = 3f;
 				SpeedDelay = 40;
@@ -361,7 +367,7 @@ namespace FFACETools {
 			/// <returns>true on success, false otherwise</returns>
 			private bool SetPlayerPosH(float value)
 			{
-				if (FFACE.SetNPCPosH(_FFACE._InstanceID, _FFACE.Player.ID, value) != 0.0f)
+				if (FFACE.SetNPCPosH(_InstanceID, _FFACE.Player.ID, value) != 0.0f)
 					return true;
 				return false;
 			} // @ public bool SetPlayerPosH(float value)
@@ -374,7 +380,7 @@ namespace FFACETools {
 			/// <returns>true on success, false otherwise</returns>
 			private bool SetNPCPosH(int index, float value)
 			{
-				if (FFACE.SetNPCPosH(_FFACE._InstanceID, index, value) != 0.0f)
+				if (FFACE.SetNPCPosH(_InstanceID, index, value) != 0.0f)
 					return true;
 				return false;
 			} // @ private bool SetNPCPosH(int index, float value)
@@ -390,7 +396,7 @@ namespace FFACETools {
 			/// <returns>true on success, false otherwise</returns>
 			private bool SetPlayerDegrees(double degrees)
 			{
-				if (FFACE.SetNPCPosH(_FFACE._InstanceID, _FFACE.Player.ID, DegreesToPosH(degrees)) != 0.0f)
+				if (FFACE.SetNPCPosH(_InstanceID, _FFACE.Player.ID, DegreesToPosH(degrees)) != 0.0f)
 					return true;
 				return false;
 			} // @ public bool SetPlayerDegrees(double degrees)
@@ -403,7 +409,7 @@ namespace FFACETools {
 			/// <returns>true on success, false otherwise</returns>
 			private bool SetNPCDegrees(int index, double degrees)
 			{
-				if (FFACE.SetNPCPosH(_FFACE._InstanceID, index, DegreesToPosH(degrees)) != 0.0f)
+				if (FFACE.SetNPCPosH(_InstanceID, index, DegreesToPosH(degrees)) != 0.0f)
 					return true;
 				return false;
 			} // @ private bool SetNPCDegrees(int index, double degrees)
@@ -467,7 +473,7 @@ namespace FFACETools {
 				if (headingType == HeadingType.Degrees)
 					PosH = DegreesToPosH(PosH);
 
-				if (FFACE.SetNPCPosH(_FFACE._InstanceID, _FFACE.Player.ID, PosH) != 0.0f)
+				if (FFACE.SetNPCPosH(_InstanceID, _FFACE.Player.ID, PosH) != 0.0f)
 					return true;
 				return false;
 			} // @ public bool FaceHeading(float PosH, HeadingType headingType)

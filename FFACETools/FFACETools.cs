@@ -154,9 +154,9 @@ namespace FFACETools {
 			Windower = new WindowerTools(_InstanceID);
 			Timer = new TimerTools(_InstanceID);
 			Chat = new ChatTools(_InstanceID);
-			Item = new ItemTools(_InstanceID);
+			Item = new ItemTools(this);
 			NPC = new NPCTools(_InstanceID);
-			Menu = new MenuTools(_InstanceID);
+			Menu = new MenuTools(this);
 			Search = new SearchTools(_InstanceID);
 			Navigator = new NavigatorTools(this);
 
@@ -203,6 +203,32 @@ namespace FFACETools {
 				}
 			}
 		} // @ ~FFACEWrapper()
+
+		#endregion
+
+		#region Methods
+
+		internal static bool IsSet(UInt32 value, UInt32 bit)
+		{
+			if (value == bit)
+				return true;
+			return ((value & bit) != 0); // generic, means i don't have to be exact on settings.
+		} // @ internal static bool IsSet(UInt32 value, UInt32 bit)
+
+		internal static bool IsSet(LineSettings value, LineSettings bit)
+		{
+			if (value == bit)
+				return true;
+			return (((UInt32)value & (UInt32)bit) != 0);
+		} // @ internal static bool IsSet(LineSettings value, LineSettings bit)
+
+		internal static bool IsSet(InventoryType value, InventoryType bit)
+		{
+			if (value == bit)
+				return true;
+
+			return (((UInt32)value & (UInt32)bit) != 0);
+		}
 
 		#endregion
 
