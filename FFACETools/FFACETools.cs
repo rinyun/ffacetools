@@ -201,6 +201,7 @@ namespace FFACETools {
 				catch
 				{
 				}
+				_InstanceID = 0;
 			}
 		} // @ ~FFACEWrapper()
 

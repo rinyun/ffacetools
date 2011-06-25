@@ -238,10 +238,12 @@ namespace FFACETools {
 					short count = -1;
 
 					for (ushort i = 0; i <= 80; i++)
-						if (GetInventoryItem(i).ID > 0)
+					{
+						if (GetInventoryItem(i) != null)
 						{
 							count++;
 						}
+					}
 					return count;
 				}
 
@@ -259,10 +261,12 @@ namespace FFACETools {
 					short count = -1;
 
 					for (byte i = 1; i <= 80; i++)
-						if (GetSackItem(i).ID > 0)
+					{
+						if (GetSackItem(i) != null)
 						{
 							count++;
 						}
+					}
 					// since we found at least ONE item, we want to report count+1 (0 == 1 item)
 					// since we started counting at item 1
 					if (count != -1)
@@ -284,10 +288,12 @@ namespace FFACETools {
 					short count = -1;
 
 					for (ushort i = 1; i <= 80; i++)
-						if (GetLockerItem(i).ID > 0)
+					{
+						if (GetLockerItem(i) != null)
 						{
 							count++;
 						}
+					}
 					// since we found at least ONE item, we want to report count+1 (0 == 1 item)
 					// since we started counting at item 1
 					if (count != -1)
@@ -309,10 +315,12 @@ namespace FFACETools {
 					short count = -1;
 
 					for (byte i = 1; i <= 80; i++)
-						if (GetSafeItem(i).ID > 0)
+					{
+						if (GetSafeItem(i) != null)
 						{
 							count++;
 						}
+					}
 					// since we found at least ONE item, we want to report count+1 (0 == 1 item)
 					// since we started counting at item 1
 					if (count != -1)
@@ -334,10 +342,12 @@ namespace FFACETools {
 					short count = -1;
 
 					for (byte i = 1; i <= 80; i++)
-						if (GetStorageItem(i).ID > 0)
+					{
+						if (GetStorageItem(i) != null)
 						{
 							count++;
 						}
+					}
 					// since we found at least ONE item, we want to report count+1 (0 == 1 item)
 					// since we started counting at item 1
 					if (count != -1)
@@ -359,10 +369,12 @@ namespace FFACETools {
 					short count = -1;
 
 					for (byte i = 1; i <= 80; i++)
-						if (GetTempItem(i).ID > 0)
+					{
+						if (GetTempItem(i) != null)
 						{
 							count++;
 						}
+					}
 					// since we found at least ONE item, we want to report count+1 (0 == 1 item)
 					// since we started counting at item 1
 					if (count != -1)
@@ -384,10 +396,12 @@ namespace FFACETools {
 					short count = -1;
 
 					for (byte i = 1; i <= 80; i++)
-						if (GetSatchelItem(i).ID > 0)
+					{
+						if (GetSatchelItem(i) != null)
 						{
 							count++;
 						}
+					}
 					// since we found at least ONE item, we want to report count+1 (0 == 1 item)
 					// since we started counting at item 1
 					if (count != -1)
@@ -404,6 +418,12 @@ namespace FFACETools {
 			{
 				get
 				{
+					if (_FFACE.Menu.IsOpen)
+						return FFACE.ParseResources.GetItemName(SelectedItemID);
+					else
+						return String.Empty;
+
+					/*
 					// get the string from FFACE
 					int size = 20;
 					byte[] buffer = new byte[20];
@@ -411,6 +431,7 @@ namespace FFACETools {
 
 					// convert to a string
 					return System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
+					 */
 				}
 			} // @ public string SelectedItemName
 
@@ -428,8 +449,41 @@ namespace FFACETools {
 			///</summary>
 			public int SelectedItemID
 			{
-				get { return GetInventoryItemIDByIndex(GetSelectedItemIndex(_InstanceID)); }
-			} // @ public int SelectedItemID
+				get
+				{
+					InventoryType it = InventoryType.None;
+					if (_FFACE.Menu.IsOpen)
+					{
+						String selection = _FFACE.Menu.Selection;
+
+						if (selection.Contains("Satchel"))
+							it = InventoryType.Satchel;
+						else if (selection.Contains("Mog Sack"))
+							it = InventoryType.Sack;
+						else if (selection.Contains("Mog Safe"))
+							it = InventoryType.Safe;
+						else if (selection.Contains("Locker"))
+							it = InventoryType.Locker;
+						else if (selection.Contains("Storage"))
+							it = InventoryType.Storage;
+						else if (selection.Contains("Temp"))
+							it = InventoryType.Temp;
+						//else if (selection.Contains("Equipment"))
+						//    it = InventoryType.Inventory;
+						else
+							it = InventoryType.Inventory;
+
+						byte index = GetSelectedItemIndex(_InstanceID);
+						if ((it == InventoryType.Inventory) && ((index < 0) || (index > 80)))
+							return 0;
+						else if (index < 1 || index > 80)
+							return 0;
+						return GetItemIDByIndex(index, it);
+					}
+					else
+						return 0;
+				}
+			}// @ public int SelectedItemID
 
 			/// <summary>
 			/// Place in inventory (1 -> max inventory)
@@ -457,6 +511,19 @@ namespace FFACETools {
 					throw new ArgumentOutOfRangeException(INVENTORY_RANGE);
 				else if (!IsSet(location, InventoryType.Inventory) && ((index < 1) || (index > 80)))
 					throw new ArgumentOutOfRangeException(OTHERBAG_RANGE);
+			}
+
+			public bool LocationHas(ushort ID, InventoryType location)
+			{
+				for (int i = 0; i < 80; i++)
+				{
+					if ((i == 0) && !IsSet(location, InventoryType.Inventory))
+						continue;
+					InventoryItem item = GetItem(i, location);
+					if (item != null && item.ID == ID)
+						return true;
+				}
+				return false;
 			}
 
 			/// <summary>
@@ -710,6 +777,7 @@ namespace FFACETools {
 			#endregion
 
 			#region Methods relating to inventory
+
 			/// <summary>
 			/// The count of an item by index
 			/// </summary>

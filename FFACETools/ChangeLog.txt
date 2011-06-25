@@ -1,3 +1,11 @@
+Version 1.3.1.8
+	- Fix Exception throwing when using *Count property
+	- Add UseArrowKeysForTurning property for setting whether to use ArrowKeys for turning.
+	- *UseArrayKeysForTurning is only used if outside (HeadingTolerance / 2) but inside HeadingTolerance
+	- *FaceHeading is still used if outside HeadingTolerance
+	- Add CallingConvention.Cdecl to all imports. No more PInvokeStackImbalance warnings when running in the debugger.
+	- Bump to 1.3.1.8, recompiled DLL.
+
 Version 1.3.1.7
 	- Fix (possibly) cacheing issues with ParseResources.
 	- Fix: Name of item is now stored in the cache with proper capitalization and won't harm the lookup either.

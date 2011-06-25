@@ -366,7 +366,7 @@ namespace FFACETools {
 					char c = value[i];
 
 					// Upper if after a space or if after a period.
-					if (char.IsWhiteSpace(value[i - 1]) || (value[i - 1] == '.'))
+					if (char.IsWhiteSpace(value[i - 1]) || (value[i - 1] == '.') || (value[i - 1] == '('))
 						c = char.ToUpper(c);
 					else
 						c = char.ToLower(c);

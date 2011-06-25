@@ -50,6 +50,8 @@ namespace FFACETools {
 				}
 			}
 
+			public bool UseArrowKeysForTurning { get; set; }
+
 			/// <summary>
 			/// How close we need to get to the target position. (Range: 0.25 - 49)
 			/// </summary>
@@ -321,6 +323,14 @@ namespace FFACETools {
 						{
 							// Face proper direction
 							FaceHeading(X, Y, Z);
+						}
+						else if (UseArrowKeysForTurning && (Herror < -(HeadingTolerance / 2.0f)))
+						{
+							_FFACE.Windower.SendKeyPress(KeyCode.NP_Number4);
+						}
+						else if (UseArrowKeysForTurning && (Herror > (HeadingTolerance / 2.0f)))
+						{
+							_FFACE.Windower.SendKeyPress(KeyCode.NP_Number6);
 						}
 
 						// Moved StartRunning to AFTER the Distance check
