@@ -418,22 +418,34 @@ namespace FFACETools {
 			{
 				get
 				{
+					String s = String.Empty;
 					if (_FFACE.Menu.IsOpen)
-						return FFACE.ParseResources.GetItemName(SelectedItemID);
-					else
-						return String.Empty;
+					{
+						try
+						{
+							s = FFACE.ParseResources.GetItemName(SelectedItemID);
+						}
+						catch
+						{
+							s = String.Empty;
+						}
 
-					/*
-					// get the string from FFACE
-					int size = 20;
-					byte[] buffer = new byte[20];
-					GetSelectedItemName(_InstanceID, buffer, ref size);
+						if (String.IsNullOrEmpty(s))
+						{
 
-					// convert to a string
-					return System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
-					 */
+							// get the string from FFACE
+							int size = 20;
+							byte[] buffer = new byte[20];
+							GetSelectedItemName(_InstanceID, buffer, ref size);
+
+							// convert to a string
+							return System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
+
+						}
+					}
+					return s;
 				}
-			} // @ public string SelectedItemName
+			}// @ public string SelectedItemName
 
 			/// <summary>
 			/// Index of the selected item
