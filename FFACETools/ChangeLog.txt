@@ -1,3 +1,26 @@
+Version 1.3.1.9
+	- Add new enums to StatusEffect enum
+	- Add Unknown, Everyones_Grudge, and Reaving_Wind value to SpellList enum
+	- Add Unknown to AbilityList enum
+	- Add Race enum
+	- Add Unknown to MoonPhase, Weekday enums
+	- Fix Player.CastPercentEx to use CastPercent * 100, it used to only return 2 possible values, 0 and 100.
+	- Modify MenuTools.SelectedItemName to use ParseResources (it's more reliable), FFACE.GetSelectedItemName() if it fails, String.Empty if menu is not open.
+	- Modify ParseResources... A LOT
+	- ** ParseResources 
+	- Add UseFFXIDatFiles, LanguagePreference, and Languages enum to ParseResources
+	- **You will need to set these BEFORE calling 'new FFACE(pid)' if you need to either use resource xmls or a different language
+	- Whether you choose FFXI Dats or Windower, you can choose a language BEFORE initing FFACE() by setting LanguagePreference to a valid Language enum
+	- Add Get*Name for Item, Ability, Spell, Weather, Day, Race, Nation (technically Region), Short Job, Long Job, Area, Status, Moon
+	- Add Get*Id for Item, Ability, Spell, Weather, Day, Race, Nation, Short Job, Long Job, Area, Status, Moon
+	- Get*Name and Get*Id for Item, Ability, Spell, Area, Status always work, the rest require using FFXIDats to retrieve.
+	- Add GetItemIds() for returning a list of valid IDs for a matching item name (Twashtar and most upgradeable weapons)
+	- Race Names are of the form 'Race Gender', unless it's Race.Unknown.  Use this for parsing Gender/Race by splitting on the space.
+	- ParseResources now works properly even without FFACE running (if you either set WindowerPath before calling it, or using FFXI Dats instead)
+	- Big Thanks to eradicate on Windower IRC for the idea of the singleton class and giving me a small base to work with for testing.
+	- If trying to use the d_Msg code from ParseResources, keep in mind it's only functional, not flawless.
+	- Bump to 1.3.1.9, recompiled DLL
+	
 Version 1.3.1.8
 	- Fix Exception throwing when using *Count property
 	- Add UseArrowKeysForTurning property for setting whether to use ArrowKeys for turning.

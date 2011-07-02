@@ -45,6 +45,11 @@ namespace FFACETools {
 		public PartyTools Party { get; set; }
 
 		/// <summary>
+		/// Information relating to FFXI Dat Files.
+		/// </summary>
+		private ParseResources Resources { get; set; }
+
+		/// <summary>
 		/// Information about party members
 		/// </summary>
 		public System.Collections.Generic.Dictionary<byte, PartyMemberTools> PartyMember { get; set; }
@@ -107,7 +112,9 @@ namespace FFACETools {
 			// create our FFACE instance
 			_InstanceID = CreateInstance((UInt32)processID);
 
-			WindowerPath = "Set this to the Plugins Directory";
+			if (!System.IO.Directory.Exists(WindowerPath) && !ParseResources.UseFFXIDatFiles)
+				ParseResources.UseFFXIDatFiles = true;
+
 			//#region Find Windower Plugin Path
 
 			//System.Diagnostics.Process[] Processes = System.Diagnostics.Process.GetProcessesByName("pol");
@@ -159,6 +166,7 @@ namespace FFACETools {
 			Menu = new MenuTools(this);
 			Search = new SearchTools(_InstanceID);
 			Navigator = new NavigatorTools(this);
+			Resources = ParseResources.Instance;
 
 			#region Party Members
 
@@ -197,6 +205,13 @@ namespace FFACETools {
 				try
 				{
 					DeleteInstance(_InstanceID);
+				}
+				catch
+				{
+				}
+				try
+				{
+					ParseResources.DeleteInstance();
 				}
 				catch
 				{

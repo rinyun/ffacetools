@@ -375,7 +375,8 @@ namespace FFACETools {
 			/// </summary>
 			public short CastPercentEx
 			{
-				get { return GetCastPercentEx(_InstanceID); }
+				// return GetCastPercentEx either only returned 0 or 100, this is a better way.
+				get { return (short)(GetCastPercent(_InstanceID) * 100.0f); }
 
 			} // @ public decimal CastPercentEx
 

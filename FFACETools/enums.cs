@@ -503,9 +503,23 @@
 		Spur = 456,
 		Efflux = 457,
 		Earthen_Armor = 458,
-		Divine_Caress2 = 459
-
-
+		Divine_Caress2 = 459,
+		Blood_Rage = 460,
+		Impetus = 461,
+		Conspirator = 462,
+		Sepulcher = 463,
+		Arcane_Crest = 464,
+		Hamanoha = 465,
+		Dragon_Breaker = 466,
+		Triple_Shot = 467,
+		Striking_Flourish = 468,
+		Perpetuance = 469,
+		Immanence = 470,
+		Migawari = 471,
+		Muddled = 473,
+		Prowess = 474,
+		Voidwatcher = 475,
+		Ensphere = 476,
 	} // @ public enum StatusEffect : short
 
 	#endregion
@@ -1011,6 +1025,7 @@
 	/// Spell List
 	/// </summary>
 	public enum SpellList : short {
+		Unknown = 0,
 		Cure = 2,
 		Cure_II = 4,
 		Cure_III = 6,
@@ -1632,7 +1647,8 @@
 		Occultation = 1358,
 		Charged_Whisker = 1360,
 		Delta_Thrust = 1364,
-		Reaving_Wind = 1368
+		Everyones_Grudge = 1366,
+		Reaving_Wind = 1368,
 
 		/* RJ Import
 		Cure = 2,
@@ -2218,7 +2234,8 @@
 		Sublimation = 234,
 		Enlightenment = 235,
 		Presto = 236,
-		Ready = 251
+		Ready = 251,
+		Unknown = 255
 
 	} // @ public enum AbilityList : byte
 
@@ -2477,6 +2494,17 @@
 
 	} // @ public enum Nation : byte
 
+	public enum Race : byte {
+		HumeMale,
+		HumeFemale,
+		ElvaanMale,
+		ElvaanFemale,
+		TarutaruMale,
+		TarutaruFemale,
+		MithraFemale,
+		GalkaMale,
+		Unknown,
+	}
 	#endregion
 
 	#region Timer Related
@@ -2496,7 +2524,8 @@
 		WaningGibbous2,
 		LastQuarter,
 		WaningCrescent,
-		WaningCrescent2
+		WaningCrescent2,
+		Unknown
 
 	} // @ public enum MoonPhase
 
@@ -2511,7 +2540,8 @@
 		Iceday,
 		Lightningday,
 		Lightsday,
-		Darksday
+		Darksday,
+		Unknown
 
 	} // @ public enum Weekday
 

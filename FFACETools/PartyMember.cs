@@ -8,6 +8,13 @@ namespace FFACETools {
 		public class PartyMemberTools {
 			#region Constructor
 
+			public override String ToString()
+			{
+				if (this.Active)
+					return String.Format("{0}:{1}:{2}", this.ID, this.Name, FFACE.ParseResources.GetAreaName(this.Zone));
+				return String.Format("0:<None>:<Unknown>");
+			}
+
 			/// <summary>
 			/// Constructor
 			/// </summary>

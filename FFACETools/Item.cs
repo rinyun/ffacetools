@@ -418,18 +418,9 @@ namespace FFACETools {
 			{
 				get
 				{
-					String s = String.Empty;
 					if (_FFACE.Menu.IsOpen)
 					{
-						try
-						{
-							s = FFACE.ParseResources.GetItemName(SelectedItemID);
-						}
-						catch
-						{
-							s = String.Empty;
-						}
-
+						String s = FFACE.ParseResources.GetItemName(SelectedItemID);
 						if (String.IsNullOrEmpty(s))
 						{
 
@@ -443,7 +434,7 @@ namespace FFACETools {
 
 						}
 					}
-					return s;
+					return String.Empty;
 				}
 			}// @ public string SelectedItemName
 
