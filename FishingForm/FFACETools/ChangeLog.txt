@@ -1,0 +1,45 @@
+﻿and Version 1.0.0.0
+	- Created FFACETools Library
+	
+Version 1.0.1.0
+	- Converted GetPlayerPos# to GetNPCPos# in the Player class so that it's supported in both FFACE v4.0.0.7 and v4.0.0.8
+	- Renamed internal inputs on NPC class to show proper parameter names
+	- Added accessor "ServerTimeUTC" to Timer class to get the servers current time in UTC
+	- Changed GetNPCType to return an enum
+	- Added accessor "Type" to target
+	- Fixed a bug in the chat system where it would throw a "Queue Empty" exception
+	- Added ability to "clean" up the line from FFACE (remove funky characters, etc)
+	
+Version 1.1.0.0
+	- Fixed a buffer exception in chat system on long strings
+	- Added FishID.Equals()
+	- Corrected a typo for GetTrasureItem to GetTreasureItem
+	- Added GetTempItem
+	- Added GetSatchelItem
+	- Added GetSatchelMax
+	- Removed support for FFACE v4.0.0.7 and v4.0.0.8
+	- Modified a bunch of item calls to work with v4.0.0.9 since the imports were removed from FFACE
+	- Added ability to parse some of resources.xml
+		- Look up item name by ID
+		- Look up area name by ID
+		- Look up status effect name by index
+	- Fixed import definitions for CastMax, CastCountDown, CastPercent, and they now work
+	- Updated some definitions stating what the command does
+	- Implimented (with permission!) Pyrolol's navigation system
+	- Added FFACE Menu calls
+	- Added FFACE Search calls
+	- Updated some imports to match exactly what FFACE returns
+	
+Version 1.1.1
+	- Added reverse lookup to resource parser (get item id by name)
+	- Fixed a bug in ParseResources.GetItemID() where it would error if the search string contained an apostrophe
+	- Added case insensitive search for itemID lookup in ParseResources
+	- Added accessor of "IncludeBackGrond" to the TextObject class in WindowerTools
+	- Removed paraemter of "includeBackground" from CreateTextObject (it reads from accessor instead)
+	- Created new method UpdateTextObject(string text) that will do the 3 calls previously required for updating text
+	- Renamed CreateTextObject() in TextObject class to "RenderTextObject"
+	- Fixed a bug in ItemTools.GetSatchelItem where it returned a locker item in place of the proper satchel item
+	- Fixed job enums to reverse SCH and DNC
+	
+Version 1.1.1.1
+	- Changed Partymember active to byte.
