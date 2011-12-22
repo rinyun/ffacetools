@@ -643,33 +643,42 @@ namespace FFACETools {
 					itemHeader = new itemHeaderFormat(br);
 					long data_pos = 0;
 					UInt32 num_strings = 0, offset = 0, flags = 0;
+					
 					// Objects (General Items)  skip 6 bytes
 					if ((itemHeader.ID <= 0x0FFF) && (itemHeader.ID >= 0x0000))
 						br.BaseStream.Position = itemHeader.HeaderSize + 6;
+
 					// Usable items skip 2 bytes
 					// Usable Items skip 6 bytes as of March 10, 2008 Update (new UINT32)
 					else if ((itemHeader.ID <= 0x1FFF) && (itemHeader.ID >= 0x1000))
 						br.BaseStream.Position = itemHeader.HeaderSize + 6;
+
 					// Gil skip just 2 bytes
 					else if (itemHeader.ID == 0xFFFF)
 						br.BaseStream.Position = itemHeader.HeaderSize + 2;
+
 					// Puppet Items, skip 8 bytes
-					else if ((itemHeader.ID <= 0x2BFF) && (itemHeader.ID >= 0x2000))
+					else if ((itemHeader.ID <= 0x21FF) && (itemHeader.ID >= 0x2000))//11263 - 8192
 						br.BaseStream.Position = itemHeader.HeaderSize + 10;  // Unknown is 0x04 bytes not 0x02
+
 					// Armor Specific Info, 22 bytes to skip to get to text
 					// 26 in March 10, 2008 Update (new UINT32)
-					else if ((itemHeader.ID <= 0x3FFF) && (itemHeader.ID >= 0x2C00))
+					else if ((itemHeader.ID <= 0x3FFF) && (itemHeader.ID >= 0x2800))//16383 - 11264
 						br.BaseStream.Position = itemHeader.HeaderSize + 26;
+
 					// Weapon Specific Info, 30 bytes to skip
 					// 34 bytes in March 10, 2008 Update (new UINT32)
 					else if ((itemHeader.ID <= 0x6FFF) && (itemHeader.ID >= 0x4000))
 						br.BaseStream.Position = itemHeader.HeaderSize + 34;
+
 					// Storage Slips, Vouchers, etc.
 					else if ((itemHeader.ID <= 0x7FFF) && (itemHeader.ID >= 0x7000))
 						br.BaseStream.Position = itemHeader.HeaderSize + 70;
+
 					// Unknown, should not have anything in the way...
 					else
 						br.BaseStream.Position = itemHeader.HeaderSize + 2;
+						
 					data_pos = br.BaseStream.Position;
 					num_strings = br.ReadUInt32();
 
