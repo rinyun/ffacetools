@@ -1,3 +1,10 @@
+Version 1.3.1.10
+	- Fix: dat reading class for Dec '11 update (Rzn)
+	- Fix: OutOfMemory Exception in ChatTools (GolfnSurf)
+	- Fix: Duplicate key entry error in ParseResources (Eradicate)
+	- Removed hardcoded WindowerPath variable in ParseResources, will now try to determine path automatically for windower users.
+	- Added non-windower support (will check exe assembly folder for "resources" sub-folder for xml files.
+
 Version 1.3.1.9
 	- Add new enums to StatusEffect enum
 	- Add Unknown, Everyones_Grudge, and Reaving_Wind value to SpellList enum

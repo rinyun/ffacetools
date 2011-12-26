@@ -942,7 +942,6 @@ namespace FFACETools {
 			private void ParseResourceFiles()
 			{
 				XmlDocument xmlDoc = new XmlDocument();
-				String WindowerPath = @"C:\Windower\plugins\";
 				XmlAttribute x;
 				XmlAttribute id;
 
@@ -956,7 +955,9 @@ namespace FFACETools {
 					{
 						if (i.InnerText != string.Empty)
 						{
-							ResourcesCache.Add((int)(uint.Parse(i.Attributes["id"].Value, CultureInfo.InvariantCulture) | (uint)ResourceBit.Item), i.InnerText);
+							int identity = (int)(uint.Parse(i.Attributes["id"].Value, CultureInfo.InvariantCulture) | (uint)ResourceBit.Item);
+                            if (!ResourcesCache.ContainsKey(identity))
+							ResourcesCache.Add(identity, i.InnerText);
 						}
 					}
 				}
@@ -966,7 +967,9 @@ namespace FFACETools {
 					{
 						if ((x = i.Attributes[LanguageStringsShort[(int)LanguagePreference]]) != null && (id = i.Attributes["id"]) != null)
 						{
-							ResourcesCache.Add((int)(uint.Parse(id.Value, CultureInfo.InvariantCulture) | (uint)ResourceBit.Item), x.Value);
+							int identity = (int)(uint.Parse(id.Value, CultureInfo.InvariantCulture) | (uint)ResourceBit.Item);
+                            if (!ResourcesCache.ContainsKey(identity))
+                                ResourcesCache.Add(identity, x.Value);
 						}
 					}
 				}
@@ -981,7 +984,9 @@ namespace FFACETools {
 					{
 						if (i.InnerText != string.Empty)
 						{
-							ResourcesCache.Add((int)(uint.Parse(i.Attributes["id"].Value, CultureInfo.InvariantCulture) | (uint)ResourceBit.Item), i.InnerText);
+							int identity = (int)(uint.Parse(i.Attributes["id"].Value, CultureInfo.InvariantCulture) | (uint)ResourceBit.Item);
+                            if (!ResourcesCache.ContainsKey(identity))
+							ResourcesCache.Add(identity, i.InnerText);
 						}
 					}
 				}
@@ -991,7 +996,9 @@ namespace FFACETools {
 					{
 						if ((x = i.Attributes[LanguageStringsShort[(int)LanguagePreference]]) != null && (id = i.Attributes["id"]) != null)
 						{
-							ResourcesCache.Add((int)(uint.Parse(id.Value, CultureInfo.InvariantCulture) | (uint)ResourceBit.Item), x.Value);
+							int identity = (int)(uint.Parse(id.Value, CultureInfo.InvariantCulture) | (uint)ResourceBit.Item);
+                            if (!ResourcesCache.ContainsKey(identity))
+                                ResourcesCache.Add(identity, x.Value);
 						}
 					}
 				}
@@ -1006,7 +1013,9 @@ namespace FFACETools {
 					{
 						if (i.InnerText != string.Empty)
 						{
-							ResourcesCache.Add((int)(uint.Parse(i.Attributes["id"].Value, CultureInfo.InvariantCulture) | (uint)ResourceBit.Item), i.InnerText);
+							int identity = (int)(uint.Parse(i.Attributes["id"].Value, CultureInfo.InvariantCulture) | (uint)ResourceBit.Item);
+                            if (!ResourcesCache.ContainsKey(identity))
+							    ResourcesCache.Add(identity, i.InnerText);
 						}
 					}
 				}
@@ -1016,7 +1025,9 @@ namespace FFACETools {
 					{
 						if ((x = i.Attributes[LanguageStringsShort[(int)LanguagePreference]]) != null && (id = i.Attributes["id"]) != null)
 						{
-							ResourcesCache.Add((int)(uint.Parse(id.Value, CultureInfo.InvariantCulture) | (uint)ResourceBit.Item), x.Value);
+							int identity = (int)(uint.Parse(id.Value, CultureInfo.InvariantCulture) | (uint)ResourceBit.Item);
+                            if (!ResourcesCache.ContainsKey(identity))
+                                ResourcesCache.Add(identity, x.Value);
 						}
 					}
 				}
@@ -1033,8 +1044,8 @@ namespace FFACETools {
 						if (idValue < 0)
 							continue;
 						int identity = (int)((uint)idValue | (uint)ResourceBit.Abils);
-
-						ResourcesCache.Add(identity | (int)ResourceBit.Abils, x.Value);
+						if (!ResourcesCache.ContainsKey(identity))
+						    ResourcesCache.Add(identity, x.Value);
 					}
 				}
 				#endregion
@@ -1049,8 +1060,8 @@ namespace FFACETools {
 						if (i.InnerText != string.Empty)
 						{
 							int identity = (int)(uint.Parse(i.Attributes["id"].Value, CultureInfo.InvariantCulture) | (uint)ResourceBit.Status);
-
-							ResourcesCache.Add(identity, i.InnerText);
+							if (!ResourcesCache.ContainsKey(identity))
+								ResourcesCache.Add(identity, i.InnerText);
 						}
 					}
 				}
@@ -1061,8 +1072,8 @@ namespace FFACETools {
 						if ((x = i.Attributes[LanguageStringsShort[(int)LanguagePreference]]) != null && (id = i.Attributes["id"]) != null)
 						{
 							int identity = (int)(uint.Parse(id.Value, CultureInfo.InvariantCulture) | (uint)ResourceBit.Status);
-
-							ResourcesCache.Add(identity, x.Value);
+                            if (!ResourcesCache.ContainsKey(identity))
+							    ResourcesCache.Add(identity, x.Value);
 						}
 					}
 				}
@@ -1075,7 +1086,9 @@ namespace FFACETools {
 				{
 					if ((x = i.Attributes[LanguageStrings[(int)LanguagePreference].ToLower()]) != null && (id = i.Attributes["id"]) != null)
 					{
-						ResourcesCache.Add((int)(uint.Parse(id.Value, CultureInfo.InvariantCulture) | (uint)ResourceBit.Spell), x.Value);
+						int identity = (int)(uint.Parse(id.Value, CultureInfo.InvariantCulture) | (uint)ResourceBit.Spell);
+                        if (!ResourcesCache.ContainsKey(identity))
+						    ResourcesCache.Add(identity, x.Value);
 					}
 				}
 				#endregion
@@ -1090,7 +1103,7 @@ namespace FFACETools {
 						if (i.InnerText != string.Empty)
 						{
 							int identity = (int)(uint.Parse(i.Attributes["id"].Value, CultureInfo.InvariantCulture) | (uint)ResourceBit.Area);
-
+							if (!ResourcesCache.ContainsKey(identity))
 							ResourcesCache.Add(identity, i.InnerText);
 						}
 					}
@@ -1101,7 +1114,9 @@ namespace FFACETools {
 					{
 						if ((x = i.Attributes[LanguageStringsShort[(int)LanguagePreference]]) != null && (id = i.Attributes["id"]) != null)
 						{
-							ResourcesCache.Add((int)(uint.Parse(id.Value, CultureInfo.InvariantCulture) | (uint)ResourceBit.Area), x.Value);
+							int identity = (int)(uint.Parse(i.Attributes["id"].Value, CultureInfo.InvariantCulture) | (uint)ResourceBit.Area);
+                            if (!ResourcesCache.ContainsKey(identity))
+							    ResourcesCache.Add(identity, x.Value);
 						}
 					}
 				}
