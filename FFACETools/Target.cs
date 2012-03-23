@@ -203,6 +203,15 @@ namespace FFACETools {
 
 			} // @ private TARGETINFO GetTargetInformation()
 
+            /// <summary>
+            /// Sets the target to the index value provided in the NPC array
+            /// </summary>
+            /// <param name="index">NPC/PC Array Index; Set index to 0 to disable target lock</param>
+            /// <returns>True on success, False on error</returns>
+            public bool SetNPCTarget (int index)
+            {
+                return SetTarget(_InstanceID, index);
+            }
 			#endregion
 
 		} // @ public class TargetTools
