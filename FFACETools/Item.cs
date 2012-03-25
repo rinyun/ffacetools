@@ -421,20 +421,22 @@ namespace FFACETools {
 					if (_FFACE.Menu.IsOpen)
 					{
 						String s = FFACE.ParseResources.GetItemName(SelectedItemID);
-						if (String.IsNullOrEmpty(s))
-						{
+                        if (String.IsNullOrEmpty(s))
+                        {
 
-							// get the string from FFACE
-							int size = 20;
-							byte[] buffer = new byte[20];
-							GetSelectedItemName(_InstanceID, buffer, ref size);
+                            // get the string from FFACE
+                            int size = 20;
+                            byte[] buffer = new byte[20];
+                            GetSelectedItemName(_InstanceID, buffer, ref size);
 
-							// convert to a string
-							return System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
+                            // convert to a string
+                            return System.Text.Encoding.GetEncoding(1252).GetString(buffer, 0, size - 1);
 
-						}
+                        }
+                        else
+                            return s;
 					}
-					return String.Empty;
+					return String.Empty; // Menu is not open so return an empty string
 				}
 			}// @ public string SelectedItemName
 
