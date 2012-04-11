@@ -53,7 +53,7 @@ namespace FFACETools {
 					MyLot = mylot;
 					WinLot = winlot;
 					WinPlayerSrvID = winplayersrvid;
-					WinPlayerID = WinPlayerID;
+                    WinPlayerID = winplayerid;
 					TimeStamp = timestamp;
 					PlayerID = playerid;
 				}
