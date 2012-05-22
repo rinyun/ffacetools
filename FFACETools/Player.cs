@@ -1014,6 +1014,10 @@ namespace FFACETools {
 
 			} // @ public SkillDetails GetCombatSkillDetail(CombatSkill skill)
 
+            public bool HasKeyitem(KeyItem item)
+            {
+                return HasKeyItem(_InstanceID, (uint)item);
+            }
 			#endregion
 
 		} // @ public class PlayerTools
