@@ -1018,6 +1018,54 @@ namespace FFACETools {
             {
                 return HasKeyItem(_InstanceID, (uint)item);
             }
+
+            ///<summary>
+            ///Spells you have learned.
+            ///</summary>
+            public bool KnowsSpell(SpellList spell)
+            {
+                return HasSpell(_InstanceID, (uint)((short)spell * 2));
+            }
+
+            /// <summary>
+            /// Checks that you have access to a given ability
+            /// </summary>
+            /// <param name="ability"></param>
+            /// <returns></returns>
+            public bool HasAbility(AbilityList ability)
+            {
+                return GetAbilityAvailable(_InstanceID, (uint)ability);
+            }
+
+            /// <summary>
+            /// Checks that you have a given job trait
+            /// </summary>
+            /// <param name="ID"></param>
+            /// <returns></returns>
+            public bool HasTrait(uint ID)
+            {
+                return GetTraitAvailable(_InstanceID, ID);
+            }
+
+            /// <summary>
+            /// Check that you have a given pet command
+            /// </summary>
+            /// <param name="ID"></param>
+            /// <returns></returns>
+            public bool HasPetCommand(uint ID)
+            {
+                return GetPetCommandAvailable(_InstanceID, ID);
+            }
+
+            /// <summary>
+            /// Check that you has a given weaponskill
+            /// </summary>
+            /// <param name="ID"></param>
+            /// <returns></returns>
+            public bool HasWeaponSkill(uint ID)
+            {
+                return GetWeaponSkillAvailable(_InstanceID, ID);
+            }
 			#endregion
 
 		} // @ public class PlayerTools

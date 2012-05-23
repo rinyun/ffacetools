@@ -38,6 +38,16 @@ namespace FFACETools {
 		private static extern byte GetWeatherType(int instanceID);
         [DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern bool HasKeyItem(int instanceID, uint ID);
+        [DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern bool HasSpell(int instanceID, uint ID);
+        [DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern bool GetAbilityAvailable(int instanceID, uint ID);
+        [DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern bool GetTraitAvailable(int instanceID, uint ID);
+        [DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern bool GetPetCommandAvailable(int instanceID, uint ID);
+        [DllImport(FFACE_LIBRARY, CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern bool GetWeaponSkillAvailable(int instanceID, uint ID);
 		#endregion
 
 		#region Party Member Imports
