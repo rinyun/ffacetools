@@ -17,6 +17,12 @@ namespace FFACETools
             /// </summary>
             public class CraftDetails
             {
+
+                /// <summary>
+                /// Skill of the craft
+                /// </summary>
+                public Craft Skill { get; set; }
+
                 /// <summary>
                 /// Level of the craft
                 /// </summary>
@@ -25,12 +31,94 @@ namespace FFACETools
                 /// <summary>
                 /// Rank of the craft
                 /// </summary>
-                public int Rank { get; set; }
+                public CraftRank Rank { get; set; }
 
                 /// <summary>
                 /// Whether the craft is capped
                 /// </summary>
                 public bool Capped { get; set; }
+
+                public CraftDetails (Craft skill, int level, CraftRank rank, bool capped)
+                {
+                    Skill = skill;
+                    Level = level;
+                    Rank = rank;
+                    Capped = capped;
+                }
+
+                /// <summary>
+                /// ToString override.
+                /// </summary>
+                /// <returns>String in the format "Skill Rank (Level) (Capped/Uncapped)"</returns>
+                public override string ToString ()
+                {
+                    string ret = String.Format("{2} {1} ({0}) ({3})",
+                    this.Level, this.Rank.ToString("G"),
+                    this.Skill.ToString("G"),
+                    this.Capped ? "Capped" : "Uncapped");
+                    return ret;
+                }
+
+                /// <summary>
+                /// Private function for determining if a character is a "special" char for formatting
+                /// </summary>
+                /// <param name="c"></param>
+                /// <returns></returns>
+                private bool IsSpecial (char c)
+                {
+                    char x = char.ToLower(c);
+                    if (x == 'r' || x == 'c' || x == 's' || x == 'l')
+                        return true;
+                    return false;
+                }
+
+                /// <summary>
+                /// ToString overload for passing a custom format. (Extremely rudimentary)
+                /// </summary>
+                /// <param name="format">String containing any of {S} (Skill), {R} (Rank), {L} (Level), or {C} (Capped/Uncapped)</param>
+                /// <returns>String formatted to the provided parameter's requirement.</returns>
+                public string ToString (string format)
+                {
+                    if (String.IsNullOrEmpty(format))
+                        return this.ToString();
+
+                    System.Text.StringBuilder sb = new System.Text.StringBuilder(50);
+                    for (int i = 0; i < format.Length; i++)
+                    {
+                        char next = '\0';
+                        char next2 = '\0';
+
+                        if (( i + 1 ) < format.Length)
+                            next = char.ToLower(format[i + 1]);
+                        if (( i + 2 ) < format.Length)
+                            next2 = char.ToLower(format[i + 2]);
+                        if (( format[i] == '{' ) && this.IsSpecial(next) && ( next2 == '}' ))
+                        {
+                            if (next == 'r')
+                                sb.Append(this.Rank.ToString("G"));
+                            else if (next == 'c')
+                                sb.Append(this.Capped ? "Capped" : "Uncapped");
+                            else if (next == 's')
+                                sb.Append(this.Skill.ToString("G"));
+                            else if (next == 'l')
+                                sb.Append(this.Level);
+                            i += 2;
+                        }
+                        else if (( format[i] == '{' ) && ( next == '{' ))
+                        {
+                            sb.Append('{');
+                            i++;
+                        }
+                        else if (( format[i] == '}' ) && ( next == '}' ))
+                        {
+                            sb.Append('}');
+                            i++;
+                        }
+                        else
+                            sb.Append(format[i]);
+                    }
+                    return sb.ToString();
+                }
 
             } // @ public struct CraftDetails
 
@@ -39,6 +127,22 @@ namespace FFACETools
             /// </summary>
             public class SkillDetails
             {
+
+                private int _Skill;
+
+                public int Skill
+                {
+                    get { return _Skill; }
+                    set
+                    {
+                        if (value > 255) { _Skill = value & 0xFF; SkillType = (MagicOrCombat)( value & 0xFF00 ); }
+                        else
+                            _Skill = value;
+                    }
+                }
+
+                public MagicOrCombat SkillType { get; set; }
+
                 /// <summary>
                 /// Level of the skill
                 /// </summary>
@@ -48,6 +152,86 @@ namespace FFACETools
                 /// Whether the skill is capped
                 /// </summary>
                 public bool Capped { get; set; }
+
+                /// <summary>
+                /// ToString override.
+                /// </summary>
+                /// <returns>String in the format "Skill Level (Capped/Uncapped)"</returns>
+                public override string ToString ()
+                {
+                    string ret = String.Format("{0} {1} ({2})",
+                    ( this.SkillType == MagicOrCombat.Combat ) ? ( (CombatSkill)this.Skill ).ToString("G") :
+                    ( this.SkillType == MagicOrCombat.Magic ) ? ( (MagicSkill)this.Skill ).ToString("G") : "Unknown-Skill",
+                    this.Level,
+                    this.Capped ? "Capped" : "Uncapped");
+                    return ret;
+                }
+
+                /// <summary>
+                /// Private function for determining if a character is a "special" char for formatting
+                /// </summary>
+                /// <param name="c"></param>
+                /// <returns></returns>
+                private bool IsSpecial (char c)
+                {
+                    char x = char.ToLower(c);
+                    if (x == 'c' || x == 's' || x == 'l')
+                        return true;
+                    return false;
+                }
+
+                /// <summary>
+                /// ToString overload for passing a custom format. (Extremely rudimentary)
+                /// </summary>
+                /// <param name="format">String containing any of {S} (Skill), {L} (Level), or {C} (Capped/Uncapped)</param>
+                /// <returns>String formatted to the provided parameter's requirement.</returns>
+                public string ToString (string format)
+                {
+                    if (String.IsNullOrEmpty(format))
+                        return this.ToString();
+
+                    System.Text.StringBuilder sb = new System.Text.StringBuilder(50);
+                    for (int i = 0; i < format.Length; i++)
+                    {
+                        char next = '\0';
+                        char next2 = '\0';
+
+                        if (( i + 1 ) < format.Length)
+                            next = char.ToLower(format[i + 1]);
+                        if (( i + 2 ) < format.Length)
+                            next2 = char.ToLower(format[i + 2]);
+                        if (( format[i] == '{' ) && this.IsSpecial(next) && ( next2 == '}' ))
+                        {
+                            if (next == 'c')
+                                sb.Append(this.Capped ? "Capped" : "Uncapped");
+                            else if (next == 's')
+                            {
+                                if (this.SkillType == MagicOrCombat.Magic)
+                                    sb.Append(( (MagicSkill)this.Skill ).ToString("G"));
+                                else if (this.SkillType == MagicOrCombat.Combat)
+                                    sb.Append(( (CombatSkill)this.Skill ).ToString("G"));
+                                else
+                                    sb.Append("Unknown-Skill");
+                            }
+                            else if (next == 'l')
+                                sb.Append(this.Level);
+                            i += 2;
+                        }
+                        else if (( format[i] == '{' ) && ( next == '{' ))
+                        {
+                            sb.Append('{');
+                            i++;
+                        }
+                        else if (( format[i] == '}' ) && ( next == '}' ))
+                        {
+                            sb.Append('}');
+                            i++;
+                        }
+                        else
+                            sb.Append(format[i]);
+                    }
+                    return sb.ToString();
+                }
 
             } // @ public struct SkillDetails
 
@@ -59,7 +243,7 @@ namespace FFACETools
             /// Constructor
             /// </summary>
             /// <param name="instanceID">Instance ID created by FFACE</param>
-            public PlayerTools(int instanceID)
+            public PlayerTools (int instanceID)
             {
                 _InstanceID = instanceID;
                 _PartyInformation = new PartyMemberTools(instanceID, 0);
@@ -197,7 +381,8 @@ namespace FFACETools
             /// </summary>
             public short CastPercentEx
             {
-                get { return GetCastPercentEx(_InstanceID); }
+                // return GetCastPercentEx either only returned 0 or 100, this is a better way.
+                get { return (short)( GetCastPercent(_InstanceID) * 100.0f ); }
 
             } // @ public decimal CastPercentEx
 
@@ -390,6 +575,30 @@ namespace FFACETools
             } // @ public ushort LimitPoints
 
             /// <summary>
+            /// Current limit mode as the byte value from memory.
+            /// </summary>
+            public byte LimitMode
+            {
+                get { return GetPlayerInformation().LimitMode; }
+            } // @ public byte LimitMode
+
+            /// <summary>
+            /// Is 'Limit Points' mode set in Status/Merit Points/Mode Switch
+            /// </summary>
+            public bool IsMeritMode
+            {
+                get { return IsSet((uint)LimitMode, 0x80); }
+            } // @ public bool IsMeritMode
+
+            /// <summary>
+            /// Is 'EXP' mode set in Status/Merit Points/Mode Switch
+            /// </summary>
+            public bool IsExpMode
+            {
+                get { return !IsSet((uint)LimitMode, 0x80); }
+            } // @ public bool IsExpMode
+
+            /// <summary>
             /// Current amount of merit points
             /// </summary>
             public short MeritPoints
@@ -525,7 +734,7 @@ namespace FFACETools
             /// <summary>
             /// Returns true if you are in the middle of a synth
             /// </summary>
-            public bool IsSynthing()
+            public bool IsSynthing ()
             {
                 return IsSynthesis(_InstanceID);
 
@@ -535,7 +744,7 @@ namespace FFACETools
             /// <summary>
             /// Gets the PLAYERINFO struct from FFACE
             /// </summary>
-            private PLAYERINFO GetPlayerInformation()
+            private PLAYERINFO GetPlayerInformation ()
             {
                 PLAYERINFO playerInfo = new PLAYERINFO();
                 GetPlayerInfo(_InstanceID, ref playerInfo);
@@ -545,10 +754,63 @@ namespace FFACETools
             } // @ private PLAYERINFO GetPlayerInfo()
 
             /// <summary>
+            /// Will get all craft details as a List<>
+            /// </summary>
+            /// <returns>List<> of CraftDetails populated with all crafting information.</returns>
+            public List<CraftDetails> GetAllCraftDetails ()
+            {
+                List<CraftDetails> ret = new List<CraftDetails>();
+                ushort value;
+                foreach (byte val in Enum.GetValues(typeof(Craft)))
+                {
+                    PlayerCraftLevels craftLevels = GetPlayerInformation().CraftLevels;
+                    switch ((Craft)val)
+                    {
+                        case Craft.Alchemy:
+                            value = craftLevels.Alchemy;
+                            break;
+                        case Craft.Bonecrafting:
+                            value = craftLevels.Bonecraft;
+                            break;
+                        case Craft.Clothcraft:
+                            value = craftLevels.Clothcraft;
+                            break;
+                        case Craft.Cooking:
+                            value = craftLevels.Cooking;
+                            break;
+                        case Craft.Fishing:
+                            value = craftLevels.Fishing;
+                            break;
+                        case Craft.Goldsmithing:
+                            value = craftLevels.Goldsmithing;
+                            break;
+                        case Craft.Leathercraft:
+                            value = craftLevels.Leathercraft;
+                            break;
+                        case Craft.Smithing:
+                            value = craftLevels.Smithing;
+                            break;
+                        case Craft.Woodworking:
+                            value = craftLevels.Woodworking;
+                            break;
+                        case Craft.Synergy:
+                            value = craftLevels.Synergy;
+                            break;
+                        default:
+                            continue;
+                    }
+                    CraftDetails details = new CraftDetails((Craft)val, ( ( value & 0x1FE0 ) >> 5 ), (CraftRank)( value & 0x1F ), Convert.ToBoolean(( ( value & 0x8000 ) >> 15 )));
+                    //CraftDetails tmp = GetCraftDetails((Craft)val);
+                    ret.Add(details);
+                }
+                return ret;
+            }
+
+            /// <summary>
             /// Will get craft details about the passed craft
             /// </summary>
             /// <param name="craft">Craft to get details about</param>
-            public CraftDetails GetCraftDetails(Craft craft)
+            public CraftDetails GetCraftDetails (Craft craft)
             {
                 // Get craft information from fface
                 PlayerCraftLevels craftLevels = GetPlayerInformation().CraftLevels;
@@ -586,16 +848,20 @@ namespace FFACETools
                     case Craft.Woodworking:
                         value = craftLevels.Woodworking;
                         break;
+                    case Craft.Synergy:
+                        value = craftLevels.Synergy;
+                        break;
                     default:
                         throw new ArgumentException("Unknown craft passed to GetCraftDetails()");
 
                 } // @ switch (craft)
 
                 // create return result
-                CraftDetails details = new CraftDetails();
-                details.Capped = Convert.ToBoolean(((value & 0x8000) >> 15));
-                details.Level = ((value & 0x1FE0) >> 5);
-                details.Rank = (value & 0x1F);
+                CraftDetails details = new CraftDetails(craft, ( ( value & 0x1FE0 ) >> 5 ), (CraftRank)( value & 0x1F ), Convert.ToBoolean(( ( value & 0x8000 ) >> 15 )));
+                //details.Capped = Convert.ToBoolean(((value & 0x8000) >> 15));
+                //details.Level = ((value & 0x1FE0) >> 5);
+                //details.Rank = (CraftRank)(value & 0x1F);
+                //details.Skill = craft;
 
                 return details;
 
@@ -606,7 +872,7 @@ namespace FFACETools
             /// </summary>
             /// <param name="skill">Magic skill to get details about</param>
             /// <returns></returns>
-            public SkillDetails GetMagicSkillDetails(MagicSkill skill)
+            public SkillDetails GetMagicSkillDetails (MagicSkill skill)
             {
                 // Get magic skill information from fface
                 PlayerMagicSkills magicSkills = GetPlayerInformation().MagicSkills;
@@ -659,9 +925,10 @@ namespace FFACETools
                 } // @ switch (skill)
 
                 SkillDetails details = new SkillDetails();
-                details.Level = (value & 0xFFF);
-                details.Capped = Convert.ToBoolean(((value & 0x8000) >> 15));
-
+                details.Level = ( value & 0xFFF );
+                details.Capped = Convert.ToBoolean(( ( value & 0x8000 ) >> 15 ));
+                details.SkillType = MagicOrCombat.Magic;
+                details.Skill = (int)skill;
                 return details;
 
             } // @ public SkillDetails GetMagicSkillDetail(MagicSkill skill)
@@ -671,7 +938,7 @@ namespace FFACETools
             /// </summary>
             /// <param name="skill">Combat skill to get details about</param>
             /// <returns></returns>
-            public SkillDetails GetCombatSkillDetails(CombatSkill skill)
+            public SkillDetails GetCombatSkillDetails (CombatSkill skill)
             {
                 // Get combat skill information from fface
                 PlayerCombatSkills combatSkills = GetPlayerInformation().CombatSkills;
@@ -745,13 +1012,67 @@ namespace FFACETools
                 } // @ switch (skill)
 
                 SkillDetails details = new SkillDetails();
-                details.Level = (value & 0xFFF);
-                details.Capped = Convert.ToBoolean(((value & 0x8000) >> 15));
+                details.Level = ( value & 0xFFF );
+                details.Capped = Convert.ToBoolean(( ( value & 0x8000 ) >> 15 ));
+                details.SkillType = MagicOrCombat.Combat;
+                details.Skill = (int)skill;
 
                 return details;
 
             } // @ public SkillDetails GetCombatSkillDetail(CombatSkill skill)
 
+            public bool HasKeyitem (KeyItem item)
+            {
+                return HasKeyItem(_InstanceID, (uint)item);
+            }
+
+            ///<summary>
+            ///Spells you have learned.
+            ///</summary>
+            public bool KnowsSpell (SpellList spell)
+            {
+                return HasSpell(_InstanceID, (uint)( (short)spell * 2 ));
+            }
+
+            /// <summary>
+            /// Checks that you have access to a given ability
+            /// </summary>
+            /// <param name="ability"></param>
+            /// <returns></returns>
+            public bool HasAbility (AbilityList ability)
+            {
+                return GetAbilityAvailable(_InstanceID, (uint)ability);
+            }
+
+            /// <summary>
+            /// Checks that you have a given job trait
+            /// </summary>
+            /// <param name="ID"></param>
+            /// <returns></returns>
+            public bool HasTrait (uint ID)
+            {
+                return GetTraitAvailable(_InstanceID, ID);
+            }
+
+            /// <summary>
+            /// Check that you have a given pet command
+            /// </summary>
+            /// <param name="ID"></param>
+            /// <returns></returns>
+            public bool HasPetCommand (uint ID)
+            {
+                return GetPetCommandAvailable(_InstanceID, ID);
+            }
+
+            /// <summary>
+            /// Check that you has a given weaponskill
+            /// </summary>
+            /// <param name="ID"></param>
+            /// <returns></returns>
+            public bool HasWeaponSkill (uint ID)
+            {
+                return GetWeaponSkillAvailable(_InstanceID, ID);
+            }
             #endregion
 
         } // @ public class PlayerTools

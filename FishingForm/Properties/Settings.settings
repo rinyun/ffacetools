@@ -41,12 +41,6 @@
     <Setting Name="FakeSmallMin" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">50</Value>
     </Setting>
-    <Setting Name="FightType" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Tap</Value>
-    </Setting>
-    <Setting Name="LogColor" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
     <Setting Name="MaxNoCatch" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">20</Value>
     </Setting>
@@ -61,9 +55,6 @@
     </Setting>
     <Setting Name="FullAction" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="GMdetectDC" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="FullActionOther" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -103,6 +94,12 @@
     </Setting>
     <Setting Name="TellDetect" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ShowFishHP" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="Itemizer" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

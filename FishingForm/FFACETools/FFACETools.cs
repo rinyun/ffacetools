@@ -47,6 +47,11 @@ namespace FFACETools
         public PartyTools Party { get; set; }
 
         /// <summary>
+        /// Information relating to FFXI Dat Files.
+        /// </summary>
+        private ParseResources Resources { get; set; }
+
+        /// <summary>
         /// Information about party members
         /// </summary>
         public System.Collections.Generic.Dictionary<byte, PartyMemberTools> PartyMember { get; set; }
@@ -104,35 +109,43 @@ namespace FFACETools
         /// Constructor that instantiates FFACE
         /// </summary>
         /// <param name="processID">The Process ID of the POL Process you want to interface with.</param>
-        public FFACE(int processID)
+        public FFACE (int processID)
         {
             // create our FFACE instance
             _InstanceID = CreateInstance((UInt32)processID);
 
-            WindowerPath = "Set this to the Plugins Directory";
-            //#region Find Windower Plugin Path
+            #region Find Windower Plugin Path
 
-            //System.Diagnostics.Process[] Processes = System.Diagnostics.Process.GetProcessesByName("pol");
-            //if (Processes.Length > 0)
-            //	foreach (System.Diagnostics.ProcessModule mod in Processes[0].Modules)
-            //	{
-            //		if (mod.ModuleName.ToLower() == "hook.dll")
-            //		{
-            //			WindowerPath = mod.FileName.Substring(0, mod.FileName.Length - 8) + @"\plugins\";
-            //			break;
-            //		}
-            //	}
+            System.Diagnostics.Process[] Processes = System.Diagnostics.Process.GetProcessesByName("pol");
+            if (Processes.Length > 0)
+                foreach (System.Diagnostics.ProcessModule mod in Processes[0].Modules)
+                {
+                    if (mod.ModuleName.ToLower() == "hook.dll")
+                    {
+                        WindowerPath = mod.FileName.Substring(0, mod.FileName.Length - 8) + @"\plugins\";
+                        ParseResources.UseFFXIDatFiles = false;
+                        break;
+                    }
+                }
+            // Fix for non-windower users
+            if (String.IsNullOrEmpty(WindowerPath))
+            {
+                string ExePath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+                // If we have a resources folder, use the resource parser otherwise let it default to using .dat reader
+                if (System.IO.Directory.Exists(ExePath + @"\resources\"))
+                {
+                    WindowerPath = ExePath;
+                    ParseResources.UseFFXIDatFiles = false;
+                }
+            }
 
-            //if (String.IsNullOrEmpty(WindowerPath))
-            //	WindowerPath = "Windower path could not be found";
-
-            //#endregion
+            #endregion
 
             // Find out if we should be using structs or not
             System.Diagnostics.FileVersionInfo fileInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(FFACE_LIBRARY);
 
             // Need 4, 1, 0, 14 or later.  Adjust these settings as needed.
-            UInt64 version = ((UInt64)fileInfo.FileMajorPart << 48) + ((UInt64)fileInfo.FileMinorPart << 32) + ((UInt64)fileInfo.FileBuildPart << 16) + (UInt64)fileInfo.FilePrivatePart;
+            UInt64 version = ( (UInt64)fileInfo.FileMajorPart << 48 ) + ( (UInt64)fileInfo.FileMinorPart << 32 ) + ( (UInt64)fileInfo.FileBuildPart << 16 ) + (UInt64)fileInfo.FilePrivatePart;
             if (fileInfo.FileMajorPart != 4)
                 throw new Exception(NEED_v410_14_OR_HIGHER);
             else if (version < 0x000400010000000EUL)			// 0004 0001 0000 000E (4, 1, 0, 14)
@@ -156,11 +169,12 @@ namespace FFACETools
             Windower = new WindowerTools(_InstanceID);
             Timer = new TimerTools(_InstanceID);
             Chat = new ChatTools(_InstanceID);
-            Item = new ItemTools(_InstanceID);
+            Item = new ItemTools(this);
             NPC = new NPCTools(_InstanceID);
-            Menu = new MenuTools(_InstanceID);
+            Menu = new MenuTools(this);
             Search = new SearchTools(_InstanceID);
             Navigator = new NavigatorTools(this);
+            Resources = ParseResources.Instance;
 
             #region Party Members
 
@@ -192,9 +206,9 @@ namespace FFACETools
         /// <summary>
         /// Destructor
         /// </summary>
-        ~FFACE()
+        ~FFACE ()
         {
-            if (!_InstanceID.Equals(0))
+            if (_InstanceID != 0)
             {
                 try
                 {
@@ -203,8 +217,42 @@ namespace FFACETools
                 catch
                 {
                 }
+                try
+                {
+                    ParseResources.DeleteInstance();
+                }
+                catch
+                {
+                }
+                _InstanceID = 0;
             }
         } // @ ~FFACEWrapper()
+
+        #endregion
+
+        #region Methods
+
+        internal static bool IsSet (UInt32 value, UInt32 bit)
+        {
+            if (value == bit)
+                return true;
+            return ( ( value & bit ) != 0 ); // generic, means i don't have to be exact on settings.
+        } // @ internal static bool IsSet(UInt32 value, UInt32 bit)
+
+        internal static bool IsSet (LineSettings value, LineSettings bit)
+        {
+            if (value == bit)
+                return true;
+            return ( ( (UInt32)value & (UInt32)bit ) != 0 );
+        } // @ internal static bool IsSet(LineSettings value, LineSettings bit)
+
+        internal static bool IsSet (InventoryType value, InventoryType bit)
+        {
+            if (value == bit)
+                return true;
+
+            return ( ( (UInt32)value & (UInt32)bit ) != 0 );
+        }
 
         #endregion
 

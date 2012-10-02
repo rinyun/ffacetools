@@ -39,16 +39,16 @@ namespace FFACETools
             /// <summary>
             /// Determines if the current Position is equal to the passed position
             /// </summary>
-            public override bool Equals(object obj)
+            public override bool Equals (object obj)
             {
                 bool bResult = false;
 
                 if (obj is Position)
                 {
-                    if (X.Equals(((Position)obj).X)
-                        && Y.Equals(((Position)obj).Y)
-                        && Z.Equals(((Position)obj).Z)
-                        && H.Equals(((Position)obj).H))
+                    if (X.Equals(( (Position)obj ).X)
+                        && Y.Equals(( (Position)obj ).Y)
+                        && Z.Equals(( (Position)obj ).Z)
+                        && H.Equals(( (Position)obj ).H))
                         bResult = true;
                 }
 
@@ -59,7 +59,7 @@ namespace FFACETools
             /// <summary>
             /// Serves as a hash function for a particular type.
             /// </summary>
-            public override int GetHashCode()
+            public override int GetHashCode ()
             {
                 return X.GetHashCode() + Y.GetHashCode() + Z.GetHashCode() + H.GetHashCode();
 
@@ -81,7 +81,7 @@ namespace FFACETools
             /// </summary>
             /// <param name="instanceID">Instance ID generated from FFACE</param>
             /// <param name="index">Index of the NPC</param>
-            public NPCTools(int instanceID)
+            public NPCTools (int instanceID)
             {
                 _InstanceID = instanceID;
 
@@ -103,7 +103,7 @@ namespace FFACETools
             /// <summary>
             /// If the NPC is rendered on the screen
             /// </summary>
-            public byte NPCBit(int id)
+            public byte NPCBit (int id)
             {
                 return GetNPCBit(_InstanceID, id);
 
@@ -112,7 +112,7 @@ namespace FFACETools
             /// <summary>
             /// Type of NPC
             /// </summary>
-            public NPCType NPCType(int id)
+            public NPCType NPCType (int id)
             {
                 return GetNPCType(_InstanceID, id);
 
@@ -121,7 +121,7 @@ namespace FFACETools
             /// <summary>
             /// Whether the NPC is claimed or not
             /// </summary>
-            public bool IsClaimed(int id)
+            public bool IsClaimed (int id)
             {
                 return IsNPCclaimed(_InstanceID, id);
 
@@ -130,7 +130,7 @@ namespace FFACETools
             /// <summary>
             /// Server ID of the person who first claimed the mob
             /// </summary>
-            public int ClaimedID(int id)
+            public int ClaimedID (int id)
             {
                 return GetNPCclaimID(_InstanceID, id);
 
@@ -139,7 +139,7 @@ namespace FFACETools
             /// <summary>
             /// Whether the NPC is active or not
             /// </summary>
-            public bool IsActive(int id)
+            public bool IsActive (int id)
             {
                 return NPCIsActive(_InstanceID, id);
 
@@ -148,7 +148,7 @@ namespace FFACETools
             /// <summary>
             /// Name of the NPC
             /// </summary>
-            public string Name(int id)
+            public string Name (int id)
             {
                 int size = 20;
                 byte[] buffer = new byte[size];
@@ -162,7 +162,7 @@ namespace FFACETools
             /// <summary>
             /// X position of the NPC
             /// </summary>
-            public float PosX(int id)
+            public float PosX (int id)
             {
                 return GetNPCPosX(_InstanceID, id);
 
@@ -171,7 +171,7 @@ namespace FFACETools
             /// <summary>
             /// Y position of the NPC
             /// </summary>
-            public float PosY(int id)
+            public float PosY (int id)
             {
                 return GetNPCPosY(_InstanceID, id);
 
@@ -180,7 +180,7 @@ namespace FFACETools
             /// <summary>
             /// Z position of the NPC
             /// </summary>
-            public float PosZ(int id)
+            public float PosZ (int id)
             {
                 return GetNPCPosZ(_InstanceID, id);
 
@@ -189,7 +189,7 @@ namespace FFACETools
             /// <summary>
             /// H position of the NPC
             /// </summary>
-            public float PosH(int id)
+            public float PosH (int id)
             {
                 return GetNPCPosH(_InstanceID, id);
 
@@ -198,7 +198,7 @@ namespace FFACETools
             /// <summary>
             /// Gets the position of the NPC
             /// </summary>
-            public Position GetPosition(int id)
+            public Position GetPosition (int id)
             {
                 return new Position
                 {
@@ -213,7 +213,7 @@ namespace FFACETools
             /// <summary>
             /// NPC's current hit point percent
             /// </summary>
-            public short HPPCurrent(int id)
+            public short HPPCurrent (int id)
             {
                 return GetNPCHPP(_InstanceID, id);
 
@@ -222,7 +222,7 @@ namespace FFACETools
             /// <summary>
             /// NPC's status
             /// </summary>
-            public Status Status(int id)
+            public Status Status (int id)
             {
                 return GetNPCStatus(_InstanceID, id);
 
@@ -231,7 +231,7 @@ namespace FFACETools
             /// <summary>
             /// Uses player index to get PetID
             /// </summary>
-            public int PetID(int id)
+            public int PetID (int id)
             {
                 return GetNPCPetID(_InstanceID, id);
 
@@ -240,7 +240,7 @@ namespace FFACETools
             /// <summary>
             /// NPC's current TP
             /// </summary>
-            public short TPCurrent(int id)
+            public short TPCurrent (int id)
             {
                 return GetNPCTP(_InstanceID, id);
 
@@ -249,7 +249,7 @@ namespace FFACETools
             /// <summary>
             /// NPC's distance from player
             /// </summary>
-            public double Distance(int id)
+            public double Distance (int id)
             {
                 return GetNPCDistance(_InstanceID, id);
 
