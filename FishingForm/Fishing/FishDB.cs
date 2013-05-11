@@ -198,6 +198,8 @@ namespace Fishing
                     return dbFolder + @"\hume.xml";
                 case "Lu Shang's F. Rod":
                     return dbFolder + @"\lushang.xml";
+                case "MMM Fishing Rod":
+                    return dbFolder + @"\mmm.xml";
                 case "Mithran Fish. Rod":
                     return dbFolder + @"\mithran.xml";
                 case "S.H. Fishing Rod":

@@ -166,10 +166,15 @@ namespace Fishing
             }
             else
             {
-                btnProcessAttach.Text = "Select a Process -- Then Click Here";
+                MessageBox.Show("Please select a process first!");
             }
         }
 
         #endregion
+
+        private void btnExit_Click(object sender, System.EventArgs e)
+        {
+            System.Environment.Exit(1);
+        }
     }
 }

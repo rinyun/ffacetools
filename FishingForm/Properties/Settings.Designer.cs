@@ -37,13 +37,13 @@ namespace Fishing.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool AutoReel {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool MaxCatch {
             get {
-                return ((bool)(this["AutoReel"]));
+                return ((bool)(this["MaxCatch"]));
             }
             set {
-                this["AutoReel"] = value;
+                this["MaxCatch"] = value;
             }
         }
         
@@ -416,6 +416,30 @@ namespace Fishing.Properties {
             }
             set {
                 this["Itemizer"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public decimal MaxCatchValue {
+            get {
+                return ((decimal)(this["MaxCatchValue"]));
+            }
+            set {
+                this["MaxCatchValue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SneakFishing {
+            get {
+                return ((bool)(this["SneakFishing"]));
+            }
+            set {
+                this["SneakFishing"] = value;
             }
         }
     }

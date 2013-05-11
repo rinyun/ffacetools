@@ -119,7 +119,7 @@ namespace FFACETools
 
             #region Constants
             private const string RESOURCES_FILE_NAME = "resources.xml";
-
+			// TODO: Add error checking to these files
             private const string RESOURCES_ITEMS_GENERAL_FILE_NAME = "items_general.xml";
             private const string RESOURCES_ITEM_ARMOR_FILE_NAME = "items_armor.xml";
             private const string RESOURCES_ITEM_WEAPONS_FILE_NAME = "items_weapons.xml";
@@ -752,6 +752,7 @@ namespace FFACETools
 
             private void Initialize ()
             {
+                //TODO: Check if the resource files exists before parsing them, if they don't parse using dat files
                 if (UseFFXIDatFiles)
                     ParseActualFiles();
                 else
@@ -793,7 +794,8 @@ namespace FFACETools
                             if (type == FileTypes.SpellNames)
                                 ResourcesCache.Add((int)( (uint)( i * 2 ) | (uint)rb ), s);
                             else
-                                ResourcesCache.Add((int)( (uint)i | (uint)rb ), s);
+                                if (!ResourcesCache.ContainsKey((int) ((uint) i | (uint) rb)))
+                                    ResourcesCache.Add((int) ((uint) i | (uint) rb), s);
                         }
                     }
                 }
